@@ -10,17 +10,27 @@
         },
 
         post: async function (url, data = {}) {
+            const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = tokenMeta ? tokenMeta.content : '';
+
             const res = await fetch(`${APP_URL}${url}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(data)
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRF-Token': csrfToken
+                },
+                body: new URLSearchParams({ ...data, csrf_token: csrfToken })
             });
             return res.json();
         },
 
         delete: async function (url, data = {}) {
+            const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+            const csrfToken = tokenMeta ? tokenMeta.content : '';
+
             const formData = new FormData();
             formData.append('_method', 'DELETE');
+            formData.append('csrf_token', csrfToken);
             for (const [key, val] of Object.entries(data)) {
                 formData.append(key, val);
             }
@@ -54,6 +64,10 @@
                 clearTimeout(timer);
                 timer = setTimeout(() => fn.apply(this, args), delay);
             };
+        },
+
+        easeInOut: function (t) {
+            return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
         }
     };
 })();

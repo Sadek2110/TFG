@@ -17,7 +17,8 @@
         <div class="glass rounded-3xl p-8 fade-up-1">
             <h1 class="text-2xl font-black mb-7">Crear cuenta</h1>
 
-            <form method="POST" action="<?= APP_URL ?>/register" class="space-y-4" novalidate>
+            <form method="POST" action="<?= APP_URL ?>/register" class="space-y-4" novalidate id="registerForm" data-loading-form>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="col-span-2 sm:col-span-1">
                         <label class="block text-sm font-medium text-gray-300 mb-2">Nombre completo</label>
@@ -90,8 +91,12 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn-primary w-full justify-center py-3.5 text-base glow-green mt-1">
-                    Crear mi cuenta gratis →
+                <button type="submit" data-submit-btn data-loading-text="Creando cuenta…" class="btn-primary w-full justify-center py-3.5 text-base glow-green mt-1">
+                    <span data-btn-text>Crear mi cuenta gratis →</span>
+                    <svg data-spinner class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
                 </button>
             </form>
         </div>

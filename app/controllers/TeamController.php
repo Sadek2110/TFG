@@ -31,9 +31,9 @@ class TeamController extends Controller {
             $this->redirect('/teams');
         }
 
-        $name = htmlspecialchars(trim($_POST['name'] ?? ''), ENT_QUOTES, 'UTF-8');
-        $city = htmlspecialchars(trim($_POST['city'] ?? ''), ENT_QUOTES, 'UTF-8');
-        $desc = htmlspecialchars(trim($_POST['description'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $name = trim($_POST['name'] ?? '');
+        $city = trim($_POST['city'] ?? '');
+        $desc = trim($_POST['description'] ?? '');
 
         if (empty($name) || empty($city)) {
             $this->flash('error', 'Nombre y ciudad son obligatorios.');

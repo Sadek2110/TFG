@@ -8,8 +8,9 @@ abstract class Controller
         extract($data);
         $file = APP_PATH . '/views/' . str_replace('.', '/', $view) . '.php';
         if (!file_exists($file)) {
+            error_log("View not found: {$view}");
             http_response_code(404);
-            die("View not found: {$view}");
+            die($this->renderError(404, 'Página no encontrada'));
         }
         require $file;
     }
@@ -91,7 +92,11 @@ abstract class Controller
     protected function verifyCsrf(): bool
     {
         $token = $_POST['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-        return !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+        $valid = !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+        if ($valid) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+        return $valid;
     }
 
     protected function requireCsrf(): void

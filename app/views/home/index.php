@@ -9,16 +9,25 @@
     transform: translateY(-50%);
     width: 40%;
     opacity: 0;
-    transition: opacity 0.1s ease-out; /* Controlled mainly by JS now */
     pointer-events: none;
     z-index: 20;
+    will-change: opacity, transform;
 }
-.scroll-section.active {
-    pointer-events: auto;
-}
+.scroll-section.active { pointer-events: auto; }
 @keyframes scrollDown {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(200%); }
+    0%   { transform: translateY(-100%); }
+    100% { transform: translateY(200%);  }
+}
+/* Extend glass transition to include lift + shadow for cards in scroll sections */
+.scroll-section .glass,
+.scroll-section .glass-green {
+    transition: background 0.25s ease, border-color 0.25s ease,
+                transform 0.22s cubic-bezier(.22,1,.36,1), box-shadow 0.25s ease;
+}
+.scroll-section .glass:hover,
+.scroll-section .glass-green:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,.35);
 }
 </style>
 
@@ -258,7 +267,8 @@
         </div>
 
         <!-- Scroll Indicator (Visible at top only) -->
-        <div id="scroll-indicator" class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 transition-opacity duration-500 z-30">
+        <div id="scroll-indicator" class="absolute bottom-10 flex flex-col items-center gap-3 z-30"
+             style="left:50%; transform:translateX(-50%); transition: opacity .5s ease, transform .5s ease;">
             <span class="text-[10px] font-bold text-white/60 uppercase tracking-[0.3em]">Scroll</span>
             <div class="w-px h-12 bg-white/20 relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1/2 bg-green-400 animate-[scrollDown_1.5s_ease-in-out_infinite]"></div>
@@ -297,15 +307,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let lastRenderedIndex = -1;
     const renderFrame = (frameIndex) => {
+        if (frameIndex === lastRenderedIndex) return;
         if (!images[frameIndex]) return;
+        lastRenderedIndex = frameIndex;
         const img = images[frameIndex];
-        
+
         const draw = () => {
             const canvasRatio = canvas.width / canvas.height;
             const imgRatio = img.width / img.height;
             let drawWidth, drawHeight, offsetX, offsetY;
-            
-            // Use 'contain' logic to fit the whole transparent PNG
+
             if (canvasRatio > imgRatio) {
                 drawHeight = canvas.height;
                 drawWidth = canvas.height * imgRatio;
@@ -334,19 +345,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const createParticles = () => {
         particles = [];
-        const count = window.innerWidth < 768 ? 40 : 100;
+        const count = window.innerWidth < 768 ? 35 : 80;
         for (let i = 0; i < count; i++) {
+            const isSpark = Math.random() > 0.65;
             particles.push({
                 x: Math.random() * window.innerWidth,
                 y: Math.random() * window.innerHeight,
-                w: Math.random() * 3 + 2,
-                h: Math.random() * 8 + 6,
-                vx: (Math.random() - 0.5) * 1.5,
-                vy: (Math.random() - 0.5) * 1.5 - 0.5,
+                w: isSpark ? (Math.random() * 2 + 1) : (Math.random() * 3 + 2),
+                h: isSpark ? (Math.random() * 2 + 1) : (Math.random() * 9 + 5),
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: (Math.random() - 0.5) * 1.2 - 0.35,
                 angle: Math.random() * Math.PI * 2,
-                spin: (Math.random() - 0.5) * 0.1,
-                alpha: Math.random() * 0.4 + 0.1,
-                color: Math.random() > 0.5 ? '#16a34a' : '#4ade80'
+                spin: (Math.random() - 0.5) * 0.08,
+                alpha: Math.random() * 0.35 + 0.08,
+                color: ['#16a34a','#4ade80','#22c55e','#86efac'][Math.floor(Math.random()*4)],
+                shape: isSpark ? 'circle' : 'rect'
             });
         }
     };
@@ -359,19 +372,24 @@ document.addEventListener('DOMContentLoaded', () => {
             p.x += p.vx;
             p.y += p.vy;
             p.angle += p.spin;
-            
-            // Wrap around
+
             if (p.x < -20) p.x = pCanvas.width + 20;
             if (p.x > pCanvas.width + 20) p.x = -20;
             if (p.y < -20) p.y = pCanvas.height + 20;
             if (p.y > pCanvas.height + 20) p.y = -20;
-            
+
             pCtx.save();
             pCtx.translate(p.x, p.y);
             pCtx.rotate(p.angle);
             pCtx.fillStyle = p.color;
             pCtx.globalAlpha = p.alpha;
-            pCtx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+            if (p.shape === 'circle') {
+                pCtx.beginPath();
+                pCtx.arc(0, 0, p.w, 0, Math.PI * 2);
+                pCtx.fill();
+            } else {
+                pCtx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+            }
             pCtx.restore();
         });
         requestAnimationFrame(drawParticles);
@@ -410,65 +428,64 @@ document.addEventListener('DOMContentLoaded', () => {
         { start: 0.80, end: 1.00 }  // Section 4: Pricing
     ];
 
+    const easeInOut = window.utils.easeInOut;
+    let indicatorVisible = true;
+
     const onScroll = () => {
-        // Calculate scroll progress percentage (0 to 1)
         const scrollY = window.scrollY;
         const containerTop = scrollContainer.offsetTop;
         const containerHeight = scrollContainer.scrollHeight - window.innerHeight;
-        
-        // Progress bounded between 0 and 1
+
         let progress = (scrollY - containerTop) / containerHeight;
         if (progress < 0) progress = 0;
         if (progress > 1) progress = 1;
 
-        // 1. Scrub frames based on progress
-        const frameIndex = Math.min(
-            frameCount - 1,
-            Math.floor(progress * frameCount)
-        );
-        lastRenderedIndex = frameIndex;
-        renderFrame(frameIndex);
+        renderFrame(Math.min(frameCount - 1, Math.floor(progress * frameCount)));
 
-        // 2. Hide scroll indicator after scrolling down a bit
-        if (progress > 0.03) {
-            scrollIndicator.style.opacity = '0';
-            scrollIndicator.style.pointerEvents = 'none';
-        } else {
-            scrollIndicator.style.opacity = '1';
+        const shouldShow = progress <= 0.025;
+        if (shouldShow !== indicatorVisible) {
+            indicatorVisible = shouldShow;
+            scrollIndicator.style.opacity = shouldShow ? '1' : '0';
+            scrollIndicator.style.transform = shouldShow ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(8px)';
+            scrollIndicator.style.pointerEvents = shouldShow ? '' : 'none';
         }
 
-        // 3. Animate sections in and out
         sections.forEach((sec, index) => {
             const bp = breakpoints[index];
-            const fadeZone = 0.03; // 3% of scroll for fading in/out
-            
+            const fadeZone = 0.05;
             const fadeStart = bp.start - fadeZone;
-            const fadeEnd = bp.end + fadeZone;
+            const fadeEnd   = bp.end   + fadeZone;
 
             if (progress > fadeStart && progress < fadeEnd) {
                 sec.classList.add('active');
-                
-                let opacity = 1;
-                let yOffset = 0; // translation in pixels
+
+                let rawRatio = 0;
+                let yDir = 0;
 
                 if (progress < bp.start) {
-                    // Entering from bottom
-                    const ratio = (bp.start - progress) / fadeZone; // 1 to 0
-                    opacity = 1 - ratio;
-                    yOffset = ratio * 40; 
+                    rawRatio = (bp.start - progress) / fadeZone;
+                    yDir = 1;
                 } else if (progress > bp.end) {
-                    // Exiting to top
-                    const ratio = (progress - bp.end) / fadeZone; // 0 to 1
-                    opacity = 1 - ratio;
-                    yOffset = -ratio * 40;
+                    rawRatio = (progress - bp.end) / fadeZone;
+                    yDir = -1;
                 }
 
-                // Apply opacity and transform
-                sec.style.opacity = opacity;
-                sec.style.transform = `translateY(calc(-50% + ${yOffset}px))`;
+                const smooth  = easeInOut(Math.min(1, rawRatio));
+                const opacity = 1 - smooth;
+
+                if (opacity < 0.005) {
+                    sec.classList.remove('active');
+                    sec.style.opacity   = '0';
+                    sec.style.transform = 'translateY(-50%)';
+                    return;
+                }
+
+                sec.style.opacity   = opacity;
+                sec.style.transform = `translateY(calc(-50% + ${yDir * smooth * 36}px))`;
             } else {
                 sec.classList.remove('active');
-                sec.style.opacity = '0';
+                sec.style.opacity   = '0';
+                sec.style.transform = 'translateY(-50%)';
             }
         });
     };
@@ -480,7 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 animationFrameId = null;
             });
         }
-    });
+    }, { passive: true });
 
     // Run once on load to set initial state
     onScroll();

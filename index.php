@@ -13,9 +13,27 @@ require_once CORE_PATH   . '/Model.php';
 require_once CORE_PATH   . '/Controller.php';
 require_once CORE_PATH   . '/Router.php';
 
+session_set_cookie_params([
+    'lifetime' => SESSION_LIFETIME,
+    'path'     => '/',
+    'secure'   => isset($_SERVER['HTTPS']),
+    'httponly'  => true,
+    'samesite' => 'Strict',
+]);
+ini_set('session.gc_maxlifetime', SESSION_LIFETIME);
+ini_set('session.use_strict_mode', 1);
+ini_set('session.use_only_cookies', 1);
+
 session_start();
 
-// Generate CSRF token if not exists
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > SESSION_LIFETIME)) {
+    session_unset();
+    session_destroy();
+    header('Location: ' . APP_URL . '/login');
+    exit;
+}
+$_SESSION['last_activity'] = time();
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }

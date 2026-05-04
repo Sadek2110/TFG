@@ -6,10 +6,26 @@ abstract class Model
     protected PDO    $db;
     protected string $table  = '';
     protected string $pk     = 'id';
+    protected array  $allowedSortColumns = ['id', 'created_at', 'name', 'match_date', 'start_date'];
 
     public function __construct()
     {
         $this->db = Database::getInstance();
+    }
+
+    private function validateOrderBy(string $orderBy): string
+    {
+        $parts    = explode(' ', trim($orderBy));
+        $column   = $parts[0];
+        $direction = strtoupper($parts[1] ?? 'DESC');
+
+        if (!in_array($column, $this->allowedSortColumns)) {
+            $column = $this->pk;
+        }
+        if (!in_array($direction, ['ASC', 'DESC'])) {
+            $direction = 'DESC';
+        }
+        return "{$column} {$direction}";
     }
 
     public function findById(int $id): array|false
@@ -21,15 +37,18 @@ abstract class Model
 
     public function findAll(string $orderBy = 'id DESC', int $limit = 100): array
     {
-        $st = $this->db->query("SELECT * FROM {$this->table} ORDER BY {$orderBy} LIMIT {$limit}");
+        $orderBy = $this->validateOrderBy($orderBy);
+        $st = $this->db->prepare("SELECT * FROM {$this->table} ORDER BY {$orderBy} LIMIT ?");
+        $st->execute([$limit]);
         return $st->fetchAll();
     }
 
     public function findWhere(array $conditions, string $orderBy = 'id DESC', int $limit = 100): array
     {
+        $orderBy = $this->validateOrderBy($orderBy);
         [$where, $vals] = $this->buildWhere($conditions);
-        $st = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$where} ORDER BY {$orderBy} LIMIT {$limit}");
-        $st->execute($vals);
+        $st = $this->db->prepare("SELECT * FROM {$this->table} WHERE {$where} ORDER BY {$orderBy} LIMIT ?");
+        $st->execute([...$vals, $limit]);
         return $st->fetchAll();
     }
 
@@ -76,6 +95,7 @@ abstract class Model
 
     public function paginate(int $page = 1, int $perPage = 20, string $orderBy = 'id DESC', array $conditions = []): array
     {
+        $orderBy = $this->validateOrderBy($orderBy);
         $page = max(1, $page);
         $offset = ($page - 1) * $perPage;
 
@@ -87,9 +107,9 @@ abstract class Model
         $total = (int) $st->fetchColumn();
 
         $st = $this->db->prepare(
-            "SELECT * FROM {$this->table} {$whereClause} ORDER BY {$orderBy} LIMIT {$perPage} OFFSET {$offset}"
+            "SELECT * FROM {$this->table} {$whereClause} ORDER BY {$orderBy} LIMIT ? OFFSET ?"
         );
-        $st->execute($vals);
+        $st->execute([...$vals, $perPage, $offset]);
 
         return [
             'data'        => $st->fetchAll(),

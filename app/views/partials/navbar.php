@@ -44,7 +44,7 @@ function isActive(string $route, string $path): string {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
-                <div id="userDropdown" class="hidden absolute right-0 top-full mt-2 w-48 glass rounded-2xl overflow-hidden shadow-2xl py-1">
+                <div id="userDropdown" class="dropdown-panel absolute right-0 top-full mt-2 w-48 glass rounded-2xl overflow-hidden shadow-2xl py-1">
                     <a href="<?= APP_URL ?>/dashboard" class="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
                         Dashboard
@@ -81,7 +81,7 @@ function isActive(string $route, string $path): string {
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobileMenu" class="hidden absolute top-16 left-0 right-0 glass border-t border-white/10 py-4 px-6 flex flex-col gap-3">
+    <div id="mobileMenu" class="absolute top-16 left-0 right-0 glass border-t border-white/10">
         <a href="<?= APP_URL ?>/teams"   class="nav-link py-2 border-b border-white/5">Equipos</a>
         <a href="<?= APP_URL ?>/matches" class="nav-link py-2 border-b border-white/5">Partidos</a>
         <a href="<?= APP_URL ?>/leagues" class="nav-link py-2 border-b border-white/5">Ligas</a>
@@ -99,20 +99,33 @@ function isActive(string $route, string $path): string {
 </nav>
 <script>
 function toggleNav(){
-    const m=document.getElementById('mobileMenu');
-    const h1=document.getElementById('ham1');
-    const h2=document.getElementById('ham2');
-    const h3=document.getElementById('ham3');
-    const open=m.classList.toggle('hidden')=== false;
-    h1.style.transform = open ? 'translateY(8px) rotate(45deg)'  : '';
+    const m  = document.getElementById('mobileMenu');
+    const h1 = document.getElementById('ham1');
+    const h2 = document.getElementById('ham2');
+    const h3 = document.getElementById('ham3');
+    const open = m.classList.toggle('open');
+    h1.style.transform = open ? 'translateY(8px) rotate(45deg)'   : '';
     h2.style.opacity   = open ? '0' : '1';
     h3.style.transform = open ? 'translateY(-8px) rotate(-45deg)' : '';
 }
 function toggleUserMenu(){
-    document.getElementById('userDropdown').classList.toggle('hidden');
+    document.getElementById('userDropdown').classList.toggle('open');
 }
 document.addEventListener('click', e => {
     const m = document.getElementById('userMenu');
-    if(m && !m.contains(e.target)) document.getElementById('userDropdown')?.classList.add('hidden');
+    if(m && !m.contains(e.target)) document.getElementById('userDropdown')?.classList.remove('open');
 });
+// Scroll-aware navbar: deepen background only on state change
+(function(){
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    let solid = false;
+    window.addEventListener('scroll', () => {
+        const isSolid = window.scrollY > 24;
+        if (isSolid === solid) return;
+        solid = isSolid;
+        nav.style.background = solid ? 'rgba(6,13,9,0.97)' : 'rgba(6,13,9,0.85)';
+        nav.style.boxShadow  = solid ? '0 1px 24px rgba(0,0,0,.4)' : 'none';
+    }, { passive: true });
+})();
 </script>

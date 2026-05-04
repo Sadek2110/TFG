@@ -19,7 +19,8 @@
         <div class="glass rounded-3xl p-8 fade-up-1">
             <h1 class="text-2xl font-black mb-7">Iniciar sesión</h1>
 
-            <form method="POST" action="<?= APP_URL ?>/login" class="space-y-5" novalidate>
+            <form method="POST" action="<?= APP_URL ?>/login" class="space-y-5" novalidate id="loginForm" data-loading-form>
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">Email o teléfono</label>
                     <input type="text" name="credential" required autocomplete="username"
@@ -35,8 +36,12 @@
                         </button>
                     </div>
                 </div>
-                <button type="submit" class="btn-primary w-full justify-center py-3.5 text-base glow-green mt-2">
-                    Entrar →
+                <button type="submit" data-submit-btn data-loading-text="Entrando…" class="btn-primary w-full justify-center py-3.5 text-base glow-green mt-2">
+                    <span data-btn-text>Entrar →</span>
+                    <svg data-spinner class="hidden w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                    </svg>
                 </button>
             </form>
 

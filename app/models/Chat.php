@@ -33,6 +33,9 @@ class Chat extends Model {
     }
 
     public function sendMessage(int $roomId, int $userId, string $content): array|false {
+        if (empty(trim($content)) || strlen($content) > 1000) {
+            return false;
+        }
         $this->db->beginTransaction();
         try {
             $st = $this->db->prepare('INSERT INTO chat_messages (room_id, user_id, content) VALUES (?, ?, ?)');

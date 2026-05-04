@@ -59,10 +59,13 @@ class Router
 
     private function run(string $controller, string $action, array $params): void
     {
+        $controller = basename($controller);
         $file = APP_PATH . '/controllers/' . $controller . '.php';
         if (!file_exists($file)) {
-            http_response_code(500);
-            die("Controller not found: {$controller}");
+            error_log("Controller not found: {$controller}");
+            http_response_code(404);
+            echo $this->renderError(404, 'Página no encontrada');
+            return;
         }
         require_once $file;
         $instance = new $controller();

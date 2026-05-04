@@ -1,4 +1,4 @@
-<footer class="mt-auto border-t border-white/5" style="background:#040a06;">
+<footer class="mt-auto border-t border-white/5" style="background:#040a06; animation: fadeUp .7s .15s cubic-bezier(.22,1,.36,1) both;">
     <div class="max-w-7xl mx-auto px-6 py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
             <!-- Brand -->
@@ -11,9 +11,9 @@
                     Fútbol amateur organizado para todos, en cualquier lugar.
                 </p>
                 <div class="flex items-center gap-3">
-                    <a href="#" class="w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-green-500/40 transition-colors text-sm">𝕏</a>
-                    <a href="#" class="w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-green-500/40 transition-colors text-sm">in</a>
-                    <a href="#" class="w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-green-500/40 transition-colors text-sm">ig</a>
+                    <a href="#" class="w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-green-500/40 hover:scale-110 hover:shadow-[0_0_12px_rgba(22,163,74,.3)] transition-all duration-200 text-sm">𝕏</a>
+                    <a href="#" class="w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-green-500/40 hover:scale-110 hover:shadow-[0_0_12px_rgba(22,163,74,.3)] transition-all duration-200 text-sm">in</a>
+                    <a href="#" class="w-9 h-9 glass rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:border-green-500/40 hover:scale-110 hover:shadow-[0_0_12px_rgba(22,163,74,.3)] transition-all duration-200 text-sm">ig</a>
                 </div>
             </div>
 

@@ -15,6 +15,9 @@ class ChatController extends Controller {
         $chat     = new Chat();
         $room     = $chat->findById((int)$id);
         if (!$room) { $this->redirect('/chat'); }
+        if (!$chat->isMember((int)$id, $_SESSION['user_id'])) {
+            $this->redirect('/chat');
+        }
         $messages = $chat->getMessages((int)$id);
         $this->render('chat/room', compact('room', 'messages'));
     }
@@ -35,6 +38,8 @@ class ChatController extends Controller {
 
         $msg = $chat->sendMessage((int)$id, $_SESSION['user_id'], $content);
         if ($msg) {
+            $msg['content']     = htmlspecialchars($msg['content'], ENT_QUOTES, 'UTF-8');
+            $msg['author_name'] = htmlspecialchars($msg['author_name'], ENT_QUOTES, 'UTF-8');
             $this->json(['success' => true, 'message' => $msg]);
         }
         $this->json(['error' => 'Error al enviar'], 500);
