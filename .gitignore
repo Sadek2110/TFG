@@ -10,8 +10,7 @@ uploads/*
 # Runtime local y assets generados pesados
 php/
 public/frames/
-!public/frames-webp/
-!public/frames-webp/**
+public/frames-webp/
 
 # Editores / IDEs
 .idea/
