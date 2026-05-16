@@ -100,6 +100,28 @@ class Equipo
         Database::run('DELETE FROM teams WHERE id=?', [$id]);
     }
 
+    public function deletionBlocker(int $id): ?string
+    {
+        $matches = (int) Database::value(
+            'SELECT COUNT(*) FROM matches WHERE home_team_id=? OR away_team_id=?',
+            [$id, $id]
+        );
+        if ($matches > 0) {
+            return 'No se puede eliminar un equipo con partidos asociados.';
+        }
+        $activeLeagues = (int) Database::value(
+            "SELECT COUNT(*)
+             FROM league_teams lt
+             JOIN leagues l ON l.id = lt.league_id
+             WHERE lt.team_id=? AND l.status IN ('open','in_progress')",
+            [$id]
+        );
+        if ($activeLeagues > 0) {
+            return 'No se puede eliminar un equipo inscrito en una liga activa.';
+        }
+        return null;
+    }
+
     public function isCaptain(int $teamId, int $userId): bool
     {
         return (bool) Database::value('SELECT 1 FROM teams WHERE id=? AND captain_id=?', [$teamId, $userId]);

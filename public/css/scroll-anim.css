@@ -12,12 +12,12 @@ html { scroll-behavior: auto !important; }
     radial-gradient(ellipse 55% 45% at 85% 25%, rgba(245,158,11,.08) 0%, transparent 60%),
     linear-gradient(160deg, #0d2916 0%, #08170d 50%, #050d07 100%);
 }
-.scroll-anim__canvas-wrap canvas {
+.scroll-anim__canvas-wrap video {
   width: 100%; height: 100%; object-fit: cover; display: block;
   opacity: 0;
   transition: opacity .5s ease-out;
 }
-.scroll-anim__canvas-wrap canvas.is-ready { opacity: 1; }
+.scroll-anim__canvas-wrap video.is-ready { opacity: 1; }
 
 .scroll-anim__vignette {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;

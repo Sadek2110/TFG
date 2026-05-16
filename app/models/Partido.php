@@ -68,6 +68,13 @@ class Partido
         if (!$ts)                                  $errors['scheduled_at'] = 'Fecha/hora inválida.';
         elseif ($ts < time() - 60)                 $errors['scheduled_at'] = 'La fecha debe ser futura.';
 
+        if ($field > 0 && !Database::value('SELECT 1 FROM fields WHERE id=?', [$field])) {
+            $errors['field_id'] = 'El campo seleccionado no existe.';
+        }
+        if ($league > 0 && !Database::value('SELECT 1 FROM leagues WHERE id=?', [$league])) {
+            $errors['league_id'] = 'La liga seleccionada no existe.';
+        }
+
         if (!$errors && $league > 0) {
             $homeIn = (int) Database::value('SELECT 1 FROM league_teams WHERE league_id=? AND team_id=?', [$league, $home]);
             $awayIn = (int) Database::value('SELECT 1 FROM league_teams WHERE league_id=? AND team_id=?', [$league, $away]);
@@ -88,6 +95,23 @@ class Partido
     public function setStatus(int $id, string $status, ?int $homeScore = null, ?int $awayScore = null): bool
     {
         if (!in_array($status, ['pending','confirmed','cancelled','finished'], true)) {
+            return false;
+        }
+        $current = Database::one('SELECT status FROM matches WHERE id=?', [$id]);
+        if (!$current) {
+            return false;
+        }
+        $from = (string) $current['status'];
+        if (in_array($from, ['finished','cancelled'], true)) {
+            return false;
+        }
+        if ($status === 'pending') {
+            return false;
+        }
+        if ($status === 'confirmed' && $from !== 'pending') {
+            return false;
+        }
+        if ($status === 'finished' && $from !== 'confirmed') {
             return false;
         }
         if ($status === 'finished') {

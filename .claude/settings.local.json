@@ -5,7 +5,10 @@
       "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/AdminController.php\")",
       "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/LeaguesController.php\")",
       "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/HomeController.php\")",
-      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/ChatController.php\")"
+      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/ChatController.php\")",
+      "mcp__plugin_engram_engram__mem_current_project",
+      "mcp__plugin_engram_engram__mem_search",
+      "mcp__plugin_engram_engram__mem_save"
     ]
   }
 }

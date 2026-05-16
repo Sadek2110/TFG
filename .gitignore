@@ -6,8 +6,10 @@ storage/*.log
 # Uploads del usuario (no los assets de marca controlados)
 uploads/*
 !uploads/.htaccess
-!uploads/frames/
-!uploads/frames/**
+
+# Runtime local y assets generados pesados
+php/
+public/frames/
 
 # Editores / IDEs
 .idea/

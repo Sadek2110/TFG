@@ -84,8 +84,11 @@ class MatchesController extends Controller
         $id = (int) $id;
         $partido = $this->model('Partido');
         if (!$this->canManageMatch($partido, $id)) { return; }
-        $partido->setStatus($id, 'confirmed');
-        flash('ok', 'Partido confirmado.');
+        if ($partido->setStatus($id, 'confirmed')) {
+            flash('ok', 'Partido confirmado.');
+        } else {
+            flash('warn', 'No se puede confirmar un partido en este estado.');
+        }
         redirect('matches/show/' . $id);
     }
 
@@ -96,8 +99,11 @@ class MatchesController extends Controller
         $id = (int) $id;
         $partido = $this->model('Partido');
         if (!$this->canManageMatch($partido, $id)) { return; }
-        $partido->setStatus($id, 'cancelled');
-        flash('ok', 'Partido cancelado.');
+        if ($partido->setStatus($id, 'cancelled')) {
+            flash('ok', 'Partido cancelado.');
+        } else {
+            flash('warn', 'No se puede cancelar un partido en este estado.');
+        }
         redirect('matches/show/' . $id);
     }
 
@@ -127,8 +133,18 @@ class MatchesController extends Controller
         if (!$this->canManageMatch($partido, $id)) { return; }
         $hs = isset($_POST['home_score']) ? (int) $_POST['home_score'] : 0;
         $as = isset($_POST['away_score']) ? (int) $_POST['away_score'] : 0;
-        $partido->setStatus($id, 'finished', max(0, $hs), max(0, $as));
-        flash('ok', 'Partido finalizado, marcador registrado.');
+        $hs = min(99, max(0, $hs));
+        $as = min(99, max(0, $as));
+        if ($hs === 0 && $as === 0) {
+            flash('warn', 'Indica un marcador real para finalizar el partido.');
+            redirect('matches/show/' . $id);
+            return;
+        }
+        if ($partido->setStatus($id, 'finished', $hs, $as)) {
+            flash('ok', 'Partido finalizado, marcador registrado.');
+        } else {
+            flash('warn', 'No se puede finalizar un partido en este estado.');
+        }
         redirect('matches/show/' . $id);
     }
 

@@ -7,9 +7,10 @@ class ChatController extends Controller
     {
         $this->requireAuth();
         $chat = $this->model('Chat');
+        $userId = (int) current_user()['id'];
         $this->view('chat/index', [
             'active' => 'chat',
-            'rooms'  => $chat->rooms(),
+            'rooms'  => $chat->rooms($userId, is_admin()),
             'title'  => 'Chat — FastPlay',
         ]);
     }
@@ -21,13 +22,18 @@ class ChatController extends Controller
         $chat = $this->model('Chat');
         $room = $chat->room($id);
         if (!$room) { Router::notFound(); return; }
+        if (!$chat->canAccessRoom($room, (int) current_user()['id'], is_admin())) {
+            flash('warn', 'No tienes acceso a esta sala.');
+            redirect('chat');
+            return;
+        }
 
         $msgs = array_reverse($chat->messages($id));
         $this->view('chat/room', [
             'active'   => 'chat',
             'room'     => $room,
             'messages' => $msgs,
-            'rooms'    => $chat->rooms(),
+            'rooms'    => $chat->rooms((int) current_user()['id'], is_admin()),
             'title'    => $room['name'] . ' — Chat — FastPlay',
         ]);
     }
@@ -38,7 +44,7 @@ class ChatController extends Controller
         $this->requirePost();
         $id = (int) $id;
         $chat = $this->model('Chat');
-        $res = $chat->send($id, (int) current_user()['id'], (string) ($_POST['body'] ?? ''));
+        $res = $chat->send($id, (int) current_user()['id'], (string) ($_POST['body'] ?? ''), is_admin());
         if (!empty($res['error'])) {
             flash('warn', $res['error']);
         }

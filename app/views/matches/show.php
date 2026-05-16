@@ -39,16 +39,18 @@
                 <?= csrf_field() ?>
                 <button class="fp-btn fp-btn-ghost" style="color:#f87171;">Cancelar</button>
             </form>
+            <?php if ($match['st'] === 'confirmed'): ?>
             <details class="fp-glass" style="border-radius:14px;padding:14px 16px;">
                 <summary style="cursor:pointer;font-weight:600;font-size:13px;">Cerrar resultado</summary>
                 <form method="post" action="<?= url('matches/finish/' . (int) $match['id']) ?>" style="display:flex;gap:10px;align-items:center;margin-top:12px;">
                     <?= csrf_field() ?>
-                    <input type="number" name="home_score" min="0" placeholder="Local" class="fp-input" style="width:100px;">
+                    <input type="number" name="home_score" min="0" max="99" placeholder="Local" class="fp-input" style="width:100px;">
                     <span style="color:#6b7280;">–</span>
-                    <input type="number" name="away_score" min="0" placeholder="Visit." class="fp-input" style="width:100px;">
+                    <input type="number" name="away_score" min="0" max="99" placeholder="Visit." class="fp-input" style="width:100px;">
                     <button class="fp-btn fp-btn-primary">Finalizar →</button>
                 </form>
             </details>
+            <?php endif; ?>
         </section>
     <?php endif; ?>
 </main>

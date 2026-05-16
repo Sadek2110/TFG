@@ -166,7 +166,9 @@ unset($_l);
   <div class="scroll-progress" id="scrollProgress"></div>
 
   <div class="scroll-anim__canvas-wrap">
-    <canvas id="frameCanvas"></canvas>
+    <video id="heroVideo" muted playsinline preload="auto" poster="<?= asset('images/hero-poster.jpg') ?>">
+      <source src="<?= asset('video/hero.webm') ?>" type="video/webm">
+    </video>
   </div>
 
   <div class="scroll-anim__vignette"></div>
@@ -362,7 +364,6 @@ unset($_l);
 (function() {
   'use strict';
 
-  var FRAME_PATH = '<?= str_replace(' ', '%20', asset('frames/frame_')) ?>';
   var navbar = document.querySelector('.fp-navbar');
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -412,7 +413,6 @@ unset($_l);
   }
 
   FastPlayScrollAnim.init({
-    framePath: FRAME_PATH,
     onScroll: function(scrollTop) {
       if (navbar) {
         if (scrollTop > 60) navbar.classList.add('scrolled');

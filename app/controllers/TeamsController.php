@@ -103,6 +103,12 @@ class TeamsController extends Controller
             redirect('teams');
             return;
         }
+        $blocker = $equipo->deletionBlocker($id);
+        if ($blocker) {
+            flash('warn', $blocker);
+            redirect('teams/show/' . $id);
+            return;
+        }
         $equipo->delete($id);
         flash('ok', 'Equipo eliminado.');
         redirect('teams');

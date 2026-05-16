@@ -80,6 +80,13 @@ class AdminController extends Controller
             }
         }
 
+        $captainOf = (int) Database::value('SELECT COUNT(*) FROM teams WHERE captain_id=?', [$targetId]);
+        if ($captainOf > 0) {
+            flash('warn', 'No puedes eliminar un usuario que capitanea equipos. Transfiere la capitania antes.');
+            redirect('admin/users');
+            return;
+        }
+
         $usuario->delete($targetId);
         flash('ok', 'Usuario eliminado.');
         redirect('admin/users');
