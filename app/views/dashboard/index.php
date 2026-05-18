@@ -88,8 +88,11 @@ $posShort  = $positionShort((string) ($card['position'] ?? ''));
                 </div>
                 <a href="<?= url('teams/show/' . (int) $team['id']) ?>" class="fp-btn fp-btn-ghost" style="width:100%;justify-content:center;padding:10px 0;font-size:13px;">Ver equipo →</a>
             <?php else: ?>
-                <p style="font-size:13px;color:#9ca3af;margin:0 0 14px;">Aún no tienes equipo. ¡Crea uno o únete a uno existente!</p>
-                <a href="<?= url('teams/create') ?>" class="fp-btn fp-btn-primary fp-btn-glow" style="width:100%;justify-content:center;padding:10px 0;font-size:13px;">Crear equipo →</a>
+                <p style="font-size:13px;color:#9ca3af;margin:0 0 14px;">Aún no tienes equipo. ¡Únete a uno o crea el tuyo!</p>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <a href="<?= url('teams') ?>" class="fp-btn fp-btn-primary fp-btn-glow" style="width:100%;justify-content:center;padding:10px 0;font-size:13px;">Unirse a un equipo →</a>
+                    <a href="<?= url('teams/create') ?>" class="fp-btn fp-btn-gold" style="width:100%;justify-content:center;padding:10px 0;font-size:13px;">+ Crear equipo</a>
+                </div>
             <?php endif; ?>
         </div>
 

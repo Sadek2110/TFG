@@ -116,6 +116,69 @@ class Usuario
         return [];
     }
 
+    /**
+     * Procesa un upload de avatar. Devuelve [ruta_relativa_o_null, errors].
+     * - Acepta JPG/PNG/WEBP hasta 2 MB.
+     * - Guarda bajo public/uploads/avatars/u{id}_{time}.{ext}.
+     * - Borra el avatar anterior del usuario si existía y era nuestro.
+     */
+    public function updateAvatar(int $id, array $file): array
+    {
+        $err = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
+        if ($err === UPLOAD_ERR_NO_FILE) {
+            return [null, []];
+        }
+        if ($err !== UPLOAD_ERR_OK) {
+            return [null, ['avatar' => 'No se pudo subir la imagen (código ' . $err . ').']];
+        }
+        $size = (int) ($file['size'] ?? 0);
+        if ($size <= 0 || $size > 2 * 1024 * 1024) {
+            return [null, ['avatar' => 'La imagen debe pesar menos de 2 MB.']];
+        }
+        $tmp = (string) ($file['tmp_name'] ?? '');
+        if ($tmp === '' || !is_uploaded_file($tmp)) {
+            return [null, ['avatar' => 'Fichero temporal no válido.']];
+        }
+        $info = @getimagesize($tmp);
+        if (!$info) {
+            return [null, ['avatar' => 'El archivo no parece una imagen válida.']];
+        }
+        $extByMime = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png',
+            'image/webp' => 'webp',
+        ];
+        $mime = (string) ($info['mime'] ?? '');
+        if (!isset($extByMime[$mime])) {
+            return [null, ['avatar' => 'Formato no soportado. Usa JPG, PNG o WEBP.']];
+        }
+        $ext = $extByMime[$mime];
+
+        $publicDir = APP_ROOT . '/public/uploads/avatars';
+        if (!is_dir($publicDir) && !mkdir($publicDir, 0775, true) && !is_dir($publicDir)) {
+            return [null, ['avatar' => 'No se pudo preparar el directorio de subidas.']];
+        }
+        $filename = 'u' . $id . '_' . time() . '.' . $ext;
+        $dest = $publicDir . '/' . $filename;
+        if (!move_uploaded_file($tmp, $dest)) {
+            return [null, ['avatar' => 'No se pudo guardar la imagen.']];
+        }
+        @chmod($dest, 0644);
+
+        $relative = 'uploads/avatars/' . $filename;
+
+        // Borrar avatar anterior del mismo usuario si era nuestro
+        $previous = (string) (Database::value('SELECT avatar FROM users WHERE id = ?', [$id]) ?? '');
+        if ($previous !== '' && str_starts_with($previous, 'uploads/avatars/')) {
+            $prevPath = APP_ROOT . '/public/' . $previous;
+            if (is_file($prevPath)) {
+                @unlink($prevPath);
+            }
+        }
+        Database::run('UPDATE users SET avatar = ? WHERE id = ?', [$relative, $id]);
+        return [$relative, []];
+    }
+
     public function changePassword(int $id, string $current, string $new, string $confirm): array
     {
         $errors = [];

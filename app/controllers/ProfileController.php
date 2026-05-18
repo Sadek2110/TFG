@@ -30,6 +30,12 @@ class ProfileController extends Controller
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             require_csrf();
             $errors = $usuario->updateProfile((int) $user['id'], $_POST);
+            if (!$errors && !empty($_FILES['avatar']['name'])) {
+                [, $avErrors] = $usuario->updateAvatar((int) $user['id'], $_FILES['avatar']);
+                if ($avErrors) {
+                    $errors = array_merge($errors, $avErrors);
+                }
+            }
             if (!$errors) {
                 $fresh = $usuario->find((int) $user['id']);
                 if ($fresh) {

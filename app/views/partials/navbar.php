@@ -27,7 +27,11 @@ $user = current_user();
         <div style="display:flex;align-items:center;gap:12px;">
             <?php if ($user): ?>
                 <a href="<?= url('dashboard') ?>" class="fp-glass" style="border-radius:9999px;padding:5px 14px 5px 6px;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;text-decoration:none;color:#fff;">
-                    <span style="width:26px;height:26px;border-radius:9999px;background:#16a34a;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;"><?= e(mb_substr($user['name'], 0, 1)) ?></span>
+                    <?php if (!empty($user['avatar'])): ?>
+                        <img src="<?= asset($user['avatar']) ?>" alt="" style="width:26px;height:26px;border-radius:9999px;object-fit:cover;display:block;">
+                    <?php else: ?>
+                        <span style="width:26px;height:26px;border-radius:9999px;background:#16a34a;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;"><?= e(mb_substr($user['name'], 0, 1)) ?></span>
+                    <?php endif; ?>
                     <?= e($user['name']) ?>
                 </a>
                 <form method="post" action="<?= url('auth/logout') ?>" style="margin:0;">
