@@ -4,8 +4,8 @@
     <div style="width:100%;max-width:520px;position:relative;">
         <div style="text-align:center;margin-bottom:32px;">
             <a href="<?= url('') ?>" class="fp-logo" style="justify-content:center;">
-                <img src="<?= asset('images/logo.png') ?>" alt="" class="fp-logo-icon" style="height:44px;">
-                <img src="<?= asset('images/logo_palabra.png') ?>" alt="FastPlay" class="fp-logo-word" style="height:44px;">
+                <img src="<?= asset('images/logo.png') ?>" alt="" class="fp-logo-icon" style="height:30px;">
+                <img src="<?= asset('images/logo_palabra.png') ?>" alt="FastPlay" class="fp-logo-word" style="height:22px;">
             </a>
             <p style="color:#6b7280;margin-top:8px;font-size:13px;">Crea tu perfil de jugador</p>
         </div>
