@@ -209,7 +209,7 @@ body {
 .fp-navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
-  height: 64px;
+  height: 80px;
   z-index: 50;
   background: rgba(10,20,12,.97);
   backdrop-filter: blur(20px);
