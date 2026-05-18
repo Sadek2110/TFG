@@ -244,8 +244,13 @@ body {
   color: #fff;
   cursor: pointer;
 }
-.fp-logo img {
-  height: 28px;
+.fp-logo-icon {
+  height: 1.4em;
+  width: auto;
+  display: block;
+}
+.fp-logo-word {
+  height: 0.95em;
   width: auto;
   display: block;
 }
