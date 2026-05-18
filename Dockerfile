@@ -3,7 +3,7 @@ FROM php:8.2-apache
 RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     libonig-dev \
-    && docker-php-ext-install pdo pdo_sqlite mbstring \
+    && docker-php-ext-install pdo pdo_sqlite pdo_mysql mbstring \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
