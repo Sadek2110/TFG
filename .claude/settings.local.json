@@ -10,7 +10,10 @@
       "mcp__plugin_engram_engram__mem_search",
       "mcp__plugin_engram_engram__mem_save",
       "Bash(git -C \"c:/Users/sadek/Desktop/Proyectos personales/Fastplay\" log --oneline -20)",
-      "Bash(git -C \"c:/Users/sadek/Desktop/Proyectos personales/Fastplay\" ls-files)"
+      "Bash(git -C \"c:/Users/sadek/Desktop/Proyectos personales/Fastplay\" ls-files)",
+      "PowerShell(C:\\\\Users\\\\Propietario\\\\Desktop\\\\fastplay\\\\php\\\\php.exe -m)",
+      "PowerShell(Get-ChildItem C:\\\\Users\\\\Propietario\\\\Desktop\\\\fastplay\\\\php\\\\ext | Where-Object { $_.Name -match \"mb|sqlite|pdo\" })",
+      "PowerShell(C:\\\\Users\\\\Propietario\\\\Desktop\\\\fastplay\\\\php\\\\php.exe -r \"echo dirname\\(\\\\$_SERVER['SCRIPT_NAME'] ?? ''\\);\" 2>&1)"
     ]
   }
 }
