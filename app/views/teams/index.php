@@ -12,16 +12,22 @@
     <?php if (empty($teams)): ?>
         <div class="fp-empty">⚽ Aún no hay equipos. ¡Sé el primero en crear uno!</div>
     <?php else: ?>
-        <div class="fp-grid-4">
+        <div style="display:flex;flex-direction:column;gap:10px;">
             <?php foreach ($teams as $t): ?>
-                <a href="<?= url('teams/show/' . (int) $t['id']) ?>" class="fp-glass fp-card-link" style="border-radius:18px;padding:22px;display:block;text-decoration:none;color:#fff;">
-                    <div class="fp-glass fp-glass-green" style="width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px;"><?= e($t['badge'] ?? '🛡️') ?></div>
-                    <h3 style="font-size:15px;font-weight:900;margin:0 0 4px;"><?= e($t['name']) ?></h3>
-                    <p style="font-size:11px;color:#6b7280;margin:0 0 6px;">📍 <?= e($t['city']) ?></p>
-                    <p style="font-size:11px;color:#6b7280;margin:0 0 14px;">🛡️ Capitán: <?= e($t['captain_name']) ?></p>
-                    <div style="display:flex;justify-content:space-between;font-size:11px;">
-                        <span style="color:#4b5563;"><?= (int) $t['players'] ?> jugadores</span>
-                        <span style="color:#4ade80;font-weight:600;">Ver →</span>
+                <a href="<?= url('teams/show/' . (int) $t['id']) ?>" class="fp-glass fp-match-row fp-card-link" style="text-decoration:none;color:#fff;">
+                    <div class="fp-glass fp-glass-green" style="width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;">
+                        <?= e($t['badge'] ?? '🛡️') ?>
+                    </div>
+                    <div style="width:1px;height:44px;background:rgba(255,255,255,.10);"></div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="font-size:18px;font-weight:900;letter-spacing:-.01em;"><?= e($t['name']) ?></div>
+                        <div style="font-size:12px;color:#9ca3af;margin-top:4px;">📍 <?= e($t['city']) ?></div>
+                    </div>
+                    <div style="min-width:180px;text-align:right;">
+                        <div style="font-size:11px;color:#6b7280;">🛡️ Capitán: <span style="color:#d1d5db;font-weight:600;"><?= e($t['captain_name']) ?></span></div>
+                        <div style="margin-top:8px;">
+                            <span class="fp-status fp-status-confirmed"><?= (int) $t['players'] ?> jugadores</span>
+                        </div>
                     </div>
                 </a>
             <?php endforeach; ?>
