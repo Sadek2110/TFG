@@ -1,0 +1,1 @@
+- [DB dialects](project_db_dialects.md) — FastPlay mantiene schema en SQLite (vivo) + dumps equivalentes Postgres y MySQL en database/

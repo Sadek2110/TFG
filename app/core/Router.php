@@ -71,7 +71,9 @@ class Router
     public static function serverError(Throwable $e): void
     {
         http_response_code(500);
-        error_log('[FastPlay] ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+        if (!defined('FASTPLAY_TESTING')) {
+            error_log('[FastPlay] ' . $e->getMessage() . ' @ ' . $e->getFile() . ':' . $e->getLine());
+        }
         require_once APP_PATH . '/controllers/HomeController.php';
         (new HomeController())->serverError();
     }

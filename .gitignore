@@ -2,6 +2,11 @@
 storage/*.sqlite
 storage/*.sqlite-journal
 storage/*.log
+storage/sessions/
+
+# Dependencias y cachés de test
+vendor/
+.phpunit.cache/
 
 # Uploads del usuario (no los assets de marca controlados)
 uploads/*
@@ -15,6 +20,7 @@ public/frames-webp/
 # Editores / IDEs
 .idea/
 .vscode/
+.agent/
 *.bak
 *.swp
 *~

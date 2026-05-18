@@ -5,6 +5,7 @@ define('APP_NAME', 'FastPlay');
 define('APP_ROOT', dirname(__DIR__));
 define('APP_PATH', APP_ROOT . DIRECTORY_SEPARATOR . 'app');
 define('STORAGE_PATH', APP_ROOT . DIRECTORY_SEPARATOR . 'storage');
+define('SESSIONS_PATH', STORAGE_PATH . DIRECTORY_SEPARATOR . 'sessions');
 define('UPLOADS_PATH', APP_ROOT . DIRECTORY_SEPARATOR . 'uploads');
 
 // Entorno de ejecución: 'development' o 'production'.
@@ -18,9 +19,40 @@ if (!is_dir(STORAGE_PATH)) {
         throw new RuntimeException('No se pudo crear el directorio de almacenamiento: ' . STORAGE_PATH);
     }
 }
+if (!is_dir(SESSIONS_PATH)) {
+    if (!mkdir(SESSIONS_PATH, 0775, true) && !is_dir(SESSIONS_PATH)) {
+        throw new RuntimeException('No se pudo crear el directorio de sesiones: ' . SESSIONS_PATH);
+    }
+}
 
-// SQLite — sin necesidad de configurar MySQL
-define('DB_DSN', 'sqlite:' . STORAGE_PATH . DIRECTORY_SEPARATOR . 'fastplay.sqlite');
+// Conexión a BD: SQLite por defecto (dev), MySQL/PostgreSQL vía env vars (prod).
+// Variables soportadas: DB_DRIVER (sqlite|mysql|pgsql), DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS.
+$dbDriver = getenv('DB_DRIVER') ?: 'sqlite';
+define('DB_DRIVER', $dbDriver);
+
+if ($dbDriver === 'mysql') {
+    define('DB_DSN', sprintf(
+        'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+        getenv('DB_HOST') ?: 'localhost',
+        getenv('DB_PORT') ?: '3306',
+        getenv('DB_NAME') ?: 'fastplay'
+    ));
+    define('DB_USER', getenv('DB_USER') ?: '');
+    define('DB_PASS', getenv('DB_PASS') ?: '');
+} elseif ($dbDriver === 'pgsql') {
+    define('DB_DSN', sprintf(
+        'pgsql:host=%s;port=%s;dbname=%s',
+        getenv('DB_HOST') ?: 'localhost',
+        getenv('DB_PORT') ?: '5432',
+        getenv('DB_NAME') ?: 'fastplay'
+    ));
+    define('DB_USER', getenv('DB_USER') ?: '');
+    define('DB_PASS', getenv('DB_PASS') ?: '');
+} else {
+    define('DB_DSN', 'sqlite:' . STORAGE_PATH . DIRECTORY_SEPARATOR . 'fastplay.sqlite');
+    define('DB_USER', null);
+    define('DB_PASS', null);
+}
 
 // BASE_URL detecta automáticamente la ruta de instalación bajo XAMPP
 $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
@@ -46,6 +78,7 @@ if (session_status() === PHP_SESSION_NONE) {
     ]);
     ini_set('session.use_only_cookies', '1');
     ini_set('session.use_strict_mode', '1');
+    ini_set('session.save_path', SESSIONS_PATH);
     session_name('FPSESSID');
     session_start();
 }

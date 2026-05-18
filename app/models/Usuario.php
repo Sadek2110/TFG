@@ -164,7 +164,7 @@ class Usuario
     // ===== Rate limit =====
     private function isRateLimited(string $email, string $ip): bool
     {
-        $cutoff = date('Y-m-d H:i:s', time() - 600); // 10 min
+        $cutoff = gmdate('Y-m-d H:i:s', time() - 600); // SQLite datetime('now') is UTC.
         $fails = (int) Database::value(
             "SELECT COUNT(*) FROM login_attempts WHERE success = 0 AND attempted_at > ? AND (ip = ? OR email = ?)",
             [$cutoff, $ip, mb_strtolower($email)]
@@ -178,6 +178,6 @@ class Usuario
             $ip ?: '0.0.0.0', mb_strtolower($email), $success ? 1 : 0,
         ]);
         // limpieza ligera
-        Database::run('DELETE FROM login_attempts WHERE attempted_at < ?', [date('Y-m-d H:i:s', time() - 86400)]);
+        Database::run('DELETE FROM login_attempts WHERE attempted_at < ?', [gmdate('Y-m-d H:i:s', time() - 86400)]);
     }
 }

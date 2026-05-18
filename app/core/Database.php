@@ -10,14 +10,19 @@ class Database
         if (self::$pdo instanceof PDO) {
             return self::$pdo;
         }
-        $pdo = new PDO(DB_DSN, null, null, [
+        $pdo = new PDO(DB_DSN, DB_USER, DB_PASS, [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ]);
-        $pdo->exec('PRAGMA foreign_keys = ON;');
         self::$pdo = $pdo;
-        self::migrate($pdo);
+        // El auto-init de esquema y los seeds están escritos en sintaxis SQLite
+        // (AUTOINCREMENT, PRAGMA, datetime('now'), INSERT OR IGNORE). Para MySQL
+        // o PostgreSQL el esquema se carga vía database/fastplay_{mysql,postgres}.sql.
+        if ($pdo->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite') {
+            $pdo->exec('PRAGMA foreign_keys = ON;');
+            self::migrate($pdo);
+        }
         return $pdo;
     }
 
@@ -216,6 +221,25 @@ class Database
         $pdo->exec('CREATE INDEX IF NOT EXISTS idx_login_attempts_ip    ON login_attempts(ip,    attempted_at)');
 
         self::seed($pdo);
+        self::repairConsistency($pdo);
+    }
+
+    private static function repairConsistency(PDO $pdo): void
+    {
+        // Las versiones anteriores podían dejar partidos de liga con equipos no inscritos.
+        // Mantener esta reparación idempotente evita clasificaciones incoherentes.
+        $pdo->exec("
+            INSERT OR IGNORE INTO league_teams (league_id, team_id)
+            SELECT league_id, home_team_id
+            FROM matches
+            WHERE league_id IS NOT NULL
+        ");
+        $pdo->exec("
+            INSERT OR IGNORE INTO league_teams (league_id, team_id)
+            SELECT league_id, away_team_id
+            FROM matches
+            WHERE league_id IS NOT NULL
+        ");
     }
 
     private static function seed(PDO $pdo): void

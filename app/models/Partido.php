@@ -38,9 +38,9 @@ class Partido
              FROM matches m
              JOIN teams h ON h.id = m.home_team_id
              JOIN teams a ON a.id = m.away_team_id
-             WHERE m.status IN ('confirmed','pending') AND m.scheduled_at >= datetime('now')
+             WHERE m.status IN ('confirmed','pending') AND m.scheduled_at >= ?
              ORDER BY m.scheduled_at ASC
-             LIMIT ?", [$limit]
+             LIMIT ?", [date('Y-m-d H:i:s'), $limit]
         );
         return array_map(function ($r) {
             return [
