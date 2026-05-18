@@ -21,6 +21,7 @@ public/frames-webp/
 .idea/
 .vscode/
 .agent/
+.claude/
 *.bak
 *.swp
 *~
