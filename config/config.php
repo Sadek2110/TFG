@@ -86,7 +86,9 @@ function url(string $path = ''): string
 
 function asset(string $path): string
 {
-    return ASSETS_URL . '/' . ltrim($path, '/');
+    $filePath = APP_ROOT . '/public/' . ltrim($path, '/');
+    $v = is_file($filePath) ? '?v=' . filemtime($filePath) : '';
+    return ASSETS_URL . '/' . ltrim($path, '/') . $v;
 }
 
 function redirect(string $path): void
