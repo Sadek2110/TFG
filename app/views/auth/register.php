@@ -3,9 +3,8 @@
 
     <div style="width:100%;max-width:520px;position:relative;">
         <div style="text-align:center;margin-bottom:32px;">
-            <a href="<?= url('') ?>" class="fp-logo" style="font-size:26px;justify-content:center;">
-                <span class="ball" style="font-size:31px;">⚽</span>
-                <span>Fast<span class="accent">Play</span></span>
+            <a href="<?= url('') ?>" class="fp-logo" style="justify-content:center;">
+                <img src="<?= asset('images/logo.png') ?>" alt="FastPlay" style="height:48px;">
             </a>
             <p style="color:#6b7280;margin-top:8px;font-size:13px;">Crea tu perfil de jugador</p>
         </div>

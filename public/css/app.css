@@ -244,8 +244,11 @@ body {
   color: #fff;
   cursor: pointer;
 }
-.fp-logo .ball { font-size: 24px; line-height: 1; }
-.fp-logo .accent { color: var(--fp-green-400); }
+.fp-logo img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
 
 /* ============= Status badges ============= */
 .fp-status {

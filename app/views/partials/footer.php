@@ -24,8 +24,7 @@ $cols = [
     <div class="fp-footer-inner">
         <div>
             <a href="<?= url('') ?>" class="fp-logo" style="margin-bottom:16px;">
-                <span class="ball">⚽</span>
-                <span>Fast<span class="accent">Play</span></span>
+                <img src="<?= asset('images/logo.png') ?>" alt="FastPlay">
             </a>
             <p style="color:#6b7280;font-size:13px;line-height:1.55;margin:16px 0 18px;">Fútbol amateur organizado para todos, en cualquier lugar.</p>
             <div style="display:flex;gap:10px;" aria-label="Redes sociales (próximamente)">
