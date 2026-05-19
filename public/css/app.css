@@ -1113,8 +1113,8 @@ body {
 .fp-check-list i { color: var(--fp-green-400); }
 .fp-fields-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 18px;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
   align-items: start;
 }
 .fp-fields-map {
@@ -1122,8 +1122,10 @@ body {
   border-radius: 18px;
   overflow: hidden;
   border: 1px solid var(--fp-glass-border);
+  position: sticky;
+  top: 88px;
 }
-.fp-fields-list { display: flex; flex-direction: column; gap: 14px; }
+.fp-fields-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
 .fp-field-card {
   border-radius: 18px;
   overflow: hidden;

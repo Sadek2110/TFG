@@ -452,6 +452,7 @@ ORDER BY m.scheduled_at;
 -- 7. EXTENSIONES FUNCIONALES 2026-05-19 (notificaciones, solicitudes, premium)
 -- ----------------------------------------------------------------------------
 ALTER TABLE users ADD COLUMN is_premium BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE users ADD COLUMN google_id VARCHAR(255) UNIQUE;
 ALTER TABLE users ADD COLUMN current_team_id BIGINT;
 ALTER TABLE teams ADD COLUMN shield TEXT;
 ALTER TABLE team_members ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'player';

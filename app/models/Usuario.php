@@ -305,11 +305,126 @@ class Usuario
     }
 
     private function recordAttempt(string $email, string $ip, bool $success): void
+
+    /**
+     * Datos compactos para la carta estilo FIFA del dashboard:
+     * nombre, foto, posición, dorsal, altura, partidos, goles, asistencias y equipo principal.
+     */
+    public function playerCard(int $userId): array
+    {
+        $u = Database::one(
+            'SELECT id,name,avatar,position,dorsal,height_cm,goals,assists FROM users WHERE id = ?',
+            [$userId]
+        );
+        if (!$u) return [];
+        $played = (int) Database::value(
+            "SELECT COUNT(*) FROM matches m
+             JOIN team_members tm ON tm.team_id IN (m.home_team_id, m.away_team_id)
+             WHERE tm.user_id = ? AND m.status = 'finished'",
+            [$userId]
+        );
+        $team = Database::one(
+            "SELECT t.id, t.name, t.badge, t.city
+             FROM teams t
+             JOIN team_members tm ON tm.team_id = t.id
+             WHERE tm.user_id = ?
+             ORDER BY t.name LIMIT 1",
+            [$userId]
+        );
+        return [
+            'name'      => (string) $u['name'],
+            'avatar'    => $u['avatar'] ?? null,
+            'position'  => (string) ($u['position'] ?? ''),
+            'dorsal'    => isset($u['dorsal']) && $u['dorsal'] !== null ? (int) $u['dorsal'] : null,
+            'height_cm' => isset($u['height_cm']) && $u['height_cm'] !== null ? (int) $u['height_cm'] : null,
+            'goals'     => (int) ($u['goals']   ?? 0),
+            'assists'   => (int) ($u['assists'] ?? 0),
+            'played'    => $played,
+            'team'      => $team ?: null,
+        ];
+    }
+
+    public function achievements(int $userId): array
+    {
+        return Database::all(
+            'SELECT a.icon AS i, a.name AS n, a.description AS d, ua.earned_at
+             FROM user_achievements ua
+             JOIN achievements a ON a.id = ua.achievement_id
+             WHERE ua.user_id = ?
+             ORDER BY ua.earned_at DESC',
+            [$userId]
+        );
+    }
+
+    public function all(): array
+    {
+        return Database::all('SELECT id,name,email,role,city,position,created_at FROM users ORDER BY created_at DESC');
+    }
+
+    public function setRole(int $id, string $role): void
+    {
+        if (!in_array($role, ['player','admin'], true)) return;
+        Database::run('UPDATE users SET role=? WHERE id=?', [$role, $id]);
+    }
+
+    public function delete(int $id): void
+    {
+        Database::run('DELETE FROM users WHERE id=?', [$id]);
+    }
+
+    // ===== Rate limit =====
+    private function isRateLimited(string $email, string $ip): bool
+    {
+        $cutoff = gmdate('Y-m-d H:i:s', time() - 600); // SQLite datetime('now') is UTC.
+        $fails = (int) Database::value(
+            "SELECT COUNT(*) FROM login_attempts WHERE success = 0 AND attempted_at > ? AND (ip = ? OR email = ?)",
+            [$cutoff, $ip, mb_strtolower($email)]
+        );
+        return $fails >= 5;
+    }
+
+    private function recordAttempt(string $email, string $ip, bool $success): void
     {
         Database::run('INSERT INTO login_attempts (ip,email,success) VALUES (?,?,?)', [
             $ip ?: '0.0.0.0', mb_strtolower($email), $success ? 1 : 0,
         ]);
         // limpieza ligera
         Database::run('DELETE FROM login_attempts WHERE attempted_at < ?', [gmdate('Y-m-d H:i:s', time() - 86400)]);
+    }
+
+    public function registerOrLoginWithGoogle(array $googleData): array
+    {
+        $email = mb_strtolower(trim((string) $googleData['email']));
+        $googleId = (string) $googleData['id'];
+        $name = (string) $googleData['name'];
+        $avatar = (string) ($googleData['avatar'] ?? '');
+
+        $user = Database::one('SELECT * FROM users WHERE google_id = ?', [$googleId]);
+        if ($user) {
+            unset($user['password_hash']);
+            return [$user, []];
+        }
+
+        $user = Database::one('SELECT * FROM users WHERE email = ?', [$email]);
+        if ($user) {
+            Database::run('UPDATE users SET google_id = ?, avatar = COALESCE(avatar, ?) WHERE id = ?', [$googleId, $avatar, $user['id']]);
+            $user = Database::one('SELECT * FROM users WHERE id = ?', [$user['id']]);
+            unset($user['password_hash']);
+            return [$user, []];
+        }
+
+        $randomPass = bin2hex(random_bytes(16));
+        try {
+            Database::run(
+                "INSERT INTO users (name,email,password_hash,role,google_id,avatar) VALUES (?,?,?,?,?,?)",
+                [$name, $email, password_hash($randomPass, PASSWORD_DEFAULT), 'player', $googleId, $avatar]
+            );
+        } catch (\Exception $e) {
+            error_log('Google login error: ' . $e->getMessage());
+            return [null, ['email' => 'Error creando el usuario con Google (revisa la base de datos).']];
+        }
+        $user = Database::one('SELECT * FROM users WHERE id = ?', [Database::insertId()]);
+        unset($user['password_hash']);
+        return [$user, []];
     }
 }

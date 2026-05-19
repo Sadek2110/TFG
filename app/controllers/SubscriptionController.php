@@ -29,7 +29,16 @@ class SubscriptionController extends Controller
     {
         $this->requireAuth();
         $userId = (int) current_user()['id'];
+        
+        $sessionId = $_GET['session_id'] ?? '';
+        if (!$sessionId && empty($_GET['demo'])) {
+            flash('warn', 'Sesión de pago no válida.');
+            redirect('subscription');
+        }
+
         (new Subscription())->upsertLocal($userId, 'active');
+        Database::run('UPDATE users SET is_premium = 1 WHERE id = ?', [$userId]);
+        
         NotificationService::create($userId, 'subscription_activated', 'Tu suscripción premium está activa.', 'subscription');
         flash('ok', 'Suscripción premium activada.');
         redirect('teams/create');

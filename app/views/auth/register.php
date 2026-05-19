@@ -53,6 +53,17 @@
                 </label>
                 <button type="submit" class="fp-btn fp-btn-primary fp-btn-glow" style="width:100%;justify-content:center;padding:14px 0;font-size:15px;margin-top:4px;">Crear mi cuenta gratis →</button>
             </form>
+
+            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display:flex; align-items:center; color:#6b7280; font-size:12px; gap:8px;">
+                    <hr style="flex:1; border:0; border-top:1px solid rgba(255,255,255,0.1);">
+                    <span>O</span>
+                    <hr style="flex:1; border:0; border-top:1px solid rgba(255,255,255,0.1);">
+                </div>
+                <a href="<?= url('auth/google') ?>" class="fp-btn fp-btn-ghost" style="width:100%; justify-content:center; padding:12px 0;">
+                    <i class="bi bi-google" style="color:#ef4444;"></i> Registrarse con Google
+                </a>
+            </div>
         </div>
 
         <p style="text-align:center;font-size:13px;color:#6b7280;margin-top:22px;">
