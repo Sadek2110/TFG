@@ -1,4 +1,4 @@
-<main class="fp-fade fp-page">
+<main class="fp-fade fp-page fp-page--campos">
     <div class="fp-page-head">
         <div>
             <p class="fp-eyebrow">Ceuta</p>
