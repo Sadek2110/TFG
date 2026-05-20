@@ -56,6 +56,71 @@ class Database
                 );
                 foreach ($rows as $r) { $teamCols[$r['COLUMN_NAME']] = true; }
                 if (!isset($teamCols['shield'])) $pdo->exec("ALTER TABLE teams ADD COLUMN shield TEXT NULL");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS notifications (
+                    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    user_id BIGINT UNSIGNED NOT NULL,
+                    type VARCHAR(80) NOT NULL,
+                    message TEXT NOT NULL,
+                    is_read TINYINT(1) NOT NULL DEFAULT 0,
+                    action_url TEXT,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    CONSTRAINT fk_notifications_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_notifications_user_read ON notifications(user_id, is_read, created_at)");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS team_join_requests (
+                    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    team_id BIGINT UNSIGNED NOT NULL,
+                    user_id BIGINT UNSIGNED NOT NULL,
+                    captain_id BIGINT UNSIGNED NOT NULL,
+                    status ENUM('pending','accepted','rejected','cancelled') NOT NULL DEFAULT 'pending',
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    CONSTRAINT fk_tjr_team FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
+                    CONSTRAINT fk_tjr_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                    CONSTRAINT fk_tjr_captain FOREIGN KEY (captain_id) REFERENCES users(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_tjr_team_user_status ON team_join_requests(team_id, user_id, status)");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS match_requests (
+                    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    requesting_team_id BIGINT UNSIGNED NOT NULL,
+                    requested_team_id BIGINT UNSIGNED NOT NULL,
+                    requesting_captain_id BIGINT UNSIGNED NOT NULL,
+                    requested_captain_id BIGINT UNSIGNED NOT NULL,
+                    status ENUM('pending','accepted','accepted_final','rejected','cancelled') NOT NULL DEFAULT 'pending',
+                    proposed_date DATE NULL,
+                    proposed_time TIME NULL,
+                    location VARCHAR(200) NULL,
+                    requesting_confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+                    requested_confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+                    match_id BIGINT UNSIGNED NULL,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    CONSTRAINT fk_mr_requesting_team FOREIGN KEY (requesting_team_id) REFERENCES teams(id) ON DELETE CASCADE,
+                    CONSTRAINT fk_mr_requested_team FOREIGN KEY (requested_team_id) REFERENCES teams(id) ON DELETE CASCADE,
+                    CONSTRAINT fk_mr_requesting_captain FOREIGN KEY (requesting_captain_id) REFERENCES users(id) ON DELETE CASCADE,
+                    CONSTRAINT fk_mr_requested_captain FOREIGN KEY (requested_captain_id) REFERENCES users(id) ON DELETE CASCADE,
+                    CONSTRAINT fk_mr_match FOREIGN KEY (match_id) REFERENCES matches(id) ON DELETE SET NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_mr_teams_status ON match_requests(requesting_team_id, requested_team_id, status)");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS subscriptions (
+                    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    user_id BIGINT UNSIGNED NOT NULL,
+                    provider VARCHAR(40) NOT NULL DEFAULT 'stripe',
+                    provider_customer_id VARCHAR(190),
+                    provider_subscription_id VARCHAR(190),
+                    status ENUM('active','cancelled','pending','expired') NOT NULL DEFAULT 'pending',
+                    starts_at DATETIME,
+                    ends_at DATETIME,
+                    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    CONSTRAINT fk_subscriptions_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_subscriptions_user_status ON subscriptions(user_id, status)");
+
             } elseif ($driver === 'pgsql') {
                 $pdo->exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS dorsal SMALLINT");
                 $pdo->exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS height_cm SMALLINT");
@@ -64,6 +129,60 @@ class Database
                 $pdo->exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_premium BOOLEAN NOT NULL DEFAULT FALSE");
                 $pdo->exec("ALTER TABLE users ADD COLUMN IF NOT EXISTS current_team_id BIGINT");
                 $pdo->exec("ALTER TABLE teams ADD COLUMN IF NOT EXISTS shield TEXT");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS notifications (
+                    id BIGSERIAL PRIMARY KEY,
+                    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    type VARCHAR(80) NOT NULL,
+                    message TEXT NOT NULL,
+                    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+                    action_url TEXT,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                )");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_notifications_user_read ON notifications(user_id, is_read, created_at)");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS team_join_requests (
+                    id BIGSERIAL PRIMARY KEY,
+                    team_id BIGINT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+                    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    captain_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','rejected','cancelled')),
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                )");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_tjr_team_user_status ON team_join_requests(team_id, user_id, status)");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS match_requests (
+                    id BIGSERIAL PRIMARY KEY,
+                    requesting_team_id BIGINT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+                    requested_team_id BIGINT NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
+                    requesting_captain_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    requested_captain_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','accepted','accepted_final','rejected','cancelled')),
+                    proposed_date DATE,
+                    proposed_time TIME,
+                    location VARCHAR(200),
+                    requesting_confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+                    requested_confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+                    match_id BIGINT REFERENCES matches(id) ON DELETE SET NULL,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                )");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_mr_teams_status ON match_requests(requesting_team_id, requested_team_id, status)");
+
+                $pdo->exec("CREATE TABLE IF NOT EXISTS subscriptions (
+                    id BIGSERIAL PRIMARY KEY,
+                    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+                    provider VARCHAR(40) NOT NULL DEFAULT 'stripe',
+                    provider_customer_id VARCHAR(190),
+                    provider_subscription_id VARCHAR(190),
+                    status VARCHAR(20) NOT NULL DEFAULT 'pending' CHECK (status IN ('active','cancelled','pending','expired')),
+                    starts_at TIMESTAMPTZ,
+                    ends_at TIMESTAMPTZ,
+                    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                )");
+                $pdo->exec("CREATE INDEX IF NOT EXISTS idx_subscriptions_user_status ON subscriptions(user_id, status)");
             }
         } catch (Throwable $e) {
             // No bloqueamos el arranque si el usuario de BD no tiene permisos DDL;
