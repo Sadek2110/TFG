@@ -76,11 +76,9 @@ CREATE TABLE IF NOT EXISTS notifications (
     is_read    TINYINT(1)      NOT NULL DEFAULT 0,
     action_url TEXT,
     created_at TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    KEY idx_notifications_user_read (user_id, is_read, created_at),
     CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE INDEX IF NOT EXISTS idx_notifications_user_read
-    ON notifications(user_id, is_read, created_at);
 
 CREATE TABLE IF NOT EXISTS team_join_requests (
     id         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -90,13 +88,11 @@ CREATE TABLE IF NOT EXISTS team_join_requests (
     status     ENUM('pending','accepted','rejected','cancelled') NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_tjr_team_user_status (team_id, user_id, status),
     CONSTRAINT fk_tjr_team    FOREIGN KEY (team_id)    REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_tjr_user    FOREIGN KEY (user_id)    REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_tjr_captain FOREIGN KEY (captain_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE INDEX IF NOT EXISTS idx_tjr_team_user_status
-    ON team_join_requests(team_id, user_id, status);
 
 CREATE TABLE IF NOT EXISTS match_requests (
     id                    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -113,15 +109,13 @@ CREATE TABLE IF NOT EXISTS match_requests (
     match_id              BIGINT UNSIGNED NULL,
     created_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at            TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_mr_teams_status (requesting_team_id, requested_team_id, status),
     CONSTRAINT fk_mr_req_team  FOREIGN KEY (requesting_team_id)    REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_mr_res_team  FOREIGN KEY (requested_team_id)     REFERENCES teams(id) ON DELETE CASCADE,
     CONSTRAINT fk_mr_req_cap   FOREIGN KEY (requesting_captain_id) REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_mr_res_cap   FOREIGN KEY (requested_captain_id)  REFERENCES users(id) ON DELETE CASCADE,
     CONSTRAINT fk_mr_match     FOREIGN KEY (match_id)              REFERENCES matches(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE INDEX IF NOT EXISTS idx_mr_teams_status
-    ON match_requests(requesting_team_id, requested_team_id, status);
 
 CREATE TABLE IF NOT EXISTS subscriptions (
     id                       BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -134,11 +128,9 @@ CREATE TABLE IF NOT EXISTS subscriptions (
     ends_at                  DATETIME,
     created_at               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at               TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    KEY idx_subscriptions_user_status (user_id, status),
     CONSTRAINT fk_sub_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE INDEX IF NOT EXISTS idx_subscriptions_user_status
-    ON subscriptions(user_id, status);
 
 -- -----------------------------------------------------------------------------
 -- 3. CAMPOS DE CEUTA (INSERT IGNORE = no falla si ya existen)
