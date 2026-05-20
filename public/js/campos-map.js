@@ -69,6 +69,9 @@
       marker.on('click', function () { selectCard(field.id); });
       state.markers[field.id] = marker;
     });
+    // fp-fade animation lasts 600ms; invalidateSize after it ends so Leaflet
+    // recalculates bounds once the CSS transform on <main> has settled.
+    setTimeout(function () { state.map.invalidateSize(); }, 700);
     return true;
   }
 

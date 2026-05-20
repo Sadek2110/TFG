@@ -33,9 +33,12 @@ if (!is_dir(STORAGE_PATH)) {
 if (!is_dir(SESSIONS_PATH)) {
     mkdir(SESSIONS_PATH, 0775, true);
 }
-// Limpiar DB de test previa
+// Limpiar y preparar DB de test previa desde la plantilla de producción
 $testDbFile = STORAGE_PATH . DIRECTORY_SEPARATOR . 'fastplay_test.sqlite';
-if (file_exists($testDbFile)) {
+$prodDbFile = STORAGE_PATH . DIRECTORY_SEPARATOR . 'fastplay.sqlite';
+if (file_exists($prodDbFile)) {
+    copy($prodDbFile, $testDbFile);
+} elseif (file_exists($testDbFile)) {
     unlink($testDbFile);
 }
 

@@ -15,7 +15,7 @@ if ($user) {
 // En el landing público (active === 'home') la navbar queda minimalista: logo +
 // botones de entrar / registrarse.
 $onLanding = (($active ?? '') === 'home');
-$showInternalLinks = (bool) $user && !$onLanding;
+$showInternalLinks = (bool) $user;
 ?>
 <nav class="fp-navbar">
     <div class="fp-navbar-inner">

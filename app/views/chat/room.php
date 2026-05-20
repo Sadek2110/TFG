@@ -1,4 +1,4 @@
-<main class="fp-fade fp-page" style="max-width:980px;">
+<main class="fp-fade fp-page fp-chat-container">
     <p class="fp-eyebrow"><?= $room['type'] === 'match_negotiation' ? 'Negociación de partido' : 'Chat de equipo' ?></p>
     <div class="fp-page-head">
         <h1 class="fp-h1"><?= e($room['name']) ?></h1>

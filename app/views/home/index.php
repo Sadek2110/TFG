@@ -15,7 +15,6 @@ unset($_l);
 
 <script>
   document.documentElement.setAttribute('data-theme', 'dark');
-  localStorage.setItem('theme', 'dark');
 </script>
 
 <div class="scroll-anim">

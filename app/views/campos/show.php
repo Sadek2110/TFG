@@ -1,4 +1,4 @@
-<main class="fp-fade fp-page" style="max-width:760px;">
+<main class="fp-fade fp-page fp-medium-container">
     <?php $this->partial('back-button', ['href' => url('campos')]); ?>
     <p class="fp-eyebrow">Campo</p>
     <h1 class="fp-h1"><?= e($field['name']) ?></h1>

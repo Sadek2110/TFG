@@ -1,16 +1,16 @@
-<main class="fp-fade fp-page" style="max-width:640px;">
+<main class="fp-fade fp-page fp-small-container">
     <p class="fp-eyebrow">Admin · Campos</p>
     <h1 class="fp-h1">Registrar campo</h1>
 
-    <div class="fp-glass" style="border-radius:18px;padding:28px;margin-top:24px;">
-        <form method="post" action="<?= url('campos/create') ?>" style="display:flex;flex-direction:column;gap:18px;">
+    <div class="fp-glass fp-panel">
+        <form method="post" action="<?= url('campos/create') ?>" class="fp-profile-form">
             <?= csrf_field() ?>
             <label>
                 <span class="fp-label">Nombre</span>
                 <input name="name" class="fp-input" value="<?= old('name') ?>" required>
                 <?php if (!empty($errors['name'])): ?><small class="fp-err"><?= e($errors['name']) ?></small><?php endif; ?>
             </label>
-            <div class="fp-grid-2" style="gap:14px;">
+            <div class="fp-grid-2">
                 <label>
                     <span class="fp-label">Ciudad</span>
                     <input name="city" class="fp-input" value="<?= old('city') ?>" required>
@@ -27,7 +27,7 @@
                 <input name="address" class="fp-input" value="<?= old('address') ?>">
                 <?php if (!empty($errors['address'])): ?><small class="fp-err"><?= e($errors['address']) ?></small><?php endif; ?>
             </label>
-            <div class="fp-grid-2" style="gap:14px;">
+            <div class="fp-grid-2">
                 <label>
                     <span class="fp-label">Superficie</span>
                     <select name="surface" class="fp-input">

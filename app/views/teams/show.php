@@ -51,7 +51,11 @@
             <div class="fp-grid-3">
                 <?php foreach ($members as $m): ?>
                     <article class="fp-glass fp-member-card">
-                        <span class="fp-avatar-initial"><?= e(mb_substr($m['name'], 0, 1)) ?></span>
+                        <?php if (!empty($m['avatar'])): ?>
+                            <img src="<?= asset($m['avatar']) ?>" alt="<?= e($m['name']) ?>" class="fp-avatar-img">
+                        <?php else: ?>
+                            <span class="fp-avatar-initial"><?= e(mb_substr($m['name'], 0, 1)) ?></span>
+                        <?php endif; ?>
                         <div>
                             <strong><?= e($m['name']) ?></strong>
                             <?php if ((int) $m['is_captain'] === 1): ?><small class="fp-gold-text">Capitán</small><?php endif; ?>

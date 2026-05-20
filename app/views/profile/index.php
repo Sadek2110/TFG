@@ -23,14 +23,14 @@
         <div class="fp-glass" style="border-radius:18px;padding:24px;">
             <h2 class="fp-h2" style="margin-bottom:14px;">Mis equipos</h2>
             <?php if (empty($teams)): ?>
-                <p style="color:#9ca3af;font-size:13px;">No estás en ningún equipo.</p>
+                <p style="color:var(--fp-fg-muted);font-size:13px;">No estás en ningún equipo.</p>
                 <a href="<?= url('teams/create') ?>" class="fp-btn fp-btn-primary" style="margin-top:10px;">Crear equipo →</a>
             <?php else: ?>
                 <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
                     <?php foreach ($teams as $t): ?>
-                        <li><a href="<?= url('teams/show/' . (int) $t['id']) ?>" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font-size:13px;">
+                        <li><a href="<?= url('teams/show/' . (int) $t['id']) ?>" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fp-fg);font-size:13px;">
                     <span><?= e($t['badge'] ?? 'FP') ?></span>
-                            <span><?= e($t['name']) ?> <small style="color:#6b7280;">· <?= e($t['city']) ?></small></span>
+                            <span><?= e($t['name']) ?> <small style="color:var(--fp-fg-subtle);">· <?= e($t['city']) ?></small></span>
                         </a></li>
                     <?php endforeach; ?>
                 </ul>
@@ -49,7 +49,7 @@
                         <span style="font-size:30px;"><?= e($a['i']) ?></span>
                         <div>
                             <div style="font-weight:700;font-size:14px;"><?= e($a['n']) ?></div>
-                            <div style="font-size:12px;color:#6b7280;"><?= e($a['d']) ?></div>
+                            <div style="font-size:12px;color:var(--fp-fg-subtle);"><?= e($a['d']) ?></div>
                         </div>
                     </div>
                 <?php endforeach; ?>

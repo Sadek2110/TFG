@@ -47,4 +47,22 @@ class Database
     {
         return (int) self::pdo()->lastInsertId();
     }
+
+    private static function repairConsistency(PDO $pdo): void
+    {
+        $matches = $pdo->query('SELECT home_team_id, away_team_id, league_id FROM matches WHERE league_id IS NOT NULL')->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($matches as $m) {
+            $leagueId = $m['league_id'];
+            foreach ([$m['home_team_id'], $m['away_team_id']] as $teamId) {
+                if ($teamId !== null) {
+                    $st = $pdo->prepare('SELECT COUNT(*) FROM league_teams WHERE league_id = ? AND team_id = ?');
+                    $st->execute([$leagueId, $teamId]);
+                    if ((int) $st->fetchColumn() === 0) {
+                        $ins = $pdo->prepare('INSERT INTO league_teams (league_id, team_id) VALUES (?, ?)');
+                        $ins->execute([$leagueId, $teamId]);
+                    }
+                }
+            }
+        }
+    }
 }
