@@ -21,6 +21,11 @@ class MailService
             return true;
         }
 
+        if (!class_exists(PHPMailer::class)) {
+            error_log('[FastPlay] PHPMailer no instalado — email no enviado a ' . $to);
+            return false;
+        }
+
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP();

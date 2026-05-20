@@ -4,6 +4,9 @@ class StripeService
 {
     public function __construct()
     {
+        if (!class_exists(\Stripe\Stripe::class)) {
+            throw new RuntimeException('Stripe SDK no instalado. Ejecuta: composer install');
+        }
         \Stripe\Stripe::setApiKey(getenv('STRIPE_SECRET_KEY') ?: 'sk_test_123');
     }
 
