@@ -28,19 +28,24 @@
                     <article class="fp-glass fp-field-card" data-field-card="<?= (int) $f['id'] ?>">
                         <div class="fp-field-img" style="background-image:url('<?= e(!empty($f['image']) ? asset($f['image']) : asset('images/hero-pitch.png')) ?>')"></div>
                         <div class="fp-field-card-body">
-                            <?php if ($desc !== ''): ?>
-                                <span class="fp-field-tag<?= $isPublic ? ' fp-field-tag--public' : '' ?>"><?= e($desc) ?></span>
-                            <?php endif; ?>
+                            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                                <?php if ($desc !== ''): ?>
+                                    <span class="fp-field-tag<?= $isPublic ? ' fp-field-tag--public' : '' ?>"><?= e($desc) ?></span>
+                                <?php endif; ?>
+                                <?php if (!empty($f['hourly_rate'])): ?>
+                                    <span class="fp-field-rate"><?= number_format((float)$f['hourly_rate'], 0) ?>€/h</span>
+                                <?php endif; ?>
+                            </div>
                             <h3><?= e($f['name']) ?></h3>
                             <p><i class="bi bi-geo-alt"></i> <?= e($f['address'] ?? $f['city']) ?></p>
                             <div class="fp-field-meta">
                                 <span><i class="bi bi-people"></i> <?= (int) $f['capacity'] ?> jugadores</span>
-                                <span><?= e($f['surface']) ?></span>
+                                <span><i class="bi bi-circle-square"></i> <?= e($f['surface']) ?></span>
                             </div>
                             <div class="fp-actions-row">
-                                <a href="<?= url('campos/show/' . (int) $f['id']) ?>" class="fp-btn fp-btn-ghost">Detalles</a>
+                                <a href="<?= url('campos/show/' . (int) $f['id']) ?>" class="fp-btn fp-btn-primary">Detalles</a>
                                 <?php if (!empty($f['maps_url'])): ?>
-                                    <a href="<?= e($f['maps_url']) ?>" class="fp-btn fp-btn-gold" target="_blank" rel="noopener">Maps</a>
+                                    <a href="<?= e($f['maps_url']) ?>" class="fp-btn fp-btn-ghost" target="_blank" rel="noopener"><i class="bi bi-map"></i> Maps</a>
                                 <?php endif; ?>
                             </div>
                         </div>
