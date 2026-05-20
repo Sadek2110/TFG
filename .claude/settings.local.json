@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/MatchesController.php\")",
+      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/AdminController.php\")",
+      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/LeaguesController.php\")",
+      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/HomeController.php\")",
+      "Bash(php -l \"c:/xampp/htdocs/Proyectos/Versiones fastplay/FastPlay_v3/app/controllers/ChatController.php\")",
+      "mcp__plugin_engram_engram__mem_current_project",
+      "mcp__plugin_engram_engram__mem_search",
+      "mcp__plugin_engram_engram__mem_save",
+      "Bash(git -C \"c:/Users/sadek/Desktop/Proyectos personales/Fastplay\" log --oneline -20)",
+      "Bash(git -C \"c:/Users/sadek/Desktop/Proyectos personales/Fastplay\" ls-files)",
+      "PowerShell(C:\\\\Users\\\\Propietario\\\\Desktop\\\\fastplay\\\\php\\\\php.exe -m)",
+      "PowerShell(Get-ChildItem C:\\\\Users\\\\Propietario\\\\Desktop\\\\fastplay\\\\php\\\\ext | Where-Object { $_.Name -match \"mb|sqlite|pdo\" })",
+      "PowerShell(C:\\\\Users\\\\Propietario\\\\Desktop\\\\fastplay\\\\php\\\\php.exe -r \"echo dirname\\(\\\\$_SERVER['SCRIPT_NAME'] ?? ''\\);\" 2>&1)",
+      "Bash(git pull *)",
+      "Bash(git stash *)",
+      "Bash(git add *)",
+      "Bash(git rm *)",
+      "Bash(php -r ' *)",
+      "Read(//c/xampp/apache/**)",
+      "Read(//c/xampp/apache/logs/**)",
+      "Read(//c//**)",
+      "PowerShell(Get-ChildItem \"C:\\\\\" -Directory -ErrorAction SilentlyContinue | Where-Object { $_.Name -match \"xampp|wamp|laragon|php\" } | Select-Object FullName)",
+      "Bash(php/php.exe -l app/controllers/TeamsController.php)",
+      "Bash(php/php.exe -l app/models/Equipo.php)",
+      "Bash(php/php.exe -l app/models/TeamJoinRequest.php)",
+      "Bash(php/php.exe -l app/models/Usuario.php)",
+      "Bash(php/php.exe *)",
+      "Bash(php/php.exe -S localhost:8765 router.php)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8765/teams)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8765/teams/all)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8765/teams/show/1)",
+      "Bash(curl -s -o /tmp/teams_out.html -w \"%{http_code}\" http://localhost:8765/teams)",
+      "Read(//tmp/**)",
+      "Bash(curl -s http://localhost:8765/teams)",
+      "Bash(curl -s -o /dev/null -w \"teams: %{http_code}\\\\n\" http://localhost:8765/teams)",
+      "Bash(curl -s -o /dev/null -w \"teams/all: %{http_code}\\\\n\" http://localhost:8765/teams/all)",
+      "Bash(curl -s -o /dev/null -w \"teams/show/1: %{http_code}\\\\n\" http://localhost:8765/teams/show/1)"
+    ]
+  }
+}
