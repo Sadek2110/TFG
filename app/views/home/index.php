@@ -21,7 +21,6 @@ unset($_l);
 
 <div class="scroll-anim">
 
-  <div class="scroll-progress" id="scrollProgress"></div>
 
   <div class="scroll-anim__canvas-wrap">
     <video id="heroVideo" muted playsinline preload="auto" poster="<?= asset('images/hero-poster.jpg') ?>">

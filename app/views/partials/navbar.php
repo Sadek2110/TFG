@@ -9,24 +9,28 @@ $primaryLinks = [
     ['ids' => ['leagues'], 'label' => 'Ligas', 'url' => 'leagues', 'icon' => 'bi-trophy'],
     ['ids' => ['campos'], 'label' => 'Campos', 'url' => 'campos', 'icon' => 'bi-geo-alt'],
 ];
-$legacyLinks = [
-    ['id' => 'teams', 'label' => 'Equipos', 'url' => 'teams', 'icon' => 'bi-shield'],
-    ['id' => 'matches', 'label' => 'Partidos', 'url' => 'matches', 'icon' => 'bi-calendar2-week'],
-    ['id' => 'leagues', 'label' => 'Ligas', 'url' => 'leagues', 'icon' => 'bi-trophy'],
-    ['id' => 'campos', 'label' => 'Campos', 'url' => 'campos', 'icon' => 'bi-geo-alt'],
-];
-$legacyIconColors = [
-    'teams'   => '#4ade80',
-    'matches' => '#f59e0b',
-    'leagues' => '#a855f7',
-    'campos'  => '#f472b6',
-];
 $unread = 0;
 if ($user) {
     try { $unread = (int) Database::value('SELECT COUNT(*) FROM notifications WHERE user_id=? AND is_read=0', [(int) $user['id']]); } catch (Throwable $e) { $unread = 0; }
 }
 ?>
-<nav class="<?= $isLanding ? 'fp-sidebar' : 'fp-sidebar fp-floating-nav' ?>" id="fpSidebar" aria-label="Navegacion principal">
+<?php if ($isLanding): ?>
+<nav class="fp-landing-topbar" id="fpLandingNav" aria-label="Navegación principal">
+    <a href="<?= url('') ?>" class="fp-landing-topbar-logo">
+        <img src="<?= asset('images/logo.png') ?>" alt="" class="fp-landing-topbar-logo-img">
+        <img src="<?= asset('images/logo-nombre.png') ?>" alt="FastPlay" class="fp-landing-topbar-logo-word">
+    </a>
+    <div class="fp-landing-topbar-actions">
+        <?php if ($user): ?>
+            <a href="<?= url('dashboard') ?>" class="fp-btn fp-btn-ghost fp-btn-sm">Inicio</a>
+        <?php else: ?>
+            <a href="<?= url('auth/login') ?>" class="fp-btn fp-btn-ghost fp-btn-sm">Entrar</a>
+            <a href="<?= url('auth/register') ?>" class="fp-btn fp-btn-primary fp-btn-sm fp-btn-glow">Registrarse</a>
+        <?php endif; ?>
+    </div>
+</nav>
+<?php else: ?>
+<nav class="fp-sidebar fp-floating-nav" id="fpSidebar" aria-label="Navegacion principal">
     <button class="fp-sidebar-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Abrir menú">
         <i class="bi bi-list"></i>
     </button>
@@ -39,33 +43,12 @@ if ($user) {
     </div>
 
     <div class="fp-sidebar-nav" data-nav-menu>
-        <?php if ($isLanding): ?>
-            <?php if ($user): ?>
-                <a href="<?= url('dashboard') ?>" class="fp-sidebar-link <?= $activePage === 'dashboard' ? 'active' : '' ?>" title="Inicio">
-                    <i class="bi bi-house-door" style="color:#60a5fa;"></i>
-                    <span>Inicio</span>
-                </a>
-                <?php foreach ($legacyLinks as $l): ?>
-                    <a href="<?= url($l['url']) ?>" class="fp-sidebar-link <?= $activePage === $l['id'] ? 'active' : '' ?>" title="<?= e($l['label']) ?>">
-                        <i class="bi <?= e($l['icon']) ?>" style="color:<?= $legacyIconColors[$l['id']] ?? 'var(--fp-fg)' ?>;"></i>
-                        <span><?= e($l['label']) ?></span>
-                    </a>
-                <?php endforeach; ?>
-                <?php if (is_admin()): ?>
-                    <a href="<?= url('admin') ?>" class="fp-sidebar-link <?= $activePage === 'admin' ? 'active' : '' ?>" title="Admin">
-                        <i class="bi bi-sliders" style="color:#fb923c;"></i>
-                        <span>Admin</span>
-                    </a>
-                <?php endif; ?>
-            <?php endif; ?>
-        <?php else: ?>
-            <?php foreach ($primaryLinks as $link): ?>
-                <a href="<?= url($link['url']) ?>" class="fp-sidebar-link <?= in_array($activePage, $link['ids'], true) ? 'active' : '' ?>" title="<?= e($link['label']) ?>">
-                    <i class="bi <?= e($link['icon']) ?>"></i>
-                    <span><?= e($link['label']) ?></span>
-                </a>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <?php foreach ($primaryLinks as $link): ?>
+            <a href="<?= url($link['url']) ?>" class="fp-sidebar-link <?= in_array($activePage, $link['ids'], true) ? 'active' : '' ?>" title="<?= e($link['label']) ?>">
+                <i class="bi <?= e($link['icon']) ?>"></i>
+                <span><?= e($link['label']) ?></span>
+            </a>
+        <?php endforeach; ?>
     </div>
 
     <div class="fp-sidebar-bottom">
@@ -93,7 +76,7 @@ if ($user) {
                     <span>Salir</span>
                 </button>
             </form>
-            <?php if (!$isLanding && is_admin()): ?>
+            <?php if (is_admin()): ?>
                 <a href="<?= url('admin') ?>" class="fp-sidebar-link <?= $activePage === 'admin' ? 'active' : '' ?>" title="Admin">
                     <i class="bi bi-sliders"></i>
                     <span>Admin</span>
@@ -108,3 +91,4 @@ if ($user) {
         <?php endif; ?>
     </div>
 </nav>
+<?php endif; ?>

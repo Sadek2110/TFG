@@ -277,81 +277,12 @@ html.fp-scroll-anim-page body::-webkit-scrollbar {
   }
 }
 
-/* ====== Landing navigation ====== */
-.fp-sidebar {
-  display: flex !important;
-  z-index: 240 !important;
-}
-.fp-sidebar-toggle { display: none !important; }
-.fp-main-content { margin-left: 280px !important; }
+/* ====== Landing navigation — topbar ====== */
+/* No sidebar on landing; topbar is rendered via .fp-landing-topbar */
+.fp-sidebar { display: none !important; }
+.fp-main-content { margin-left: 0 !important; }
 .fp-footer, .fp-bg-glow { display: none !important; }
-
-@media (max-width: 1024px) {
-  .fp-sidebar {
-    top: 10px !important;
-    left: 10px !important;
-    right: 10px !important;
-    bottom: auto !important;
-    width: auto !important;
-    min-height: 64px;
-    transform: none !important;
-    opacity: 1 !important;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: 24px;
-    overflow: visible;
-  }
-
-  .fp-sidebar-logo {
-    flex: 1 1 auto;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
-  .fp-sidebar-nav {
-    display: none;
-  }
-
-  .fp-sidebar-bottom {
-    flex: 0 0 auto;
-    flex-direction: row;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    gap: 6px;
-  }
-
-  .fp-sidebar-bottom .fp-sidebar-link {
-    width: 44px;
-    min-width: 44px;
-    min-height: 44px;
-    justify-content: center;
-    padding: 8px;
-  }
-
-  .fp-sidebar-bottom .fp-sidebar-link > span:not(.fp-badge):not(.fp-sidebar-avatar) {
-    display: none;
-  }
-
-  .fp-sidebar-cta {
-    margin: 0;
-    padding: 12px 16px;
-    border-radius: 9999px;
-    white-space: nowrap;
-  }
-
-  .fp-main-content {
-    margin-left: 0 !important;
-  }
-
-  .scroll-section--hero {
-    padding-top: 128px;
-  }
-}
+.scroll-section--hero { padding-top: 100px; }
 
 /* ====== Leagues ====== */
 .scroll-league-list {
