@@ -17,6 +17,12 @@ class Router
             $params = array_slice($params, 1);
         }
 
+        // Acciones en kebab-case en la URL → camelCase del método
+        // (p.ej. resend-verification → resendVerification).
+        if (str_contains($action, '-')) {
+            $action = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $action))));
+        }
+
         if (!preg_match('/^[a-zA-Z0-9_-]+$/', $controllerSlug) || !preg_match('/^[a-zA-Z0-9_]+$/', $action)) {
             self::notFound();
             return;

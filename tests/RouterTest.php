@@ -80,6 +80,16 @@ class RouterTest extends TestCase
         $this->assertStringContainsString('404', $output);
     }
 
+    public function test_dispatch_kebab_case_action_resolves_to_camel_case_method(): void
+    {
+        // auth/resend-verification -> AuthController::resendVerification()
+        // El método llama requireAuth() (redirect -> 500 sin sesión); lo relevante
+        // es que NO devuelve 404, es decir, la acción kebab-case se resolvió.
+        $output = $this->dispatchAndGetOutput('/auth/resend-verification');
+        $this->assertStringNotContainsString('404', $output);
+        $this->assertStringContainsString('500', $output);
+    }
+
     public function test_not_found_response_code(): void
     {
         ob_start();
