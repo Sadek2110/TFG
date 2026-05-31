@@ -6,11 +6,13 @@ $cols = [
         ['l' => 'Ligas',    'u' => 'leagues'],
         ['l' => 'Campos',   'u' => 'campos'],
     ]],
-    ['h' => 'Cuenta', 'items' => [
-        ['l' => 'Registrarse',    'u' => 'auth/register'],
-        ['l' => 'Iniciar sesión', 'u' => 'auth/login'],
+    ['h' => 'Cuenta', 'items' => is_auth() ? [
         ['l' => 'Mi panel',       'u' => 'dashboard'],
         ['l' => 'Mi perfil',      'u' => 'profile'],
+        ['l' => 'Cerrar sesión',  'u' => 'auth/logout'],
+    ] : [
+        ['l' => 'Registrarse',    'u' => 'auth/register'],
+        ['l' => 'Iniciar sesión', 'u' => 'auth/login'],
     ]],
     ['h' => 'Legal', 'items' => [
         ['l' => 'Términos de uso',     'u' => 'legal/terms'],
@@ -27,10 +29,10 @@ $cols = [
                 <img src="<?= asset('images/logo-nombre.png') ?>" alt="FastPlay" class="fp-logo-word">
             </a>
             <p class="fp-footer-tagline">Fútbol amateur organizado para jugadores, capitanes y equipos de Ceuta.</p>
-            <div class="fp-footer-social" aria-label="Redes sociales (próximamente)">
-                <?php foreach (['X', 'in', 'ig'] as $s): ?>
-                    <span aria-disabled="true" title="Próximamente" class="fp-footer-social-btn"><?= e($s) ?></span>
-                <?php endforeach; ?>
+            <div class="fp-footer-social" aria-label="Redes sociales">
+                <a href="#" class="fp-footer-social-btn" aria-label="Síguenos en X"><i class="bi bi-twitter-x"></i></a>
+                <a href="#" class="fp-footer-social-btn" aria-label="Síguenos en LinkedIn"><i class="bi bi-linkedin"></i></a>
+                <a href="#" class="fp-footer-social-btn" aria-label="Síguenos en Instagram"><i class="bi bi-instagram"></i></a>
             </div>
         </div>
         <?php foreach ($cols as $col): ?>

@@ -68,7 +68,16 @@
       "PowerShell(.\\\\vendor\\\\bin\\\\phpunit tests/ProductionConfigurationTest.php tests/ConfigTest.php tests/EmailVerificationTest.php --no-coverage 2>&1)",
       "PowerShell(php -l scripts/diagnose-easypanel.php)",
       "PowerShell(php -l app/core/Router.php)",
-      "PowerShell(.\\\\vendor\\\\bin\\\\phpunit tests/RouterTest.php --no-coverage 2>&1)"
+      "PowerShell(.\\\\vendor\\\\bin\\\\phpunit tests/RouterTest.php --no-coverage 2>&1)",
+      "Bash(grep -E \"\\\\.\\(css|scss|js\\)$\")",
+      "WebFetch(domain:fastplay.dksaa.com)",
+      "PowerShell($f = \"public\\\\css\\\\app.css\"; $n = \\(Get-Content $f\\).Count; $bg = \\(Get-Content $f | Where-Object { $_.Trim\\(\\) -eq 'bg' }\\).Count; Write-Output \"lines=$n bg=$bg\"; git diff --stat -- $f)",
+      "PowerShell($f = \"public\\\\css\\\\app.css\"; $lines = Get-Content $f; \"GetContent_lines=$\\($lines.Count\\)\"; $dupes = $lines | ForEach-Object { $_.Trim\\(\\) } | Where-Object { $_ -ne '' } | Group-Object | Where-Object { $_.Count -gt 20 } | Sort-Object Count -Descending | Select-Object -First 10; \"--- lines repeated >20 times ---\"; $dupes | Format-Table Count, Name -AutoSize; \"--- last 5 lines ---\"; $lines | Select-Object -Last 5)",
+      "PowerShell(\"==== FOOTER DIFF ====\")",
+      "PowerShell(\"==== LIGA MODEL DIFF ====\")",
+      "PowerShell(\"==== REGISTER DIFF ====\")",
+      "PowerShell($d = \\(git --no-pager diff --no-color -- app/models/Liga.php\\) -join \"`n\"; $d)",
+      "PowerShell($php = \\(Get-Command php -ErrorAction SilentlyContinue\\); if \\($php\\) { php -l app/views/home/index.php; php -l app/views/partials/footer.php; php -l app/models/Liga.php } else { \"php no disponible en PATH - se omite lint\" })"
     ]
   }
 }

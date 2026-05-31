@@ -44,13 +44,13 @@ unset($_l);
           <h1 class="scroll-title" style="--i:1">
             ¿Te apetece<br><span class="fp-gradient-text">jugar?</span>
           </h1>
-          <p class="scroll-desc" style="--i:2;font-size:18px;max-width:480px;">
+          <p class="scroll-desc scroll-desc--lg" style="--i:2;">
             FastPlay conecta jugadores, organiza partidos en campos reales y lleva el fútbol amateur al siguiente nivel.
-            <strong style="color:#fff;">En cualquier lugar. Para todos.</strong>
+            <strong class="scroll-desc-highlight">En cualquier lugar. Para todos.</strong>
           </p>
           <div class="scroll-cta-row" style="--i:3">
-            <a href="<?= url('auth/register') ?>" class="fp-btn fp-btn-primary fp-btn-glow" style="padding:16px 32px;font-size:16px;">Empieza gratis →</a>
-            <a href="<?= url('leagues') ?>" class="fp-btn fp-btn-ghost" style="padding:16px 32px;font-size:16px;">Ver ligas</a>
+            <a href="<?= url('auth/register') ?>" class="fp-btn fp-btn-primary fp-btn-glow scroll-btn--hero">Empieza gratis →</a>
+            <a href="<?= url('leagues') ?>" class="fp-btn fp-btn-ghost scroll-btn--hero">Ver ligas</a>
           </div>
           <div class="scroll-trust" style="--i:4" aria-label="Garantías">
             <span class="scroll-trust__item"><span class="scroll-trust__check">✓</span> Sin tarjeta</span>
@@ -73,8 +73,8 @@ unset($_l);
           <h2 class="scroll-title scroll-title--sm" style="--i:1">
             La comunidad <span class="fp-gradient-text">crece</span>
           </h2>
-          <p class="scroll-desc" style="--i:2;max-width:480px;">
-            Miles de jugadores ya confían en FastPlay para organizar sus partidos cada semana.
+          <p class="scroll-desc scroll-desc--stats" style="--i:2;">
+            Nuestra comunidad sigue creciendo semana a semana con nuevos jugadores y equipos organizando partidos.
           </p>
           <div class="scroll-stats" style="--i:3" id="statsRow">
             <?php foreach ($stats as $i => $s): ?>
@@ -88,6 +88,7 @@ unset($_l);
               </div>
             <?php endforeach; ?>
           </div>
+          <p class="scroll-stats-note" style="--i:4;">* Las ligas amistosas son 100% gratuitas. La Liga Pro tiene un coste de inscripción por equipo.</p>
         </div>
       </div>
     </section>
@@ -100,7 +101,7 @@ unset($_l);
           <h2 class="scroll-title scroll-title--sm" style="--i:1">
             Todo lo que <span class="fp-gradient-text">necesitas</span>
           </h2>
-          <p class="scroll-desc" style="--i:2;max-width:480px;">
+          <p class="scroll-desc scroll-desc--narrow" style="--i:2;">
             Herramientas diseñadas para que organices, compitas y disfrutes del fútbol sin complicaciones.
           </p>
           <div class="scroll-features" style="--i:3">
@@ -157,7 +158,7 @@ unset($_l);
             <?php endforeach; ?>
           </div>
 
-          <p style="--i:3;font-size:13px;color:#9ca3af;margin:0 0 14px;">Elige tu nivel de competición:</p>
+          <p class="scroll-pricing-lead" style="--i:3;">Elige tu nivel de competición:</p>
           <div class="scroll-pricing" style="--i:4">
             <div class="scroll-pricing__option">
               <div class="scroll-pricing__icon">🤝</div>
@@ -172,7 +173,7 @@ unset($_l);
             </div>
             <div class="scroll-pricing__option scroll-pricing__option--pro">
               <div class="scroll-pricing__badge">
-                <span class="fp-pro-badge" style="font-size:10px;">MÁS POPULAR</span>
+                <span class="fp-pro-badge">MÁS POPULAR</span>
               </div>
               <div class="scroll-pricing__icon">🏆</div>
               <div class="scroll-pricing__name">Liga Pro</div>
@@ -194,15 +195,15 @@ unset($_l);
     <section class="scroll-section scroll-section--center" id="section-4">
       <div class="scroll-section__inner">
         <div class="scroll-stagger" style="text-align:center;">
-          <div class="scroll-eyebrow" style="--i:0;margin-left:auto;margin-right:auto;background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.28);">🚀 Únete ahora</div>
-          <h2 class="scroll-title" style="--i:1;font-size:clamp(32px,6vw,56px);text-align:center;">
+          <div class="scroll-eyebrow scroll-eyebrow--center" style="--i:0;">🚀 Únete ahora</div>
+          <h2 class="scroll-title scroll-title--cta" style="--i:1;">
             ¿Listo para <span class="fp-gradient-text">jugar?</span>
           </h2>
-          <p class="scroll-desc" style="--i:2;max-width:460px;margin-left:auto;margin-right:auto;text-align:center;font-size:17px;">
+          <p class="scroll-desc scroll-desc--cta" style="--i:2;">
             Regístrate gratis, crea tu equipo y empieza a competir hoy mismo. El fútbol amateur te espera.
           </p>
           <div class="scroll-cta-row" style="--i:3;justify-content:center;">
-            <a href="<?= url('auth/register') ?>" class="fp-btn fp-btn-primary fp-btn-glow" style="padding:18px 42px;font-size:17px;border-radius:14px;">Crear cuenta gratis →</a>
+            <a href="<?= url('auth/register') ?>" class="fp-btn fp-btn-primary fp-btn-glow scroll-btn--cta">Crear cuenta gratis →</a>
           </div>
           <div class="scroll-trust" style="--i:4;justify-content:center;" aria-label="Garantías">
             <span class="scroll-trust__item"><span class="scroll-trust__check">✓</span> Sin tarjeta</span>

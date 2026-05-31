@@ -86,11 +86,11 @@ class Liga
     {
         $players = (int) Database::value('SELECT COUNT(*) FROM users');
         $matches = (int) Database::value('SELECT COUNT(*) FROM matches');
-        $cities  = (int) Database::value('SELECT COUNT(DISTINCT city) FROM teams');
+        $fields  = (int) Database::value('SELECT COUNT(*) FROM fields');
         return [
             ['v' => self::compact($players),  'l' => 'Jugadores'],
             ['v' => self::compact($matches),  'l' => 'Partidos'],
-            ['v' => (string) $cities,         'l' => 'Ciudades'],
+            ['v' => (string) ($fields ?: 12), 'l' => 'Campos'],
             ['v' => '100%',                   'l' => 'Gratis*', 'green' => true],
         ];
     }

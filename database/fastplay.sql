@@ -172,10 +172,10 @@ CREATE TABLE `leagues` (
 --
 
 INSERT INTO `leagues` (`id`, `name`, `city`, `pro`, `prize`, `start_date`, `end_date`, `max_teams`, `status`, `created_at`) VALUES
-(1, 'Liga Pro Madrid 25/26', 'Madrid', 1, 1500.00, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04'),
-(2, 'Liga Pro Barcelona 25/26', 'Barcelona', 1, 1500.00, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04'),
-(3, 'Liga Amistosa Valencia', 'Valencia', 0, NULL, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04'),
-(4, 'Liga Amistosa Sevilla', 'Sevilla', 0, NULL, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04');
+(1, 'Liga Pro Ceuta 25/26', 'Ceuta', 1, 1500.00, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04'),
+(2, 'Copa Ciudad de Ceuta', 'Ceuta', 1, 1000.00, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04'),
+(3, 'Liga Amistosa del Tarajal', 'Ceuta', 0, NULL, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04'),
+(4, 'Liga Amistosa Hadú', 'Ceuta', 0, NULL, '2026-03-01', '2026-06-30', 12, 'open', '2026-05-18 17:47:04');
 
 -- --------------------------------------------------------
 

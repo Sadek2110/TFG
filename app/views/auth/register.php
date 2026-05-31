@@ -70,6 +70,7 @@
                             <input name="password" type="password" placeholder="Mínimo 8 caracteres" class="fp-input" minlength="8" required autocomplete="new-password"
                                    data-fp-validate-field data-fp-rule="password-strong">
                         </div>
+                        <small class="fp-help-text" style="color:var(--fp-fg-muted);font-size:11px;display:block;margin-top:4px;opacity:0.8;">Mínimo 8 caracteres, incluyendo letras y números.</small>
                         <?php if (!empty($errors['password'])): ?><small class="fp-err"><?= e($errors['password']) ?></small><?php endif; ?>
                     </div>
 
