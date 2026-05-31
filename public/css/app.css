@@ -4399,6 +4399,44 @@ input[type="file"].fp-input::-webkit-file-upload-button:hover {
 [data-theme="light"] .fp-league-card-meta,
 [data-theme="light"] .fp-league-card-dates { color: var(--color-text-muted); }
 
+/* --- Overrides para evitar sombras duplicadas/raras en Ligas y Equipos --- */
+.fp-league-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25) !important;
+  border-color: rgba(74, 222, 128, 0.35) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+}
+
+/* Evitar que las filas de equipo floten o proyecten sombras gigantes */
+.fp-team-row:hover {
+  transform: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(74, 222, 128, 0.25) !important;
+}
+
+/* Evitar hover en paneles estáticos de detalle de equipos/ligas */
+.fp-page .fp-team-overview:hover,
+.fp-page .fp-team-header:hover,
+.fp-page .fp-team-detail-grid .fp-panel:hover,
+.fp-page section.fp-panel:hover,
+.fp-page .fp-table-wrap:hover {
+  transform: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  border-color: var(--fp-glass-border, rgba(255, 255, 255, 0.08)) !important;
+  background: var(--fp-glass-bg) !important;
+}
+
+[data-theme="light"] .fp-page .fp-team-overview:hover,
+[data-theme="light"] .fp-page .fp-team-header:hover,
+[data-theme="light"] .fp-page .fp-team-detail-grid .fp-panel:hover,
+[data-theme="light"] .fp-page section.fp-panel:hover,
+[data-theme="light"] .fp-page .fp-table-wrap:hover {
+  box-shadow: 0 10px 28px rgba(31, 42, 36, 0.08) !important;
+  border-color: var(--color-border-light) !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+}
+
 /* --- Notification dot pulse --- */
 @keyframes fp-notif-pulse {
   0%, 100% { box-shadow: 0 0 8px rgba(250,204,21,.6); transform: scale(1); }
@@ -4552,35 +4590,36 @@ input[type="file"].fp-input::-webkit-file-upload-button:hover {
    CAMPOS — Rediseño: mapa compacto arriba + grid de tarjetas
    ============================================================ */
 
-/* Layout: columna única — mapa arriba, tarjetas abajo */
+/* Layout: split con mapa a la izquierda y lista de campos a la derecha (Desktop > 980px) */
 .fp-fields-layout {
-  display: flex !important;
-  flex-direction: column !important;
+  display: grid !important;
+  grid-template-columns: 45% 1fr !important;
   gap: 28px !important;
+  align-items: start !important;
 }
 
-/* Mapa compacto con altura fija */
+/* Mapa pegajoso a la izquierda */
 .fp-fields-map {
-  height: 360px !important;
-  min-height: 300px !important;
-  max-height: 380px !important;
+  position: sticky !important;
+  top: 100px !important;
+  height: calc(100vh - 140px) !important;
+  min-height: 480px !important;
+  max-height: 750px !important;
   width: 100% !important;
   border-radius: 20px !important;
   border: 1px solid var(--fp-glass-border) !important;
-  border-left: 1px solid var(--fp-glass-border) !important;
-  position: relative !important;
-  top: unset !important;
   box-shadow: 0 8px 40px rgba(0, 0, 0, .22) !important;
+  z-index: 10 !important;
 }
 [data-theme="light"] .fp-fields-map {
   box-shadow: 0 8px 32px rgba(31, 42, 36, .12) !important;
 }
 
-/* Grid de tarjetas: 3 columnas */
+/* Lista de campos a la derecha */
 .fp-fields-list {
   display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 22px !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 20px !important;
   padding: 0 !important;
 }
 
@@ -4599,18 +4638,40 @@ input[type="file"].fp-input::-webkit-file-upload-button:hover {
   display: block;
 }
 
-@media (max-width: 1100px) {
+/* Ajuste de columnas en pantallas medianas */
+@media (max-width: 1200px) {
+  .fp-fields-list {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Adaptación responsiva para tablets y móviles (<= 980px) */
+@media (max-width: 980px) {
+  .fp-fields-layout {
+    grid-template-columns: 1fr !important;
+    gap: 22px !important;
+  }
+  
+  .fp-fields-map {
+    position: relative !important;
+    top: unset !important;
+    height: 340px !important;
+    min-height: 280px !important;
+    max-height: 400px !important;
+  }
+  
   .fp-fields-list {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
+
 @media (max-width: 640px) {
   .fp-fields-list {
     grid-template-columns: 1fr !important;
   }
   .fp-fields-map {
-    height: 280px !important;
-    min-height: 240px !important;
+    height: 260px !important;
+    min-height: 220px !important;
     border-radius: 16px !important;
   }
 }
