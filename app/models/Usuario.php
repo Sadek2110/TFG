@@ -361,7 +361,7 @@ class Usuario
         $user = Database::one('SELECT * FROM users WHERE google_id = ?', [$googleId]);
         if ($user) {
             unset($user['password_hash']);
-            return [$user, []];
+            return [$user, [], false];
         }
 
         $user = Database::one('SELECT * FROM users WHERE email = ?', [$email]);
@@ -369,7 +369,7 @@ class Usuario
             Database::run('UPDATE users SET google_id = ?, avatar = COALESCE(avatar, ?), email_verified = 1, verification_token = NULL WHERE id = ?', [$googleId, $avatar, $user['id']]);
             $user = Database::one('SELECT * FROM users WHERE id = ?', [$user['id']]);
             unset($user['password_hash']);
-            return [$user, []];
+            return [$user, [], false];
         }
 
         $randomPass = bin2hex(random_bytes(16));
@@ -380,10 +380,10 @@ class Usuario
             );
         } catch (\Exception $e) {
             error_log('Google login error: ' . $e->getMessage());
-            return [null, ['email' => 'Error creando el usuario con Google (revisa la base de datos).']];
+            return [null, ['email' => 'Error creando el usuario con Google (revisa la base de datos).'], false];
         }
         $user = Database::one('SELECT * FROM users WHERE id = ?', [Database::insertId()]);
         unset($user['password_hash']);
-        return [$user, []];
+        return [$user, [], true];
     }
 }

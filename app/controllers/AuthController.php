@@ -107,7 +107,7 @@ class AuthController extends Controller
             $ownerDetails = $provider->getResourceOwner($token);
 
             $usuario = $this->model('Usuario');
-            [$user, $errors] = $usuario->registerOrLoginWithGoogle([
+            [$user, $errors, $isNew] = $usuario->registerOrLoginWithGoogle([
                 'id' => $ownerDetails->getId(),
                 'email' => $ownerDetails->getEmail(),
                 'name' => $ownerDetails->getName(),
@@ -115,6 +115,13 @@ class AuthController extends Controller
             ]);
 
             if ($user) {
+                if ($isNew) {
+                    $dashboardUrl = ($_SERVER['REQUEST_SCHEME'] ?? 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . url('dashboard');
+                    MailService::send($user['email'], '¡Bienvenido a FastPlay!', 'bienvenida', [
+                        'name' => $user['name'],
+                        'url'  => $dashboardUrl
+                    ]);
+                }
                 login_user($user);
                 flash('ok', '¡Bienvenido ' . $user['name'] . '!');
                 redirect('dashboard');

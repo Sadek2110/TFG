@@ -42,6 +42,28 @@ class EmailVerificationTest extends TestCase
         $this->assertNull($user['verification_token']);
     }
 
+    public function test_google_registration_returns_is_new_flag(): void
+    {
+        [$user, $errors, $isNew] = $this->usuario->registerOrLoginWithGoogle([
+            'id'    => 'google-id-99999',
+            'email' => 'google-new-user@test.com',
+            'name'  => 'Google New User',
+        ]);
+
+        $this->assertEmpty($errors);
+        $this->assertTrue($isNew);
+
+        // Login again with the same credentials, should return isNew as false
+        [$userAgain, $errorsAgain, $isNewAgain] = $this->usuario->registerOrLoginWithGoogle([
+            'id'    => 'google-id-99999',
+            'email' => 'google-new-user@test.com',
+            'name'  => 'Google New User',
+        ]);
+
+        $this->assertEmpty($errorsAgain);
+        $this->assertFalse($isNewAgain);
+    }
+
     public function test_valid_token_verifies_user(): void
     {
         [$user] = $this->usuario->register([
