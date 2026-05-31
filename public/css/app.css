@@ -4402,17 +4402,29 @@ input[type="file"].fp-input::-webkit-file-upload-button:hover {
 /* --- Overrides para evitar sombras duplicadas/raras en Ligas y Equipos --- */
 .fp-league-card:hover {
   transform: translateY(-3px) !important;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25) !important;
-  border-color: rgba(74, 222, 128, 0.35) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
   background: rgba(255, 255, 255, 0.07) !important;
+}
+
+[data-theme="light"] .fp-league-card:hover {
+  border-color: rgba(47, 125, 70, 0.25) !important;
+  box-shadow: 0 12px 28px rgba(31, 42, 36, 0.08) !important;
+  background: #ffffff !important;
 }
 
 /* Evitar que las filas de equipo floten o proyecten sombras gigantes */
 .fp-team-row:hover {
   transform: none !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 20px rgba(0, 0, 0, 0.25) !important;
   background: rgba(255, 255, 255, 0.07) !important;
-  border-color: rgba(74, 222, 128, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="light"] .fp-team-row:hover {
+  border-color: rgba(47, 125, 70, 0.18) !important;
+  box-shadow: 0 4px 12px rgba(31, 42, 36, 0.04) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
 }
 
 /* Evitar hover en paneles estáticos de detalle de equipos/ligas */
