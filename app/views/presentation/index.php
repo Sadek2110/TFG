@@ -1868,7 +1868,7 @@
                     { name: "TeamsController.php", desc: "Creación de equipos, invitación a jugadores y flujo de unión con capitán." },
                     { name: "MatchesController.php", desc: "Creación, confirmación, cancelación y finalización de partidos." },
                     { name: "DashboardController.php", desc: "Carga la pantalla privada agregando datos de notificaciones, equipos y perfiles." },
-                    { name: "PresentationController.php", desc: "Maneja la carga y el renderizado sin layout de esta presentación técnica interactiva." }
+                    { name: "PresentacionController.php", desc: "Maneja la carga y el renderizado sin layout de esta presentación técnica interactiva." }
                 ]
             },
             {

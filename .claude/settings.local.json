@@ -77,7 +77,9 @@
       "PowerShell(\"==== LIGA MODEL DIFF ====\")",
       "PowerShell(\"==== REGISTER DIFF ====\")",
       "PowerShell($d = \\(git --no-pager diff --no-color -- app/models/Liga.php\\) -join \"`n\"; $d)",
-      "PowerShell($php = \\(Get-Command php -ErrorAction SilentlyContinue\\); if \\($php\\) { php -l app/views/home/index.php; php -l app/views/partials/footer.php; php -l app/models/Liga.php } else { \"php no disponible en PATH - se omite lint\" })"
+      "PowerShell($php = \\(Get-Command php -ErrorAction SilentlyContinue\\); if \\($php\\) { php -l app/views/home/index.php; php -l app/views/partials/footer.php; php -l app/models/Liga.php } else { \"php no disponible en PATH - se omite lint\" })",
+      "PowerShell(php -l \"app\\\\controllers\\\\PresentacionController.php\")",
+      "PowerShell(php -l \"app\\\\views\\\\presentation\\\\index.php\")"
     ]
   }
 }

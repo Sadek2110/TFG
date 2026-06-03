@@ -1,7 +1,7 @@
 <?php
 // FastPlay · Controlador de la presentación interactiva
 
-class PresentationController extends Controller
+class PresentacionController extends Controller
 {
     public function index(): void
     {
