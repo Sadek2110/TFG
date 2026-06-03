@@ -5,6 +5,7 @@ $cols = [
         ['l' => 'Partidos', 'u' => 'matches'],
         ['l' => 'Ligas',    'u' => 'leagues'],
         ['l' => 'Campos',   'u' => 'campos'],
+        ['l' => 'Presentación', 'u' => 'presentacion'],
     ]],
     ['h' => 'Cuenta', 'items' => is_auth() ? [
         ['l' => 'Mi panel',       'u' => 'dashboard'],
