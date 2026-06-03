@@ -92,19 +92,39 @@
         }
 
         .logo-circle {
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
             background: linear-gradient(135deg, var(--neon) 0%, #0f766e 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 15px var(--neon-glow);
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.4));
         }
 
         .logo-circle i {
             color: white;
             font-size: 1.2rem;
+        }
+
+        .home-btn {
+            color: var(--neon-light) !important;
+            border-color: rgba(22, 163, 74, 0.35) !important;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            background: rgba(22, 163, 74, 0.15) !important;
+            border-color: var(--neon) !important;
         }
 
         .logo-text {
@@ -863,6 +883,260 @@
             animation: pulse 3s infinite ease-in-out;
         }
 
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: floating 4s infinite ease-in-out;
+        }
+
+        /* Staggered content reveal when a slide becomes active */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(35px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        .slide.active .eyebrow,
+        .slide.active .cover-badge { animation: fadeUp 0.6s 0.08s both; }
+
+        .slide.active h1.slide-title,
+        .slide.active h2.slide-subtitle { animation: fadeUp 0.65s 0.18s both; }
+
+        .slide.active .slide-desc { animation: fadeUp 0.65s 0.28s both; }
+
+        .slide.active .glass-panel,
+        .slide.active .visual-showcase { animation: fadeUp 0.7s 0.36s both; }
+
+        .slide.active .feature-grid,
+        .slide.active .badge-list,
+        .slide.active .quality-grid,
+        .slide.active .db-entities-grid,
+        .slide.active .tech-categories,
+        .slide.active .explorer-container,
+        .slide.active .impact-grid { animation: fadeUp 0.75s 0.46s both; }
+
+        .slide.active .stats-highlight-row { animation: fadeIn 0.9s 0.6s both; }
+
+        /* Animated gradient sweep on titles */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1.slide-title span {
+            background-size: 200% auto;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        /* Directional exit (set by JS) */
+        .slide.exit-left {
+            transform: scale(0.92) translateX(-60px);
+            opacity: 0;
+        }
+        .slide.exit-right {
+            transform: scale(0.92) translateX(60px);
+            opacity: 0;
+        }
+
+        /* Impact / animated counters grid */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            width: 100%;
+            max-width: 1100px;
+            margin-top: 10px;
+        }
+
+        .impact-card {
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--neon) 0%, var(--gold) 100%);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .impact-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(22, 163, 74, 0.3);
+            background: rgba(22, 163, 74, 0.04);
+        }
+
+        .impact-card:hover::after { opacity: 1; }
+
+        .impact-icon {
+            font-size: 1.8rem;
+            color: var(--neon-light);
+            margin-bottom: 12px;
+        }
+
+        .impact-card.gold .impact-icon { color: var(--gold); }
+
+        .impact-number {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .impact-number .suffix { color: var(--neon-light); }
+        .impact-card.gold .impact-number .suffix { color: var(--gold); }
+
+        .impact-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        /* Gamification / social cards */
+        .gamification-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            width: 100%;
+        }
+
+        .game-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: rgba(255, 255, 255, 0.015);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            transition: var(--transition-smooth);
+        }
+
+        .game-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(22, 163, 74, 0.25);
+            background: rgba(22, 163, 74, 0.03);
+        }
+
+        .game-card .game-icon {
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(22, 163, 74, 0.1);
+            border: 1px solid rgba(22, 163, 74, 0.2);
+            color: var(--neon-light);
+        }
+
+        .game-card.gold .game-icon {
+            background: rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.2);
+            color: var(--gold);
+        }
+
+        .game-card h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 6px;
+        }
+
+        .game-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Closing slide */
+        .closing-logo {
+            width: 130px;
+            height: 130px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, var(--neon) 0%, #0f766e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 45px var(--neon-glow);
+            margin-bottom: 25px;
+            padding: 22px;
+        }
+
+        .closing-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .closing-title {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #c2f5d3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .closing-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--neon);
+            color: white;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 14px 32px;
+            border-radius: 14px;
+            text-decoration: none;
+            box-shadow: 0 8px 25px var(--neon-glow);
+            transition: var(--transition-smooth);
+            margin-top: 30px;
+            pointer-events: auto;
+        }
+
+        .closing-cta:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(22, 163, 74, 0.5);
+        }
+
+        .closing-cta.secondary {
+            background: transparent;
+            border: 1px solid var(--border-glass);
+            color: var(--text-light);
+            box-shadow: none;
+            margin-left: 12px;
+        }
+
+        .closing-cta.secondary:hover {
+            background: rgba(255,255,255,0.05);
+            box-shadow: none;
+        }
+
         /* Footer info */
         footer.slide-footer {
             position: fixed;
@@ -974,6 +1248,19 @@
             .db-entities-grid {
                 grid-template-columns: 1fr;
             }
+            .impact-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .gamification-grid {
+                grid-template-columns: 1fr;
+            }
+            .closing-title {
+                font-size: 2.6rem;
+            }
+            .home-btn span,
+            #autoplayBtn {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -987,13 +1274,16 @@
     <!-- Top Sticky Header -->
     <header>
         <div class="logo-container">
-            <div class="logo-circle">
-                <i class="bi bi-play-fill"></i>
+            <div class="logo-circle floating">
+                <img src="<?= asset('images/logo.png') ?>" alt="FastPlay logo">
             </div>
             <div class="logo-text">FastPlay</div>
             <span class="project-tag">v3.0.0</span>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="<?= url('') ?>" class="fs-btn home-btn" title="Volver a la página principal">
+                <i class="bi bi-house-door-fill"></i> Volver al Inicio
+            </a>
             <button class="fs-btn" id="autoplayBtn" onclick="toggleAutoplay()">
                 <i class="bi bi-play-circle-fill"></i> Autoplay
             </button>
@@ -1330,7 +1620,118 @@
             </div>
         </div>
 
-        <!-- Slide 8: Estabilidad, Coherencia y Conclusiones -->
+        <!-- Slide 8: Gamificación y Componente Social -->
+        <div class="slide" id="slide-gamification">
+            <div class="slide-full">
+                <div class="eyebrow gold">Engagement & Retención</div>
+                <h2 class="slide-subtitle" style="margin-bottom: 10px;">Gamificación y <span>Comunidad viva</span></h2>
+                <p class="slide-desc" style="max-width: 850px; margin-bottom: 25px;">
+                    Fastplay no es solo un gestor: es una comunidad. Combinamos mecánicas de juego, comunicación en tiempo real y retos entre capitanes para mantener a los jugadores enganchados temporada tras temporada.
+                </p>
+
+                <div class="gamification-grid" style="max-width: 1100px;">
+                    <div class="game-card">
+                        <div class="game-icon"><i class="bi bi-award-fill"></i></div>
+                        <div>
+                            <h4>Logros & Medallas</h4>
+                            <p>Sistema de hitos desbloqueables: primer gol, racha de victorias, veteranía o fichajes. Cada logro otorga insignias visibles en el perfil del jugador.</p>
+                        </div>
+                    </div>
+                    <div class="game-card gold">
+                        <div class="game-icon"><i class="bi bi-bar-chart-line-fill"></i></div>
+                        <div>
+                            <h4>Carta FIFA Dinámica</h4>
+                            <p>Cada jugador posee una carta de estadísticas estilo FIFA que evoluciona con su rendimiento real: partidos jugados, goles, asistencias y valoración media.</p>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon"><i class="bi bi-chat-dots-fill"></i></div>
+                        <div>
+                            <h4>Chat de Equipo (AJAX)</h4>
+                            <p>Salas de mensajería en tiempo real por equipo, gestionadas con peticiones asíncronas JavaScript para coordinar alineaciones sin recargar la página.</p>
+                        </div>
+                    </div>
+                    <div class="game-card gold">
+                        <div class="game-icon"><i class="bi bi-controller"></i></div>
+                        <div>
+                            <h4>Retos entre Capitanes</h4>
+                            <p>Canal de negociación 1:1 donde los capitanes pactan amistosos en directo: fecha, campo y reglas. El reto aceptado genera el partido automáticamente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel gold" style="margin-top: 20px; padding: 15px 28px; width: 100%; max-width: 1100px; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-size: 0.88rem; color: #e2e8f0; text-align: left;">
+                        <strong style="color: var(--gold);">Notificaciones internas:</strong> solicitudes de unión, confirmaciones de partido y logros desbloqueados llegan al panel del usuario en tiempo real.
+                    </div>
+                    <span class="tech-badge gold" style="background: rgba(251, 191, 36, 0.12); border-color: var(--gold); color: var(--gold); font-weight: 700;">
+                        <i class="bi bi-bell-fill"></i> Tiempo Real
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Métricas de Impacto (contadores animados) -->
+        <div class="slide" id="slide-impact">
+            <div class="slide-full">
+                <div class="eyebrow">El Proyecto en Cifras</div>
+                <h2 class="slide-subtitle" style="margin-bottom: 10px;">Magnitud y <span>Robustez técnica</span></h2>
+                <p class="slide-desc" style="max-width: 800px; margin-bottom: 30px;">
+                    Un vistazo cuantitativo al esfuerzo de ingeniería detrás de Fastplay: cobertura de pruebas, entidades de dominio y arquitectura construida íntegramente a medida.
+                </p>
+
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="bi bi-shield-fill-check"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="231">0</span></div>
+                        <div class="impact-label">Tests PHPUnit</div>
+                    </div>
+                    <div class="impact-card gold">
+                        <div class="impact-icon"><i class="bi bi-diagram-3-fill"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="12">0</span></div>
+                        <div class="impact-label">Entidades de Dominio</div>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="6">0</span></div>
+                        <div class="impact-label">Campos de Ceuta</div>
+                    </div>
+                    <div class="impact-card gold">
+                        <div class="impact-icon"><i class="bi bi-percent"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="100">0</span><span class="suffix">%</span></div>
+                        <div class="impact-label">Stack Vanilla</div>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="bi bi-controller"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="2">0</span></div>
+                        <div class="impact-label">Modelos de Liga</div>
+                    </div>
+                    <div class="impact-card gold">
+                        <div class="impact-icon"><i class="bi bi-credit-card-2-front-fill"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="1">0</span></div>
+                        <div class="impact-label">Pasarela Stripe</div>
+                    </div>
+                    <div class="impact-card">
+                        <div class="impact-icon"><i class="bi bi-database-fill-check"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="2">0</span></div>
+                        <div class="impact-label">Motores BD (SQLite/PG)</div>
+                    </div>
+                    <div class="impact-card gold">
+                        <div class="impact-icon"><i class="bi bi-box-seam-fill"></i></div>
+                        <div class="impact-number"><span class="counter" data-target="0">0</span></div>
+                        <div class="impact-label">Frameworks Pesados</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel" style="margin-top: 25px; padding: 15px 28px; width: 100%; max-width: 1100px; text-align: center;">
+                    <p style="font-size: 0.88rem; color: #cbd5e1;">
+                        <strong style="color: var(--neon-light);">Cero dependencias de framework:</strong> cada capa &mdash; router, ORM ligero, autenticación, seguridad y vistas &mdash; fue diseñada y verificada manualmente para demostrar dominio completo del stack web.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Estabilidad, Coherencia y Conclusiones -->
         <div class="slide" id="slide-8">
             <div class="slide-grid">
                 <div class="content-side">
@@ -1371,6 +1772,34 @@
 
                     <a href="<?= url('') ?>" class="fs-btn" style="text-align: center; justify-content: center; font-weight: 700; background: var(--neon); color: white; border: none; padding: 12px; font-size: 1rem; box-shadow: 0 5px 15px var(--neon-glow); pointer-events: auto; display: flex; align-items: center; gap: 8px; border-radius: 12px;">
                         Volver a la Aplicación Principal <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Cierre / Gracias -->
+        <div class="slide" id="slide-closing">
+            <div class="slide-full">
+                <div class="closing-logo floating">
+                    <img src="<?= asset('images/logo.png') ?>" alt="FastPlay logo">
+                </div>
+                <div class="cover-badge">
+                    <i class="bi bi-check-circle-fill"></i> Presentación completada
+                </div>
+                <h1 class="closing-title">FastPlay</h1>
+                <h2 class="slide-subtitle" style="font-weight: 500; font-size: 1.3rem; color: var(--text-muted); max-width: 650px; margin-bottom: 5px;">
+                    Donde la pachanga de barrio en Ceuta se convierte en competición organizada.
+                </h2>
+                <p class="slide-desc" style="max-width: 600px; margin-top: 15px;">
+                    Gracias por recorrer la arquitectura técnica del proyecto. Una aplicación web completa, segura y sin frameworks, construida desde cero.
+                </p>
+
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+                    <a href="<?= url('') ?>" class="closing-cta">
+                        <i class="bi bi-house-door-fill"></i> Volver al Inicio
+                    </a>
+                    <a href="https://github.com/Sadek2110" target="_blank" class="closing-cta secondary">
+                        <i class="bi bi-github"></i> Ver en GitHub
                     </a>
                 </div>
             </div>
@@ -1596,19 +2025,50 @@
 
         function goToSlide(idx) {
             if (idx < 0 || idx >= slides.length) return;
-            
-            // Handle prev state class for nice animation direction
+
+            const goingForward = idx > currentSlideIdx;
+
+            // Apply directional exit classes for a smooth horizontal transition
             slides.forEach((slide, sIdx) => {
-                slide.classList.remove('active', 'prev');
-                if (sIdx < idx) {
-                    slide.classList.add('prev');
+                slide.classList.remove('active', 'prev', 'exit-left', 'exit-right');
+                if (sIdx !== idx) {
+                    if (sIdx < idx) {
+                        slide.classList.add('exit-left');
+                    } else {
+                        slide.classList.add('exit-right');
+                    }
                 }
             });
 
             currentSlideIdx = idx;
-            slides[currentSlideIdx].classList.add('active');
-            
+            const activeSlide = slides[currentSlideIdx];
+            activeSlide.classList.add('active');
+
+            // Trigger animated counters if this slide contains any
+            const counters = activeSlide.querySelectorAll('.counter');
+            if (counters.length) animateCounters(counters);
+
             updateProgress();
+        }
+
+        // Animated number counters (count-up)
+        function animateCounters(counters) {
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'), 10) || 0;
+                const duration = 1200;
+                const startTime = performance.now();
+
+                function tick(now) {
+                    const progress = Math.min((now - startTime) / duration, 1);
+                    // easeOutCubic for a natural deceleration
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    counter.textContent = Math.round(eased * target);
+                    if (progress < 1) requestAnimationFrame(tick);
+                    else counter.textContent = target;
+                }
+                counter.textContent = '0';
+                requestAnimationFrame(tick);
+            });
         }
 
         function nextSlide() {
