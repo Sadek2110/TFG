@@ -1,44 +1,31 @@
 <?php
-// FastPlay · front controller
+// Punto de entrada único de FastPlay (Front Controller).
+// Carga la configuración, el núcleo y la tabla de rutas, y delega la
+// petición al enrutador.
 
-// Autoloader de Composer (Stripe, PHPMailer, League OAuth2…)
-$autoload = __DIR__ . '/../vendor/autoload.php';
-if (is_file($autoload)) {
-    require_once $autoload;
-}
+declare(strict_types=1);
 
-require_once __DIR__ . '/../config/config.php';
-require_once APP_PATH . '/core/Database.php';
-require_once APP_PATH . '/core/Router.php';
-require_once APP_PATH . '/core/Controller.php';
+require __DIR__ . '/../config/configuracion.php';
+require RUTA_APP . '/nucleo/helpers.php';
+require RUTA_APP . '/nucleo/BaseDeDatos.php';
+require RUTA_APP . '/nucleo/Sesion.php';
+require RUTA_APP . '/nucleo/Csrf.php';
+require RUTA_APP . '/nucleo/Controlador.php';
+require RUTA_APP . '/nucleo/Enrutador.php';
 
-// Manejo unificado de excepciones y errores fatales
-set_exception_handler(function (Throwable $e) {
-    Router::serverError($e);
-});
+iniciar_aplicacion();
 
-register_shutdown_function(function () {
-    $err = error_get_last();
-    if ($err && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
-        Router::serverError(new ErrorException(
-            $err['message'], 0, $err['type'], $err['file'], $err['line']
-        ));
-    }
-});
+$enrutador = new Enrutador();
+require RUTA_RAIZ . '/config/rutas.php';
 
-// Inicializa BD (idempotente — sólo migra/seedea si está vacía)
 try {
-    Database::pdo();
-} catch (Throwable $e) {
-    Router::serverError($e);
-    exit;
-}
-
-$url = isset($_GET['url']) ? (string) $_GET['url'] : '';
-if ($url === '' && PHP_SAPI === 'cli-server') {
-    $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '', '/');
-    if ($path !== '' && !str_contains(basename($path), '.')) {
-        $url = $path;
+    $enrutador->despachar();
+} catch (Throwable $error) {
+    error_log('[FastPlay] ' . $error->getMessage() . ' en ' . $error->getFile() . ':' . $error->getLine());
+    http_response_code(500);
+    if ((getenv('FASTPLAY_ENTORNO') ?: 'desarrollo') !== 'produccion') {
+        echo '<pre>' . escapar((string) $error) . '</pre>';
+    } else {
+        echo 'Ha ocurrido un error inesperado. Inténtalo más tarde.';
     }
 }
-Router::dispatch($url);

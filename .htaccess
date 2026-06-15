@@ -1,13 +1,11 @@
-# Si alguien apunta a la raíz del proyecto, redirige a /public/
+# Si el DocumentRoot apunta a la raíz del proyecto en lugar de a public/,
+# redirigimos todas las peticiones al front controller dentro de public/.
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{ENV:REDIRECT_STATUS} ^$
-    RewriteRule ^$ public/ [L]
-    RewriteCond %{ENV:REDIRECT_STATUS} ^$
+
+    RewriteCond %{REQUEST_URI} !^/public/
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
-
-Options -Indexes
-ServerSignature Off

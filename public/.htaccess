@@ -1,27 +1,18 @@
+# Reescritura para Apache: cualquier URL que no apunte a un archivo o
+# directorio real se envía al front controller.
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # No reescribir si el archivo o directorio existe (assets físicos)
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
-
-    # Resto de rutas → front controller
-    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
 </IfModule>
 
-# Bloquear acceso directo a archivos sensibles
-<FilesMatch "\.(env|md|log|sqlite|sqlite-journal|ini|sql|json|lock|yml|yaml|dockerfile)$">
-    <IfModule mod_authz_core.c>
-        Require all denied
-    </IfModule>
-    <IfModule !mod_authz_core.c>
-        Order allow,deny
-        Deny from all
-    </IfModule>
-</FilesMatch>
-
+# Endurecimiento mínimo: ocultar la firma del servidor.
 ServerSignature Off
 
-# Las cabeceras de seguridad (X-Frame-Options, CSP, etc.) se envían desde
-# config/config.php (security_headers()) para no duplicar y mantener un único origen.
+# Bloquear archivos sensibles si se subiesen por error a public/.
+<FilesMatch "\.(sqlite|sql|md|log|ini)$">
+    Require all denied
+</FilesMatch>

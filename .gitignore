@@ -1,32 +1,15 @@
-# --- FastPlay ---
-storage/*.sqlite
-storage/*.sqlite-journal
-storage/*.log
-storage/sessions/
+# Base de datos local generada
+/base_datos/fastplay.sqlite
+/base_datos/fastplay.sqlite-journal
 
-# Dependencias y cachés de test
-vendor/
-.phpunit.cache/
+# Sesiones PHP (se crean en tiempo de ejecución)
+/almacenamiento/sesiones/*
+!/almacenamiento/sesiones/.gitkeep
 
-# Uploads del usuario (no los assets de marca controlados)
-uploads/*
-!uploads/.htaccess
-
-# Runtime local y assets generados pesados
-php/
-public/frames/
-public/frames-webp/
-
-# Editores / IDEs
+# Editores y sistema
 .idea/
 .vscode/
-.agent/
-.claude/
-*.bak
+.DS_Store
+Thumbs.db
 *.swp
 *~
-
-# Sistema
-Thumbs.db
-.DS_Store
-desktop.ini
