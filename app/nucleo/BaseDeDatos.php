@@ -17,12 +17,9 @@ class BaseDeDatos
             return self::$conexion;
         }
 
-        $nuevoArchivo = !file_exists(RUTA_BD);
-        if ($nuevoArchivo) {
-            $directorio = dirname(RUTA_BD);
-            if (!is_dir($directorio)) {
-                mkdir($directorio, 0775, true);
-            }
+        $directorio = dirname(RUTA_BD);
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0775, true);
         }
 
         $pdo = new PDO('sqlite:' . RUTA_BD);
@@ -34,14 +31,13 @@ class BaseDeDatos
 
         self::$conexion = $pdo;
 
-        if ($nuevoArchivo) {
+        if (!self::tablaExiste('usuarios')) {
             self::aplicarEsquema();
             if (file_exists(RUTA_DEMO)) {
                 self::ejecutarArchivo(RUTA_DEMO);
             }
-        } else {
-            self::actualizarEsquemaLigero();
         }
+        self::actualizarEsquemaLigero();
 
         return self::$conexion;
     }
@@ -101,6 +97,14 @@ class BaseDeDatos
             }
         }
         return false;
+    }
+
+    private static function tablaExiste(string $tabla): bool
+    {
+        return self::valor(
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = :tabla",
+            ['tabla' => $tabla]
+        ) !== null;
     }
 
     private static function ejecutarArchivo(string $ruta): void

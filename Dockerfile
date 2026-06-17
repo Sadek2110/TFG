@@ -29,3 +29,7 @@ EXPOSE 80
 ENV FASTPLAY_ENTORNO=produccion
 ENV FASTPLAY_BD_PATH=/var/www/html/almacenamiento/fastplay.sqlite
 ENV FASTPLAY_SESIONES_PATH=/var/www/html/almacenamiento/sesiones
+
+# Los volúmenes se montan en runtime y pueden sobrescribir los permisos fijados
+# durante el build. Ajustarlos aquí evita que SQLite no pueda crear/abrir la BD.
+CMD ["sh", "-c", "mkdir -p /var/www/html/almacenamiento/sesiones && chown -R www-data:www-data /var/www/html/almacenamiento && apache2-foreground"]

@@ -51,3 +51,15 @@ Fastplay es una aplicación web escrita en PHP 8.1+ con un MVC propio minimalist
   superficie. `campos` incorpora `foto TEXT` con migración ligera.
 - La invitación por correo no envía email real ni llama APIs externas; en este
   MVP incorpora al usuario existente si el correo corresponde a una cuenta libre.
+
+## Actualización 2026-06-18 - Fix de despliegue SQLite
+- Se corrigió un fallo de producción donde todos los endpoints podían caer en
+  el `catch` global con "Ha ocurrido un error inesperado". Causa probable:
+  volumen persistente con `fastplay.sqlite` existente pero vacío/sin esquema, o
+  permisos del volumen montado en runtime.
+- `BaseDeDatos::conexion()` ya no decide aplicar esquema solo por `file_exists`;
+  ahora comprueba si existe la tabla `usuarios`. Si no existe, aplica
+  `base_datos/esquema.sql` y después ejecuta las migraciones ligeras.
+- `Dockerfile` ahora ejecuta al arrancar `mkdir -p` y `chown -R www-data:www-data`
+  sobre `/var/www/html/almacenamiento` antes de `apache2-foreground`, porque los
+  volúmenes montados pueden sobrescribir permisos definidos durante el build.
