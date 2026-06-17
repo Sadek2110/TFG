@@ -10,15 +10,26 @@
         <div class="estado-vacio">Todavía no se han registrado campos.</div>
     <?php else: ?>
         <ul class="lista-tarjetas lista-campos">
-            <?php foreach ($campos as $c): ?>
+            <?php
+            $fotosCampos = [
+                'aiman-mohamed.webp',
+                'alfonso-murube.jpg',
+                'emilio-cozar.jpg',
+                'jose-benoliel.jpg',
+                'jose-pirri.jpeg',
+                'tuhami-al-lal.webp',
+            ];
+            foreach ($campos as $indice => $c): ?>
                 <?php
                 $foto = $c['foto'] ?? '';
-                $foto = $foto !== '' ? $foto : '/imagenes/hero-poster.jpg';
+                if ($foto === '') {
+                    $foto = '/imagenes/campos/' . $fotosCampos[$indice % count($fotosCampos)];
+                }
                 $srcFoto = str_starts_with($foto, 'http://') || str_starts_with($foto, 'https://') ? $foto : url($foto);
                 $ubicacion = trim((string) (($c['direccion'] ?? '') . ' ' . ($c['ciudad'] ?? '')));
                 $maps = 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($ubicacion !== '' ? $ubicacion : (string) $c['nombre']);
                 ?>
-                <li class="tarjeta campo-card">
+                <li class="tarjeta tarjeta--clicable campo-card" data-tarjeta-url="<?= e($maps) ?>" data-tarjeta-target="_blank">
                     <img class="campo-card__foto" src="<?= e($srcFoto) ?>" alt="Foto de <?= e($c['nombre']) ?>" loading="lazy">
                     <div class="campo-card__contenido">
                         <h2><?= e($c['nombre']) ?></h2>
@@ -34,7 +45,7 @@
                                 <?= e($ubicacion) ?>
                             </a>
                         <?php endif; ?>
-                        <?php if (Sesion::esAdministrador()): ?>
+                        <?php if (Sesion::esAdministrador() && !empty($c['id'])): ?>
                             <div class="tarjeta__pie">
                                 <form method="post" action="<?= e(url('/campos/' . $c['id'] . '/eliminar')) ?>"
                                       data-confirmar="¿Eliminar este campo?">

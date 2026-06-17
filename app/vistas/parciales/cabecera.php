@@ -27,15 +27,19 @@
                     <i class="fa-solid fa-moon"></i> Oscuro
                 </button>
                 <?php if ($usuario): ?>
-                    <a href="<?= e(url('/perfil')) ?>" class="<?= ruta_activa('/perfil') ?>">
-                        <?= e($usuario['nombre']) ?>
+                    <a href="<?= e(url('/perfil')) ?>" class="cabecera__perfil <?= ruta_activa('/perfil') ?>">
+                        <i class="fa-solid fa-user" aria-hidden="true"></i>
+                        Perfil
                     </a>
                     <?php if (Sesion::esAdministrador()): ?>
                         <a href="<?= e(url('/admin')) ?>" class="<?= ruta_activa('/admin') ?>">Admin</a>
                     <?php endif; ?>
                     <form method="post" action="<?= e(url('/cerrar-sesion')) ?>" class="cabecera__cerrar">
                         <?= Csrf::campo() ?>
-                        <button type="submit" class="boton boton--enlace">Cerrar sesión</button>
+                        <button type="submit" class="boton boton--enlace">
+                            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                            Cerrar sesión
+                        </button>
                     </form>
                 <?php else: ?>
                     <a href="<?= e(url('/iniciar-sesion')) ?>" class="<?= ruta_activa('/iniciar-sesion') ?>">Iniciar sesión</a>

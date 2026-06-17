@@ -18,6 +18,24 @@
     });
 
     // -------------------------------------------------------------------------
+    // Tarjetas y filas clicables con data-tarjeta-url
+    // -------------------------------------------------------------------------
+    document.addEventListener('click', function (evento) {
+        const tarjeta = evento.target.closest('[data-tarjeta-url]');
+        if (!tarjeta) return;
+        if (evento.target.closest('a, button, input, select, textarea, label, form')) return;
+
+        const destino = tarjeta.dataset.tarjetaUrl;
+        if (!destino) return;
+
+        if (tarjeta.dataset.tarjetaTarget === '_blank') {
+            window.open(destino, '_blank', 'noopener');
+            return;
+        }
+        window.location.href = destino;
+    });
+
+    // -------------------------------------------------------------------------
     // Menú hamburguesa en móvil
     // -------------------------------------------------------------------------
     const toggle = document.querySelector('[data-menu-toggle]');

@@ -323,7 +323,7 @@ class ControladorEquipos extends Controlador
     {
         $equipo = Equipo::equipoCapitaneadoPorUsuario(Sesion::idUsuario());
         if ($equipo !== null) {
-            Sesion::flash('aviso', 'Ya eres capitÃ¡n de un equipo. Gestiona tu equipo desde aquÃ­.');
+            Sesion::flash('aviso', 'Ya eres capitán de un equipo. Gestiona tu equipo desde aquí.');
             $this->redirigir('/equipos/' . $equipo['id']);
         }
     }

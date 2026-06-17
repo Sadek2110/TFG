@@ -35,9 +35,12 @@ $idLuis  = Usuario::crear('Luis Mora',     'luis@fastplay.test',   'jugador1');
 $idMarta = Usuario::crear('Marta Ruiz',    'marta@fastplay.test',  'jugador1');
 
 // Campos.
-$idCampo1 = Campo::crear('Estadio Murube', 'Av. de los Reyes Católicos', 'Ceuta', 'Hierba natural');
-$idCampo2 = Campo::crear('Polideportivo del Sur', 'Calle del Mar', 'Ceuta', 'Hierba artificial');
-$idCampo3 = Campo::crear('Campo Municipal Norte', 'Calle Real', 'Ceuta', 'Tierra');
+$idCampo1 = Campo::crear('Estadio Murube', 'Av. de los Reyes Católicos', 'Ceuta', 'Hierba natural', '/imagenes/campos/alfonso-murube.jpg');
+$idCampo2 = Campo::crear('Polideportivo del Sur', 'Calle del Mar', 'Ceuta', 'Hierba artificial', '/imagenes/campos/emilio-cozar.jpg');
+$idCampo3 = Campo::crear('Campo Municipal Norte', 'Calle Real', 'Ceuta', 'Tierra', '/imagenes/campos/jose-benoliel.jpg');
+$idCampo4 = Campo::crear('Campo Aiman Mohamed', 'Avenida África', 'Ceuta', 'Hierba artificial', '/imagenes/campos/aiman-mohamed.webp');
+$idCampo5 = Campo::crear('Campo José Pirri', 'Barriada San José', 'Ceuta', 'Cemento', '/imagenes/campos/jose-pirri.jpeg');
+$idCampo6 = Campo::crear('Campo Tuhami Al-Lal', 'Calle Independencia', 'Ceuta', 'Hierba natural', '/imagenes/campos/tuhami-al-lal.webp');
 
 // Equipos (capitanes: Ana, Bob, Eva).
 $idTigres   = Equipo::crear('Tigres FC',     'Ceuta', 'Equipo del barrio del puerto.',    $idAna);
@@ -70,7 +73,7 @@ Partido::registrarResultado($idPartido2, 2, 2);
 
 echo "Datos de demostración cargados:" . PHP_EOL;
 echo "  - 6 usuarios (1 admin, 5 jugadores)" . PHP_EOL;
-echo "  - 3 equipos, 3 campos, 1 liga" . PHP_EOL;
+echo "  - 3 equipos, 6 campos, 1 liga" . PHP_EOL;
 echo "  - 3 partidos (2 finalizados + 1 programado)" . PHP_EOL;
 echo PHP_EOL;
 echo "Usuarios de prueba (contraseñas en texto plano para la demo):" . PHP_EOL;

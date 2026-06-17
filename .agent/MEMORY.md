@@ -77,3 +77,21 @@ Fastplay es una aplicación web escrita en PHP 8.1+ con un MVC propio minimalist
 - Ajuste posterior: en portada, la cabecera pasa a `fixed` con `body:has(.hero)`
   para superponerse al hero sin franja negra, y el vídeo/póster sobresalen del
   contenedor con inset negativo para cubrir pantallas grandes sin bordes.
+
+## Actualización 2026-06-18 - UI de endpoints, campos y modo oscuro
+- `public/imagenes/jugadores/` se renombró a `public/imagenes/campos/`; las
+  vistas que usaban esas fotos ahora apuntan a la nueva ruta.
+- `/campos` muestra al menos seis tarjetas visuales: combina campos reales de
+  SQLite con un catálogo de demo si la base existente tiene menos registros. Los
+  campos de demo no muestran acción de eliminar porque no tienen `id` persistido.
+- `base_datos/sembrar.php` crea seis campos con fotos locales de
+  `/imagenes/campos/`.
+- Las tarjetas de portada, equipos, ligas, campos y las filas de partidos usan
+  `data-tarjeta-url`; `public/js/principal.js` abre la caja completa sin
+  interferir con enlaces, botones o formularios internos.
+- El tema oscuro se aplica en `app/vistas/layout.php` antes de cargar CSS,
+  leyendo `localStorage` o `prefers-color-scheme`, para evitar el flash blanco
+  entre endpoints.
+- `/partidos` mantiene calendario server-side, pero ahora cada día incluye hora
+  y resumen del primer partido para renderizar una rejilla de calendario más
+  realista.

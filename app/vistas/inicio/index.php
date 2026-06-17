@@ -86,20 +86,20 @@
 </section>
 
 <section class="caracteristicas revelar">
-    <article class="tarjeta">
-        <h2>Equipos</h2>
+    <article class="tarjeta tarjeta--clicable" data-tarjeta-url="<?= e(url('/equipos')) ?>">
+        <h2><a href="<?= e(url('/equipos')) ?>">Equipos</a></h2>
         <p>Crea tu equipo, gestiona miembros y mantén la información al día.</p>
     </article>
-    <article class="tarjeta">
-        <h2>Partidos</h2>
+    <article class="tarjeta tarjeta--clicable" data-tarjeta-url="<?= e(url('/partidos')) ?>">
+        <h2><a href="<?= e(url('/partidos')) ?>">Partidos</a></h2>
         <p>Programa encuentros, consulta el calendario y registra resultados.</p>
     </article>
-    <article class="tarjeta">
-        <h2>Campos</h2>
+    <article class="tarjeta tarjeta--clicable" data-tarjeta-url="<?= e(url('/campos')) ?>">
+        <h2><a href="<?= e(url('/campos')) ?>">Campos</a></h2>
         <p>Encuentra los campos disponibles de tu ciudad y su superficie.</p>
     </article>
-    <article class="tarjeta">
-        <h2>Ligas</h2>
+    <article class="tarjeta tarjeta--clicable" data-tarjeta-url="<?= e(url('/ligas')) ?>">
+        <h2><a href="<?= e(url('/ligas')) ?>">Ligas</a></h2>
         <p>Sigue las clasificaciones y los próximos partidos de cada liga.</p>
     </article>
 </section>
@@ -121,7 +121,7 @@
         foreach ($jugadores as $j): ?>
             <li class="comunidad__jugador">
                 <img class="comunidad__foto"
-                     src="<?= e(url('/imagenes/jugadores/' . $j['foto'])) ?>"
+                     src="<?= e(url('/imagenes/campos/' . $j['foto'])) ?>"
                      alt="<?= e($j['nombre']) ?>" width="96" height="96"
                      loading="lazy" decoding="async">
                 <span class="comunidad__nombre"><?= e($j['nombre']) ?></span>
@@ -142,7 +142,7 @@
                 <span class="carta-fifa__posicion">DEL</span>
             </div>
             <img class="carta-fifa__foto"
-                 src="<?= e(url('/imagenes/jugadores/jose-pirri.jpeg')) ?>"
+                 src="<?= e(url('/imagenes/campos/jose-pirri.jpeg')) ?>"
                  alt="" width="160" height="160" loading="lazy" decoding="async">
             <span class="carta-fifa__nombre">FastPlayer</span>
             <ul class="carta-fifa__stats">

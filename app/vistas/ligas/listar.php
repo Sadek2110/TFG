@@ -11,7 +11,7 @@
     <?php else: ?>
         <ul class="lista-tarjetas">
             <?php foreach ($ligas as $l): ?>
-                <li class="tarjeta">
+                <li class="tarjeta tarjeta--clicable" data-tarjeta-url="<?= e(url('/ligas/' . $l['id'])) ?>">
                     <h2><a href="<?= e(url('/ligas/' . $l['id'])) ?>"><?= e($l['nombre']) ?></a></h2>
                     <p>
                         Temporada <?= e($l['temporada']) ?> &middot;

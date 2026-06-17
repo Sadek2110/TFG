@@ -4,7 +4,10 @@
         <?php if ($puedeCrearEquipo): ?>
             <a class="boton boton--principal" href="<?= e(url('/equipos/crear')) ?>">+ Nuevo equipo</a>
         <?php elseif (!empty($equipoCapitaneado)): ?>
-            <a class="boton boton--secundario" href="<?= e(url('/equipos/' . $equipoCapitaneado['id'])) ?>">Ver mi equipo</a>
+            <a class="boton boton--principal boton--destacado" href="<?= e(url('/equipos/' . $equipoCapitaneado['id'])) ?>">
+                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                Ver mi equipo
+            </a>
         <?php endif; ?>
     </div>
 
@@ -18,7 +21,7 @@
     <?php else: ?>
         <ul class="lista-tarjetas">
             <?php foreach ($equipos as $equipo): ?>
-                <li class="tarjeta">
+                <li class="tarjeta tarjeta--clicable" data-tarjeta-url="<?= e(url('/equipos/' . $equipo['id'])) ?>">
                     <h2><a href="<?= e(url('/equipos/' . $equipo['id'])) ?>"><?= e($equipo['nombre']) ?></a></h2>
                     <?php if (!empty($equipo['ciudad'])): ?>
                         <p><?= e($equipo['ciudad']) ?></p>

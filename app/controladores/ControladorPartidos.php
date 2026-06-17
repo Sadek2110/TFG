@@ -261,6 +261,7 @@ class ControladorPartidos extends Controlador
                         break;
                     }
                 }
+                $primerEvento = $eventos[0] ?? null;
                 $semana[] = [
                     'fecha' => $fecha,
                     'dia' => $cursor->format('j'),
@@ -270,6 +271,10 @@ class ControladorPartidos extends Controlador
                     'tiene_partido' => count($eventos) > 0,
                     'jugado' => $jugado,
                     'total' => count($eventos),
+                    'hora' => $primerEvento !== null ? substr((string) $primerEvento['fecha_partido'], 11, 5) : '',
+                    'resumen' => $primerEvento !== null
+                        ? (string) $primerEvento['nombre_local'] . ' vs ' . (string) $primerEvento['nombre_visitante']
+                        : '',
                 ];
                 $cursor = $cursor->modify('+1 day');
             }

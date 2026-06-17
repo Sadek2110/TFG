@@ -45,7 +45,7 @@
             <label for="foto">Foto del campo</label>
             <input type="text" id="foto" name="foto" maxlength="255"
                    value="<?= viejo('foto') ?>"
-                   placeholder="/imagenes/hero-poster.jpg">
+                   placeholder="/imagenes/campos/alfonso-murube.jpg">
             <span class="campo__ayuda">Puedes usar una ruta local o una URL completa. Si queda vacío se mostrará una imagen por defecto.</span>
         </div>
 

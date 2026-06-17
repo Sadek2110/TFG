@@ -19,7 +19,7 @@
                 <span><i class="calendario__punto calendario__punto--jugado"></i>Jugado</span>
             </div>
             <div class="calendario__grid" role="grid" aria-label="Calendario de partidos">
-                <?php foreach (['L', 'M', 'X', 'J', 'V', 'S', 'D'] as $diaSemana): ?>
+                <?php foreach (['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'] as $diaSemana): ?>
                     <span class="calendario__semana"><?= e($diaSemana) ?></span>
                 <?php endforeach; ?>
                 <?php foreach ($calendario['semanas'] as $semana): ?>
@@ -33,9 +33,13 @@
                         if ($dia['jugado']) { $clases[] = 'calendario__dia--jugado'; }
                         ?>
                         <a class="<?= e(implode(' ', $clases)) ?>" href="<?= e(url('/partidos?fecha=' . $dia['fecha'])) ?>">
-                            <span><?= e($dia['dia']) ?></span>
+                            <span class="calendario__numero"><?= e($dia['dia']) ?></span>
                             <?php if ($dia['total'] > 0): ?>
-                                <small><?= (int) $dia['total'] ?></small>
+                                <small class="calendario__contador"><?= (int) $dia['total'] ?></small>
+                                <span class="calendario__evento">
+                                    <strong><?= e($dia['hora']) ?></strong>
+                                    <?= e($dia['resumen']) ?>
+                                </span>
                             <?php endif; ?>
                         </a>
                     <?php endforeach; ?>
@@ -79,7 +83,7 @@
             </thead>
             <tbody>
                 <?php foreach ($partidos as $p): ?>
-                    <tr>
+                    <tr class="fila--clicable" data-tarjeta-url="<?= e(url('/partidos/' . $p['id'])) ?>">
                         <td><?= e(formatear_fecha($p['fecha_partido'])) ?></td>
                         <td><?= e($p['nombre_local']) ?></td>
                         <td><?= e($p['nombre_visitante']) ?></td>

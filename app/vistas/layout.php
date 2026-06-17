@@ -8,10 +8,25 @@
     <link rel="icon" href="<?= e(url('/imagenes/icono-pag.ico')) ?>" sizes="any">
     <meta name="theme-color" content="#16a34a">
     <meta name="description" content="FastPlay: organiza tu fútbol amateur. Equipos, partidos, campos y ligas en un solo sitio.">
-    <!-- Marca el documento como "con JavaScript" antes de pintar, para que las
-         animaciones de revelado solo oculten contenido si el JS va a revelarlo.
-         Sin JS, todo se ve igualmente. -->
-    <script>document.documentElement.classList.add('js');</script>
+    <!-- Marca JS y aplica el tema antes de cargar CSS para evitar el flash claro
+         cuando el usuario tiene guardado el modo oscuro. -->
+    <script>
+        (function () {
+            var raiz = document.documentElement;
+            raiz.classList.add('js');
+            try {
+                var tema = localStorage.getItem('fp_tema');
+                if (!tema) {
+                    tema = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                        ? 'oscuro'
+                        : 'claro';
+                }
+                raiz.dataset.tema = tema;
+            } catch (error) {
+                raiz.dataset.tema = 'claro';
+            }
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">

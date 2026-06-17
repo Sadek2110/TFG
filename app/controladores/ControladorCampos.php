@@ -8,9 +8,10 @@ class ControladorCampos extends Controlador
 {
     public function listar(): void
     {
+        $campos = $this->completarCamposDemo(Campo::listar());
         $this->ver('campos/listar', [
             'titulo' => 'Campos',
-            'campos' => Campo::listar(),
+            'campos' => $campos,
         ]);
     }
 
@@ -67,5 +68,36 @@ class ControladorCampos extends Controlador
         Campo::eliminar((int) $id);
         Sesion::flash('info', 'Campo eliminado.');
         $this->redirigir('/campos');
+    }
+
+    private function completarCamposDemo(array $campos): array
+    {
+        $catalogo = [
+            ['nombre' => 'Estadio Murube', 'direccion' => 'Av. de los Reyes Católicos', 'ciudad' => 'Ceuta', 'superficie' => 'Hierba natural', 'foto' => '/imagenes/campos/alfonso-murube.jpg'],
+            ['nombre' => 'Polideportivo del Sur', 'direccion' => 'Calle del Mar', 'ciudad' => 'Ceuta', 'superficie' => 'Hierba artificial', 'foto' => '/imagenes/campos/emilio-cozar.jpg'],
+            ['nombre' => 'Campo Municipal Norte', 'direccion' => 'Calle Real', 'ciudad' => 'Ceuta', 'superficie' => 'Tierra', 'foto' => '/imagenes/campos/jose-benoliel.jpg'],
+            ['nombre' => 'Campo Aiman Mohamed', 'direccion' => 'Avenida África', 'ciudad' => 'Ceuta', 'superficie' => 'Hierba artificial', 'foto' => '/imagenes/campos/aiman-mohamed.webp'],
+            ['nombre' => 'Campo José Pirri', 'direccion' => 'Barriada San José', 'ciudad' => 'Ceuta', 'superficie' => 'Cemento', 'foto' => '/imagenes/campos/jose-pirri.jpeg'],
+            ['nombre' => 'Campo Tuhami Al-Lal', 'direccion' => 'Calle Independencia', 'ciudad' => 'Ceuta', 'superficie' => 'Hierba natural', 'foto' => '/imagenes/campos/tuhami-al-lal.webp'],
+        ];
+
+        $nombresExistentes = array_map(
+            static fn (array $campo): string => strtolower((string) ($campo['nombre'] ?? '')),
+            $campos
+        );
+
+        foreach ($catalogo as $campoDemo) {
+            if (count($campos) >= 6) {
+                break;
+            }
+            if (in_array(strtolower($campoDemo['nombre']), $nombresExistentes, true)) {
+                continue;
+            }
+            $campoDemo['id'] = null;
+            $campos[] = $campoDemo;
+            $nombresExistentes[] = strtolower($campoDemo['nombre']);
+        }
+
+        return $campos;
     }
 }

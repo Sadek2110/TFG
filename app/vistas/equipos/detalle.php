@@ -26,7 +26,7 @@
     </div>
 
     <div class="equipo-resumen">
-        <article class="tarjeta">
+        <article class="tarjeta tarjeta--equipo-info">
             <h2>Información</h2>
             <?php if (!empty($equipo['descripcion'])): ?>
                 <p><?= nl2br(e($equipo['descripcion'])) ?></p>
@@ -40,7 +40,7 @@
         </article>
 
         <?php if ($puedeGestionar): ?>
-            <article class="tarjeta">
+            <article class="tarjeta tarjeta--equipo-invitar">
                 <h2>Invitar jugador</h2>
                 <form method="post" action="<?= e(url('/equipos/' . $equipo['id'] . '/invitar')) ?>" class="formulario-compacto" novalidate data-validar>
                     <?= Csrf::campo() ?>
