@@ -42,7 +42,11 @@
         if (boton) {
             const esOscuro = tema === 'oscuro';
             boton.setAttribute('aria-pressed', String(esOscuro));
-            boton.textContent = esOscuro ? '☀️ Claro' : '🌙 Oscuro';
+            const icono = boton.querySelector('i');
+            if (icono) {
+                icono.className = esOscuro ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+            }
+            boton.innerHTML = (esOscuro ? '<i class="fa-solid fa-sun"></i> Claro' : '<i class="fa-solid fa-moon"></i> Oscuro');
             boton.setAttribute('aria-label', esOscuro ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro');
         }
     }
