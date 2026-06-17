@@ -66,6 +66,12 @@
     --e8: 2rem;      /* 32px */
     --e12: 3rem;     /* 48px */
     --e16: 4rem;     /* 64px */
+    --e20: 5rem;     /* 80px */
+
+    /* Ritmo vertical principal */
+    --espacio-pagina-arriba: clamp(var(--e8), 5vw, var(--e12));
+    --espacio-pagina-abajo: clamp(var(--e12), 7vw, var(--e20));
+    --espacio-secciones: clamp(var(--e12), 7vw, var(--e20));
 
     /* Movimiento */
     --transicion: 200ms ease;
@@ -175,21 +181,32 @@ img { max-width: 100%; }
 
 /* Espaciado generoso entre secciones de una misma página (limpieza visual). */
 main.contenedor {
-    padding-top: var(--e8);
-    padding-bottom: var(--e12);
+    padding-top: var(--espacio-pagina-arriba);
+    padding-bottom: var(--espacio-pagina-abajo);
 }
 
 main.contenedor > section + section,
 main.contenedor > section + .panel-ctx,
-main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
+main.contenedor > .panel-ctx + section { margin-top: var(--espacio-secciones); }
+
+main.contenedor > section > h1 { margin-bottom: var(--e4); }
+main.contenedor > section > p { max-width: 68ch; }
+main.contenedor > section > p + .lista-tarjetas,
+main.contenedor > section > p + .formulario,
+main.contenedor > section > h1 + .formulario,
+main.contenedor > section > h1 + .tabla-envoltura { margin-top: var(--e6); }
+main.contenedor > section > * + h2 { margin-top: var(--e12); }
+main.contenedor > section > h2 + .tabla-envoltura,
+main.contenedor > section > h2 + .tabla-miembros,
+main.contenedor > section > h2 + .estado-vacio { margin-top: var(--e4); }
 
 /* Cabecera de página reutilizable: título + acciones con aire alrededor. */
 .barra-acciones {
     display: flex;
-    gap: var(--e4);
+    gap: var(--e6);
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--e6);
+    margin-bottom: var(--e8);
     flex-wrap: wrap;
 }
 
@@ -485,7 +502,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     overflow: hidden;
     width: 100vw;
     margin-left: calc(50% - 50vw);
-    margin-top: calc(-1 * var(--e8));
+    margin-top: calc(-1 * var(--espacio-pagina-arriba));
     min-height: 100vh;
     min-height: 100dvh;
     display: grid;
@@ -507,18 +524,19 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     background-color: transparent;
     background-image: url('../imagenes/hero-poster.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-repeat: no-repeat;
     pointer-events: none;
 }
 
 .hero__video {
     position: absolute;
-    inset: 0;
+    inset: 0 0 auto 0;
     z-index: 1;
     width: 100%;
-    height: 100%;
+    height: 112%;
     object-fit: cover;
+    object-position: center top;
     /* Oscurecemos el vídeo con un filtro por si el clip es muy claro. */
     filter: brightness(0.55) saturate(1.1);
     pointer-events: none;
@@ -693,70 +711,13 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     font-weight: 800;
 }
 
-/* Indicador animado al final del hero: "Descubrir ↓". */
-.hero__indicador {
-    position: absolute;
-    z-index: 5;          /* Por encima del contenido, al ser lo último pintable. */
-    left: 50%;
-    bottom: clamp(1.5rem, 4vh, 2.5rem);
-    transform: translateX(-50%);
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--e2);
-    color: rgba(255, 255, 255, 0.78);
-    text-decoration: none;
-    background-image: none;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    transition: color var(--transicion), transform var(--transicion);
-}
-
-.hero__indicador:hover,
-.hero__indicador:focus-visible {
-    color: #fff;
-    transform: translate(-50%, 2px);
-}
-
-.hero__indicador-texto { line-height: 1; }
-
-.hero__indicador-flecha {
-    display: block;
-    width: 22px;
-    height: 36px;
-    border: 2px solid currentColor;
-    border-radius: var(--radio-full);
-    position: relative;
-}
-
-.hero__indicador-flecha::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: 6px;
-    width: 4px;
-    height: 8px;
-    border-radius: var(--radio-full);
-    background: currentColor;
-    transform: translateX(-50%);
-    animation: hero-raton 1.8s ease-in-out infinite;
-}
-
-@keyframes hero-raton {
-    0%   { opacity: 0; transform: translate(-50%, 0); }
-    30%  { opacity: 1; }
-    100% { opacity: 0; transform: translate(-50%, 14px); }
-}
-
 /* ----------------------------------------------------------------------------
    8. Tarjetas y rejillas de características
    ---------------------------------------------------------------------------- */
 
 .caracteristicas {
     display: grid;
-    gap: var(--e4);
+    gap: var(--e6);
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
@@ -764,7 +725,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     background-color: var(--color-superficie);
     border: 1px solid var(--color-borde);
     border-radius: var(--radio);
-    padding: var(--e6);
+    padding: var(--e8);
     box-shadow: var(--sombra);
     transition: transform var(--transicion), box-shadow var(--transicion), border-color var(--transicion);
 }
@@ -793,7 +754,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 
 .formulario {
     display: grid;
-    gap: var(--e4);
+    gap: var(--e6);
     max-width: 480px;
     background-color: var(--color-superficie);
     border: 1px solid var(--color-borde);
@@ -843,7 +804,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 
 .formulario__acciones {
     display: flex;
-    gap: var(--e3);
+    gap: var(--e4);
     align-items: center;
     flex-wrap: wrap;
 }
@@ -854,21 +815,21 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 
 .lista-tarjetas {
     display: grid;
-    gap: var(--e4);
+    gap: var(--e6);
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.lista-tarjetas .tarjeta { display: flex; flex-direction: column; gap: var(--e2); }
+.lista-tarjetas .tarjeta { display: flex; flex-direction: column; gap: var(--e3); }
 .lista-tarjetas .tarjeta h2 { margin: 0; }
 .lista-tarjetas .tarjeta h2 a { color: var(--color-texto); background-image: linear-gradient(var(--color-acento), var(--color-acento)); }
 .lista-tarjetas .tarjeta h2 a:hover { color: var(--color-principal-oscuro); }
 
 .lista-tarjetas .tarjeta__pie {
     margin-top: auto;
-    padding-top: var(--e2);
+    padding-top: var(--e4);
     display: flex;
     gap: var(--e2);
     flex-wrap: wrap;
@@ -1109,15 +1070,15 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     border: 1px solid var(--color-borde);
     border-radius: var(--radio);
     box-shadow: var(--sombra);
-    padding: var(--e8);
+    padding: clamp(var(--e6), 4vw, var(--e12));
 }
 
 .panel-ctx__barra {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--e2);
-    margin-bottom: var(--e4);
+    gap: var(--e4);
+    margin-bottom: var(--e6);
 }
 
 .panel-ctx__barra h2 { margin: 0; font-size: 1.25rem; }
@@ -1127,7 +1088,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     display: flex;
     align-items: center;
     gap: var(--e3);
-    margin-bottom: var(--e2);
+    margin-bottom: var(--e3);
     flex-wrap: wrap;
 }
 
@@ -1151,10 +1112,10 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 
 .panel-ctx__resumen {
     list-style: none;
-    margin: 0 0 var(--e4);
+    margin: 0 0 var(--e6);
     padding: 0;
     display: grid;
-    gap: var(--e3);
+    gap: var(--e4);
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 }
 
@@ -1162,7 +1123,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     background-color: var(--color-superficie-2);
     border: 1px solid var(--color-borde);
     border-radius: var(--radio-sm);
-    padding: var(--e3);
+    padding: var(--e4);
     display: grid;
     gap: var(--e1);
 }
@@ -1170,7 +1131,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 .panel-ctx__dato strong { font-size: 1.7rem; color: var(--color-principal-oscuro); }
 .panel-ctx__dato span { font-size: 0.85rem; color: var(--color-texto-suave); }
 
-.panel-ctx__acciones { display: flex; gap: var(--e2); flex-wrap: wrap; }
+.panel-ctx__acciones { display: flex; gap: var(--e3); flex-wrap: wrap; }
 .panel-ctx__hora { margin: var(--e4) 0 0; font-size: 0.8rem; color: var(--color-texto-suave); }
 
 /* ----------------------------------------------------------------------------
@@ -1179,7 +1140,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 
 .cifras {
     display: grid;
-    gap: var(--e4);
+    gap: var(--e6);
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
@@ -1188,7 +1149,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     border: 1px solid var(--color-borde);
     border-radius: var(--radio);
     box-shadow: var(--sombra);
-    padding: var(--e6) var(--e4);
+    padding: var(--e8) var(--e4);
     text-align: center;
     transition: transform var(--transicion), box-shadow var(--transicion);
 }
@@ -1255,7 +1216,10 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
    19. Carta tipo FIFA con tilt 3D (public/js/carta-jugador.js)
    ---------------------------------------------------------------------------- */
 
-.seccion-carta { text-align: center; }
+.seccion-carta {
+    text-align: center;
+    padding: var(--e8) 0;
+}
 .seccion-carta__titulo { font-size: 1.4rem; margin-bottom: var(--e2); }
 
 .carta-fifa {
@@ -1400,14 +1364,14 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 .equipo-resumen {
     display: grid;
     grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
-    gap: var(--e4);
+    gap: var(--e8);
     align-items: start;
-    margin-bottom: var(--e8);
+    margin-bottom: var(--e12);
 }
 
 .formulario-compacto {
     display: grid;
-    gap: var(--e4);
+    gap: var(--e6);
 }
 
 .equipo-form-grid {
@@ -1452,9 +1416,9 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 .calendario-partidos {
     display: grid;
     grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.8fr);
-    gap: var(--e4);
+    gap: var(--e8);
     align-items: stretch;
-    margin-bottom: var(--e8);
+    margin-bottom: var(--e12);
 }
 
 .calendario,
@@ -1463,7 +1427,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     border: 1px solid var(--color-borde);
     border-radius: var(--radio);
     box-shadow: var(--sombra);
-    padding: var(--e6);
+    padding: var(--e8);
 }
 
 .calendario__cabecera {
@@ -1577,7 +1541,7 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 .dia-partidos {
     display: grid;
     align-content: start;
-    gap: var(--e3);
+    gap: var(--e4);
 }
 
 .dia-partidos h2 { margin: 0; }
@@ -1629,8 +1593,8 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 
 .campo-card__contenido {
     display: grid;
-    gap: var(--e3);
-    padding: var(--e6);
+    gap: var(--e4);
+    padding: var(--e8);
 }
 
 .campo-card__contenido p {
@@ -1724,6 +1688,9 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
     .calendario,
     .dia-partidos,
     .campo-card__contenido { padding: var(--e4); }
+    .tarjeta,
+    .panel-ctx,
+    .formulario { padding: var(--e6); }
     .calendario__grid { gap: var(--e1); }
     .calendario__dia { min-height: 42px; }
     .equipo-form-grid { grid-template-columns: 1fr; }

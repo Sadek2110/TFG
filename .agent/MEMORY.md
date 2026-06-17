@@ -63,3 +63,14 @@ Fastplay es una aplicación web escrita en PHP 8.1+ con un MVC propio minimalist
 - `Dockerfile` ahora ejecuta al arrancar `mkdir -p` y `chown -R www-data:www-data`
   sobre `/var/www/html/almacenamiento` antes de `apache2-foreground`, porque los
   volúmenes montados pueden sobrescribir permisos definidos durante el build.
+
+## Actualización 2026-06-18 - Espaciado visual y hero del landing
+- Se amplió el ritmo vertical global en `public/css/estilos.css` con tokens de
+  espacio de página y separación entre secciones para evitar vistas pegadas.
+- Tarjetas, listas, formularios, panel contextual, cifras, calendario, detalle
+  de equipo y tarjetas de campos usan gaps/paddings más amplios, con reducción
+  responsive en móvil.
+- En `app/vistas/inicio/index.php` se eliminó el indicador "Descubrir" del hero.
+- El vídeo del hero se recorta por CSS anclándolo arriba y aumentando su altura
+  al 112%, de forma que se oculta visualmente la zona inferior donde aparecía la
+  marca de agua sin regenerar `public/video/hero.webm`.

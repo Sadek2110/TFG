@@ -1,26 +1,23 @@
-# Equipo (/equipos)
+## /equipo
 
-Al pulsar en un equipo se tiene que poder ver la info de ese equipo (nuevo endpoint), en esa pagina tiene que aparecer algo similar a esto (si eres un capitan y ya tienes equipo, al pulsar en el enlace de equipo que te salga la info de tu equipo  directamente):
+SI eres capitan y entras a la seccion de equipo y tienes un equipo creado el boton de ver mi equipo, tiene que llamar mas la atencion.
 
-mirar -> ejemplo.png (Tiene que ser algo parecido no igual, lo importante es la funcionalidad que tiene.)
+En las vistas del jugador, la caja para mandar la invitacion tiene muy poco espacion entre sus componentes, hay que dar mas espacio y asi con el resto de la vista de equipo
 
-Si no eres integrante del equipo tiene que salirte la opcion para unirte, pero si ya perteneces a uno no puede aparecer esa opcion.
+## /campo
 
-Si eres el que ha creado el quipo, tiene que salirte la opcion de:
+En la seccion de campos tienen que salir mas y las foton estan en la carpeta imagenes/jugadores en la carpeta public, renombrala a campos y usa esos nombres y fotos para las tarjetas de los campos, aparte de darles mas estilo
 
-- Modificar posiciones.
-- Elegir titular.
-- Enviar solicitud de invitacion a tu equipo a otro jugador poniendo su correo.
-- Poder hechar a alguien de tu equipo.
+## /perfil
 
-Si eres un capitan y tienes creado ya el equipo no te puede salir la opcion de crear un equipo nuevo, pero sino no.
+El enlace para ver el perfil y para cerrar sesion que parezcan muy a la derecha del navbar, al final, y el enlace para entrar al endpoint de perfil que se llame igual ‘perfil’ y añade iconos de fontawesom a cerrar sesion y perfil.
 
-# Partidos (equipos)
+## /partidos
 
-En el diseño de la pagina de partidos hay que añadirle un calendario antes de la tabla de equipos en el que se muestre el dia actual, los dias en los que hay un partido y los dias en los que ya se jugo un partido. En una parte tiene que estar el calendario y al lado suya la info del dia que se seleccione, si no se ha seleccionado nada es el dia actual.
+En la seccion de partidos el calendario tiene que salir como un calendario real, con la misma estructura de un calendario de verdad y con las funcionalidades ya acordadas.
 
-Tiene que aparecer en grande y que resalte un boton para solicitar partido solo si eres capitan de algun equipo, sino tienes equipos o no eres capitan que no aprezca.
+## Funcionalidad general
 
-# Campos (/campos)
+Las cajas de todos los endpoints tienen que ser clickeables y llevarte al link relacionado de ese componente, solo con hacer click a la caja, sin necesidad de clickear en el enlace.
 
-Tiene que aparecer el nombre del campo, con la ubicacion para abrir en google maps y la foto del campo.
+En el modo oscuro el cambio de endpoint o cualquier renderizado hace que la pantalla de un parpadeo blanco, solucionalo.

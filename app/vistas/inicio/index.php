@@ -46,10 +46,6 @@
         </ul>
     </div>
 
-    <a class="hero__indicador" href="#panel-ctx" aria-label="Descubrir más">
-        <span class="hero__indicador-texto">Descubrir</span>
-        <span class="hero__indicador-flecha" aria-hidden="true"></span>
-    </a>
 </section>
 
 <!-- Panel contextual: lo rellena public/js/panel-contextual.js vía fetch al
