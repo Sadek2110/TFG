@@ -32,10 +32,7 @@
         <div class="hero__acciones" data-revelar>
             <a class="boton boton--principal boton--xl" href="<?= e(url('/equipos')) ?>">
                 Crear mi equipo gratis
-                <svg class="boton__icono" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
-                    <path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor"
-                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                <i class="fa-solid fa-arrow-right boton__icono" aria-hidden="true"></i>
             </a>
             <a class="boton boton--contraste boton--xl" href="<?= e(url('/partidos')) ?>">
                 Ver partidos
@@ -43,9 +40,9 @@
         </div>
 
         <ul class="hero__chips" data-revelar aria-label="Qué incluye FastPlay">
-            <li><span aria-hidden="true">✓</span> Sin coste de alta</li>
-            <li><span aria-hidden="true">✓</span> Sin descargas</li>
-            <li><span aria-hidden="true">✓</span> Hecho en España</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Sin coste de alta</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Sin descargas</li>
+            <li><i class="fa-solid fa-check" aria-hidden="true"></i> Hecho en España</li>
         </ul>
     </div>
 

@@ -26,6 +26,12 @@ Fastplay es una aplicación web escrita en PHP 8.1+ con un MVC propio minimalist
   que se vuelve sólida al scrollear) y en `public/js/animaciones-scroll.js`
   (cascada de hijos con `data-revelar` al cargar). Sin dependencias externas,
   CSS vanilla. Ver `.agent/memory/2026-06-17-landing-rediseno.md` para detalle.
+- **Navbar y hero más limpios (2026-06-17):** El usuario pidió más aire en el
+  navbar y un hero similar a la captura `public/imagenes/capturas/01_inicio_escritorio.png`.
+  En `public/css/estilos.css` se separaron mejor marca, navegación y acciones; en
+  móvil el desplegable usa filas más amplias. El hero ya no usa halos/blobs de
+  color ni texto con degradado animado; mantiene la imagen/vídeo con velo oscuro
+  neutro y acento verde sólido en la segunda línea del título.
 - **Skill "diseño":** En este entorno no existe ninguna skill de diseño (solo
   `customize-opencode`, que es para configurar opencode). Si el usuario la pide,
   trabajar con buenas prácticas de UI/UX y avisarle.
