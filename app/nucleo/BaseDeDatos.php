@@ -39,6 +39,8 @@ class BaseDeDatos
             if (file_exists(RUTA_DEMO)) {
                 self::ejecutarArchivo(RUTA_DEMO);
             }
+        } else {
+            self::actualizarEsquemaLigero();
         }
 
         return self::$conexion;
@@ -77,6 +79,28 @@ class BaseDeDatos
     private static function aplicarEsquema(): void
     {
         self::ejecutarArchivo(RUTA_ESQUEMA);
+    }
+
+    private static function actualizarEsquemaLigero(): void
+    {
+        if (!self::columnaExiste('miembros_equipo', 'titular')) {
+            self::conexion()->exec('ALTER TABLE miembros_equipo ADD COLUMN titular INTEGER NOT NULL DEFAULT 0');
+        }
+
+        if (!self::columnaExiste('campos', 'foto')) {
+            self::conexion()->exec('ALTER TABLE campos ADD COLUMN foto TEXT');
+        }
+    }
+
+    private static function columnaExiste(string $tabla, string $columna): bool
+    {
+        $columnas = self::conexion()->query('PRAGMA table_info(' . $tabla . ')')->fetchAll();
+        foreach ($columnas as $info) {
+            if (($info['name'] ?? '') === $columna) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static function ejecutarArchivo(string $ruta): void

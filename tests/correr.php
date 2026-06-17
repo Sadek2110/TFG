@@ -79,6 +79,12 @@ afirmar('Equipo.esCapitan rechaza a otro usuario',
 MiembroEquipo::anadir($idEq, $idB, 10, 'Delantero');
 afirmar('Miembro añadido aparece en el listado',
     count(MiembroEquipo::listarDeEquipo($idEq)) === 1);
+MiembroEquipo::actualizar($idEq, $idB, 11, 'Medio', true);
+$miembroActualizado = MiembroEquipo::listarDeEquipo($idEq)[0] ?? [];
+afirmar('Miembro actualizado guarda dorsal, posicion y titular',
+    (int) $miembroActualizado['dorsal'] === 11
+    && $miembroActualizado['posicion'] === 'Medio'
+    && (int) $miembroActualizado['titular'] === 1);
 MiembroEquipo::quitar($idEq, $idB);
 afirmar('Miembro retirado desaparece del listado',
     count(MiembroEquipo::listarDeEquipo($idEq)) === 0);

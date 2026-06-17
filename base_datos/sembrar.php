@@ -32,6 +32,7 @@ $idAna   = Usuario::crear('Ana Pérez',     'ana@fastplay.test',    'jugador1');
 $idBob   = Usuario::crear('Bob García',    'bob@fastplay.test',    'jugador1');
 $idEva   = Usuario::crear('Eva Romero',    'eva@fastplay.test',    'jugador1');
 $idLuis  = Usuario::crear('Luis Mora',     'luis@fastplay.test',   'jugador1');
+$idMarta = Usuario::crear('Marta Ruiz',    'marta@fastplay.test',  'jugador1');
 
 // Campos.
 $idCampo1 = Campo::crear('Estadio Murube', 'Av. de los Reyes Católicos', 'Ceuta', 'Hierba natural');
@@ -44,13 +45,13 @@ $idLeones   = Equipo::crear('Leones del Sur', 'Ceuta', 'Equipo joven con muchas 
 $idAguilas  = Equipo::crear('Águilas Doradas','Ceuta', 'Veteranos con historia en la zona.', $idEva);
 
 // Cada capitán entra como miembro de su equipo.
-MiembroEquipo::anadir($idTigres,  $idAna, 1, 'Portero');
-MiembroEquipo::anadir($idLeones,  $idBob, 1, 'Portero');
-MiembroEquipo::anadir($idAguilas, $idEva, 1, 'Defensa');
+MiembroEquipo::anadir($idTigres,  $idAna, 1, 'Portero', true);
+MiembroEquipo::anadir($idLeones,  $idBob, 1, 'Portero', true);
+MiembroEquipo::anadir($idAguilas, $idEva, 1, 'Defensa', true);
 
 // Algunos miembros adicionales.
-MiembroEquipo::anadir($idTigres,  $idLuis, 9, 'Delantero');
-MiembroEquipo::anadir($idLeones,  $idLuis, 7, 'Medio centro');
+MiembroEquipo::anadir($idTigres,  $idLuis, 9, 'Delantero', true);
+MiembroEquipo::anadir($idLeones,  $idMarta, 7, 'Medio centro', true);
 
 // Liga.
 $idLiga = Liga::crear('Liga Ceutí Amateur', '2025-2026', 'Primera edición de la liga local.');
@@ -68,7 +69,7 @@ Partido::registrarResultado($idPartido2, 2, 2);
 // El tercero queda programado.
 
 echo "Datos de demostración cargados:" . PHP_EOL;
-echo "  - 5 usuarios (1 admin, 4 jugadores)" . PHP_EOL;
+echo "  - 6 usuarios (1 admin, 5 jugadores)" . PHP_EOL;
 echo "  - 3 equipos, 3 campos, 1 liga" . PHP_EOL;
 echo "  - 3 partidos (2 finalizados + 1 programado)" . PHP_EOL;
 echo PHP_EOL;
@@ -78,3 +79,4 @@ echo "  ana@fastplay.test   / jugador1      (capitana de Tigres FC)" . PHP_EOL;
 echo "  bob@fastplay.test   / jugador1      (capitán de Leones del Sur)" . PHP_EOL;
 echo "  eva@fastplay.test   / jugador1      (capitana de Águilas Doradas)" . PHP_EOL;
 echo "  luis@fastplay.test  / jugador1      (jugador raso)" . PHP_EOL;
+echo "  marta@fastplay.test / jugador1      (jugadora rasa)" . PHP_EOL;

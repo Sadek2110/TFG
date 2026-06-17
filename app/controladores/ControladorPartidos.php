@@ -9,9 +9,22 @@ class ControladorPartidos extends Controlador
 {
     public function listar(): void
     {
+        $partidos = Partido::listar();
+        $fechaSeleccionada = $this->fechaSeleccionada();
+        $partidosDia = array_values(array_filter($partidos, static function (array $partido) use ($fechaSeleccionada): bool {
+            return substr((string) $partido['fecha_partido'], 0, 10) === $fechaSeleccionada;
+        }));
+        $idUsuario = Sesion::idUsuario();
+        $puedeSolicitar = Sesion::esAdministrador()
+            || ($idUsuario !== null && Equipo::capitaneaAlgunEquipo($idUsuario));
+
         $this->ver('partidos/listar', [
-            'titulo'   => 'Partidos',
-            'partidos' => Partido::listar(),
+            'titulo'            => 'Partidos',
+            'partidos'          => $partidos,
+            'calendario'        => $this->calendario($partidos, $fechaSeleccionada),
+            'fechaSeleccionada' => $fechaSeleccionada,
+            'partidosDia'       => $partidosDia,
+            'puedeSolicitar'    => $puedeSolicitar,
         ]);
     }
 
@@ -46,6 +59,11 @@ class ControladorPartidos extends Controlador
     public function formularioCrear(): void
     {
         $this->exigirAutenticacion();
+        if (!Sesion::esAdministrador() && !Equipo::capitaneaAlgunEquipo(Sesion::idUsuario())) {
+            http_response_code(403);
+            $this->ver('errores/403');
+            exit;
+        }
 
         $equipos = Equipo::nombres();
         if (count($equipos) < 2) {
@@ -73,6 +91,11 @@ class ControladorPartidos extends Controlador
     {
         $this->exigirAutenticacion();
         $this->exigirPost();
+        if (!Sesion::esAdministrador() && !Equipo::capitaneaAlgunEquipo(Sesion::idUsuario())) {
+            http_response_code(403);
+            $this->ver('errores/403');
+            exit;
+        }
 
         $datos = [
             'id_equipo_local'     => (string) ($_POST['id_equipo_local']     ?? ''),
@@ -197,5 +220,67 @@ class ControladorPartidos extends Controlador
         Partido::eliminar((int) $partido['id']);
         Sesion::flash('info', 'Partido eliminado.');
         $this->redirigir('/partidos');
+    }
+
+    private function fechaSeleccionada(): string
+    {
+        $fecha = (string) ($_GET['fecha'] ?? date('Y-m-d'));
+        $dt = DateTimeImmutable::createFromFormat('Y-m-d', $fecha);
+        if ($dt === false || $dt->format('Y-m-d') !== $fecha) {
+            return date('Y-m-d');
+        }
+        return $fecha;
+    }
+
+    private function calendario(array $partidos, string $fechaSeleccionada): array
+    {
+        $base = new DateTimeImmutable($fechaSeleccionada);
+        $inicioMes = $base->modify('first day of this month');
+        $finMes = $base->modify('last day of this month');
+        $inicio = $inicioMes->modify('-' . ((int) $inicioMes->format('N') - 1) . ' days');
+        $fin = $finMes->modify('+' . (7 - (int) $finMes->format('N')) . ' days');
+        $hoy = date('Y-m-d');
+
+        $porFecha = [];
+        foreach ($partidos as $partido) {
+            $fecha = substr((string) $partido['fecha_partido'], 0, 10);
+            $porFecha[$fecha][] = $partido;
+        }
+
+        $semanas = [];
+        $cursor = $inicio;
+        while ($cursor <= $fin) {
+            $semana = [];
+            for ($i = 0; $i < 7; $i++) {
+                $fecha = $cursor->format('Y-m-d');
+                $eventos = $porFecha[$fecha] ?? [];
+                $jugado = false;
+                foreach ($eventos as $evento) {
+                    if (($evento['estado'] ?? '') === 'finalizado' || $fecha < $hoy) {
+                        $jugado = true;
+                        break;
+                    }
+                }
+                $semana[] = [
+                    'fecha' => $fecha,
+                    'dia' => $cursor->format('j'),
+                    'mes_actual' => $cursor->format('m') === $base->format('m'),
+                    'hoy' => $fecha === $hoy,
+                    'seleccionado' => $fecha === $fechaSeleccionada,
+                    'tiene_partido' => count($eventos) > 0,
+                    'jugado' => $jugado,
+                    'total' => count($eventos),
+                ];
+                $cursor = $cursor->modify('+1 day');
+            }
+            $semanas[] = $semana;
+        }
+
+        return [
+            'titulo' => $base->format('m/Y'),
+            'anterior' => $base->modify('first day of previous month')->format('Y-m-d'),
+            'siguiente' => $base->modify('first day of next month')->format('Y-m-d'),
+            'semanas' => $semanas,
+        ];
     }
 }

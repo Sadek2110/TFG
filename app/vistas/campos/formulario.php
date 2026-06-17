@@ -41,6 +41,14 @@
             </select>
         </div>
 
+        <div class="campo">
+            <label for="foto">Foto del campo</label>
+            <input type="text" id="foto" name="foto" maxlength="255"
+                   value="<?= viejo('foto') ?>"
+                   placeholder="/imagenes/hero-poster.jpg">
+            <span class="campo__ayuda">Puedes usar una ruta local o una URL completa. Si queda vacío se mostrará una imagen por defecto.</span>
+        </div>
+
         <div class="formulario__acciones">
             <button type="submit" class="boton boton--principal">Guardar campo</button>
             <a href="<?= e(url('/campos')) ?>">Cancelar</a>

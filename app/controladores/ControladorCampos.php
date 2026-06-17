@@ -36,6 +36,7 @@ class ControladorCampos extends Controlador
             'direccion'  => trim((string) ($_POST['direccion']  ?? '')),
             'ciudad'     => trim((string) ($_POST['ciudad']     ?? '')),
             'superficie' => trim((string) ($_POST['superficie'] ?? '')),
+            'foto'       => trim((string) ($_POST['foto']       ?? '')),
         ];
 
         $validador = (new Validador($datos))
@@ -43,6 +44,7 @@ class ControladorCampos extends Controlador
             ->longitudMaxima('nombre', 80, 'El nombre')
             ->longitudMaxima('direccion', 120, 'La dirección')
             ->longitudMaxima('ciudad', 80, 'La ciudad')
+            ->longitudMaxima('foto', 255, 'La foto')
             ->enLista('superficie', ['', 'Hierba natural', 'Hierba artificial', 'Tierra', 'Cemento'], 'La superficie');
 
         if (!$validador->valido()) {
@@ -52,7 +54,7 @@ class ControladorCampos extends Controlador
             $this->redirigir('/campos/crear');
         }
 
-        Campo::crear($datos['nombre'], $datos['direccion'], $datos['ciudad'], $datos['superficie']);
+        Campo::crear($datos['nombre'], $datos['direccion'], $datos['ciudad'], $datos['superficie'], $datos['foto']);
         limpiar_viejos();
         Sesion::flash('exito', 'Campo creado.');
         $this->redirigir('/campos');

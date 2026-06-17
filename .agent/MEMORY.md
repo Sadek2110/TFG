@@ -35,3 +35,19 @@ Fastplay es una aplicación web escrita en PHP 8.1+ con un MVC propio minimalist
 - **Skill "diseño":** En este entorno no existe ninguna skill de diseño (solo
   `customize-opencode`, que es para configurar opencode). Si el usuario la pide,
   trabajar con buenas prácticas de UI/UX y avisarle.
+
+## Actualización 2026-06-17 - Equipos, partidos y campos
+- `/equipos/{id}` es ahora una ficha funcional: un usuario libre puede unirse,
+  un usuario que ya pertenece a un equipo no ve la acción, y el capitán/admin
+  puede invitar por correo, actualizar dorsal/posición, marcar titulares y echar
+  miembros.
+- Un capitán que ya tiene equipo se redirige a su ficha en vez de crear otro.
+- `miembros_equipo` incorpora `titular INTEGER NOT NULL DEFAULT 0`; `BaseDeDatos`
+  añade esta columna con migración ligera en SQLite existentes.
+- `/partidos` tiene calendario mensual server-side con día actual, días con
+  partido y días ya jugados. El botón destacado "Solicitar partido" solo aparece
+  para capitanes/admin.
+- `/campos` muestra tarjetas con foto, ubicación enlazada a Google Maps y
+  superficie. `campos` incorpora `foto TEXT` con migración ligera.
+- La invitación por correo no envía email real ni llama APIs externas; en este
+  MVP incorpora al usuario existente si el correo corresponde a una cuenta libre.

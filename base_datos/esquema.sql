@@ -28,6 +28,8 @@ CREATE TABLE miembros_equipo (
     id_usuario INTEGER NOT NULL,
     dorsal     INTEGER,
     posicion   TEXT,
+    titular    INTEGER NOT NULL DEFAULT 0
+               CHECK (titular IN (0, 1)),
     fecha_alta TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (id_equipo, id_usuario),
     FOREIGN KEY (id_equipo)  REFERENCES equipos(id)  ON DELETE CASCADE,
@@ -39,7 +41,8 @@ CREATE TABLE campos (
     nombre     TEXT    NOT NULL,
     direccion  TEXT,
     ciudad     TEXT,
-    superficie TEXT
+    superficie TEXT,
+    foto       TEXT
 );
 
 CREATE TABLE ligas (

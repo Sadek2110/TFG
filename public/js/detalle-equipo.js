@@ -50,7 +50,7 @@
         const fila = evento.target.closest('tr[data-nombre]');
         if (!fila || !zona.contains(fila)) return;
         // No interferir con los botones/enlaces de la fila.
-        if (evento.target.closest('a, button')) return;
+        if (evento.target.closest('a, button, input, select, textarea, label, form')) return;
         fila.classList.toggle('fila--activa');
     });
 })();

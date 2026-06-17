@@ -1388,12 +1388,275 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
 .tabla tbody tr[data-nombre] { cursor: pointer; }
 
 /* ----------------------------------------------------------------------------
-   22. Responsive
+   22. Detalle de equipo, calendario de partidos y campos
+   ---------------------------------------------------------------------------- */
+
+.boton--destacado {
+    min-height: 52px;
+    padding-inline: var(--e6);
+    font-size: 1.05rem;
+}
+
+.equipo-resumen {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+    gap: var(--e4);
+    align-items: start;
+    margin-bottom: var(--e8);
+}
+
+.formulario-compacto {
+    display: grid;
+    gap: var(--e4);
+}
+
+.equipo-form-grid {
+    display: grid;
+    grid-template-columns: minmax(92px, 0.4fr) minmax(0, 1fr);
+    gap: var(--e3);
+}
+
+.tabla--gestion td { vertical-align: middle; }
+
+.tabla-input {
+    width: 82px;
+    min-height: 38px;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid var(--color-borde-fuerte);
+    border-radius: var(--radio-sm);
+    background: var(--color-superficie);
+    color: var(--color-texto);
+    font: inherit;
+}
+
+.tabla-input--texto {
+    width: min(220px, 100%);
+}
+
+.checkbox-linea {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e2);
+    color: var(--color-texto-suave);
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.acciones-tabla {
+    display: flex;
+    align-items: center;
+    gap: var(--e2);
+    flex-wrap: wrap;
+}
+
+.calendario-partidos {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(280px, 0.8fr);
+    gap: var(--e4);
+    align-items: stretch;
+    margin-bottom: var(--e8);
+}
+
+.calendario,
+.dia-partidos {
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    box-shadow: var(--sombra);
+    padding: var(--e6);
+}
+
+.calendario__cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--e3);
+    margin-bottom: var(--e4);
+}
+
+.calendario__cabecera h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.calendario__leyenda {
+    display: flex;
+    gap: var(--e3);
+    flex-wrap: wrap;
+    margin-bottom: var(--e4);
+    color: var(--color-texto-suave);
+    font-size: 0.85rem;
+}
+
+.calendario__leyenda span {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e1);
+}
+
+.calendario__punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.calendario__punto--hoy { background: var(--color-acento); }
+.calendario__punto--partido { background: var(--color-principal); }
+.calendario__punto--jugado { background: var(--color-info); }
+
+.calendario__grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(38px, 1fr));
+    gap: var(--e2);
+}
+
+.calendario__semana {
+    text-align: center;
+    color: var(--color-texto-suave);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.calendario__dia {
+    position: relative;
+    min-height: 48px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-sm);
+    background: var(--color-superficie-2);
+    color: var(--color-texto);
+    font-weight: 700;
+    background-image: none;
+}
+
+.calendario__dia:hover {
+    border-color: var(--color-principal);
+    background: var(--color-principal-tenue);
+}
+
+.calendario__dia--fuera {
+    opacity: 0.45;
+}
+
+.calendario__dia--hoy {
+    border-color: var(--color-acento);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-acento) 35%, transparent);
+}
+
+.calendario__dia--seleccionado {
+    background: var(--color-texto);
+    color: var(--color-superficie);
+    border-color: var(--color-texto);
+}
+
+.calendario__dia--partido::after,
+.calendario__dia--jugado::after {
+    content: "";
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    transform: translateX(-50%);
+    background: var(--color-principal);
+}
+
+.calendario__dia--jugado::after { background: var(--color-info); }
+
+.calendario__dia small {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    font-size: 0.68rem;
+    color: inherit;
+}
+
+.dia-partidos {
+    display: grid;
+    align-content: start;
+    gap: var(--e3);
+}
+
+.dia-partidos h2 { margin: 0; }
+
+.dia-partidos__lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--e3);
+}
+
+.dia-partidos__lista a {
+    display: grid;
+    gap: var(--e1);
+    padding: var(--e3);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-sm);
+    background: var(--color-superficie-2);
+    color: var(--color-texto);
+    background-image: none;
+}
+
+.dia-partidos__lista a:hover {
+    border-color: var(--color-principal);
+    color: var(--color-principal-oscuro);
+}
+
+.dia-partidos__lista span {
+    color: var(--color-texto-suave);
+    font-size: 0.88rem;
+}
+
+.lista-campos {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.campo-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.campo-card__foto {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background-color: var(--color-superficie-2);
+}
+
+.campo-card__contenido {
+    display: grid;
+    gap: var(--e3);
+    padding: var(--e6);
+}
+
+.campo-card__contenido p {
+    display: flex;
+    gap: var(--e2);
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.campo-card__mapa {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--e2);
+    color: var(--color-principal-oscuro);
+    font-weight: 600;
+}
+
+/* ----------------------------------------------------------------------------
+   23. Responsive
    ---------------------------------------------------------------------------- */
 
 @media (max-width: 860px) {
     .pie__rejilla { grid-template-columns: 1fr 1fr; }
     .pie__marca { grid-column: 1 / -1; }
+    .equipo-resumen,
+    .calendario-partidos { grid-template-columns: 1fr; }
 
     /* En pantallas medianas el hero ajusta tipografía y reduce el padding. */
     .hero { padding-top: clamp(5rem, 12vh, 7rem); padding-bottom: clamp(6rem, 14vh, 8rem); }
@@ -1458,6 +1721,12 @@ main.contenedor > .panel-ctx + section { margin-top: var(--e8); }
    ---------------------------------------------------------------------------- */
 @media (max-width: 720px) {
     .contenedor { padding: 0 var(--e4); }
+    .calendario,
+    .dia-partidos,
+    .campo-card__contenido { padding: var(--e4); }
+    .calendario__grid { gap: var(--e1); }
+    .calendario__dia { min-height: 42px; }
+    .equipo-form-grid { grid-template-columns: 1fr; }
 
     .cabecera__interior {
         position: relative;

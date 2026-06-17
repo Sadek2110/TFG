@@ -30,6 +30,9 @@ $enrutador->get('/equipos/{id}/editar',         'ControladorEquipos', 'formulari
 $enrutador->post('/equipos/{id}/editar',        'ControladorEquipos', 'editar');
 $enrutador->post('/equipos/{id}/eliminar',      'ControladorEquipos', 'eliminar');
 $enrutador->post('/equipos/{id}/anadir-miembro','ControladorEquipos', 'anadirMiembro');
+$enrutador->post('/equipos/{id}/invitar',       'ControladorEquipos', 'anadirMiembro');
+$enrutador->post('/equipos/{id}/unirse',        'ControladorEquipos', 'unirse');
+$enrutador->post('/equipos/{id}/actualizar-miembro','ControladorEquipos', 'actualizarMiembro');
 $enrutador->post('/equipos/{id}/quitar-miembro','ControladorEquipos', 'quitarMiembro');
 
 // Partidos

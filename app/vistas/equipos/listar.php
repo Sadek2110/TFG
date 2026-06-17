@@ -1,8 +1,10 @@
 <section>
     <div class="barra-acciones">
         <h1>Equipos</h1>
-        <?php if (Sesion::autenticado()): ?>
+        <?php if ($puedeCrearEquipo): ?>
             <a class="boton boton--principal" href="<?= e(url('/equipos/crear')) ?>">+ Nuevo equipo</a>
+        <?php elseif (!empty($equipoCapitaneado)): ?>
+            <a class="boton boton--secundario" href="<?= e(url('/equipos/' . $equipoCapitaneado['id'])) ?>">Ver mi equipo</a>
         <?php endif; ?>
     </div>
 

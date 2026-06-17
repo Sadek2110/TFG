@@ -18,16 +18,17 @@ class Campo
         return BaseDeDatos::uno('SELECT * FROM campos WHERE id = :id', ['id' => $id]);
     }
 
-    public static function crear(string $nombre, string $direccion, string $ciudad, string $superficie): int
+    public static function crear(string $nombre, string $direccion, string $ciudad, string $superficie, string $foto = ''): int
     {
         BaseDeDatos::ejecutar(
-            'INSERT INTO campos (nombre, direccion, ciudad, superficie)
-             VALUES (:nombre, :direccion, :ciudad, :superficie)',
+            'INSERT INTO campos (nombre, direccion, ciudad, superficie, foto)
+             VALUES (:nombre, :direccion, :ciudad, :superficie, :foto)',
             [
                 'nombre'     => $nombre,
                 'direccion'  => $direccion  !== '' ? $direccion  : null,
                 'ciudad'     => $ciudad     !== '' ? $ciudad     : null,
                 'superficie' => $superficie !== '' ? $superficie : null,
+                'foto'       => $foto       !== '' ? $foto       : null,
             ]
         );
         return BaseDeDatos::ultimoId();

@@ -75,9 +75,30 @@ class Equipo
         ) !== null;
     }
 
+    public static function equipoCapitaneadoPorUsuario(int $idUsuario): ?array
+    {
+        return BaseDeDatos::uno(
+            'SELECT * FROM equipos WHERE id_capitan = :uid ORDER BY fecha_creacion ASC LIMIT 1',
+            ['uid' => $idUsuario]
+        );
+    }
+
+    public static function capitaneaAlgunEquipo(int $idUsuario): bool
+    {
+        return self::equipoCapitaneadoPorUsuario($idUsuario) !== null;
+    }
+
     // Listado simple para selects de formularios.
     public static function nombres(): array
     {
         return BaseDeDatos::todos('SELECT id, nombre FROM equipos ORDER BY nombre');
+    }
+
+    public static function nombresCapitaneadosPor(int $idUsuario): array
+    {
+        return BaseDeDatos::todos(
+            'SELECT id, nombre FROM equipos WHERE id_capitan = :uid ORDER BY nombre',
+            ['uid' => $idUsuario]
+        );
     }
 }

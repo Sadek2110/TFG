@@ -11,9 +11,13 @@ class ControladorEquipos extends Controlador
     public function listar(): void
     {
         $equipos = Equipo::listar();
+        $idUsuario = Sesion::idUsuario();
+        $equipoCapitaneado = $idUsuario !== null ? Equipo::equipoCapitaneadoPorUsuario($idUsuario) : null;
         $this->ver('equipos/listar', [
-            'titulo'  => 'Equipos',
-            'equipos' => $equipos,
+            'titulo'            => 'Equipos',
+            'equipos'           => $equipos,
+            'equipoCapitaneado' => $equipoCapitaneado,
+            'puedeCrearEquipo'  => $idUsuario !== null && $equipoCapitaneado === null,
         ]);
     }
 
@@ -26,6 +30,8 @@ class ControladorEquipos extends Controlador
         $miembros = MiembroEquipo::listarDeEquipo((int) $equipo['id']);
         $idUsuario = Sesion::idUsuario();
         $esCapitan = $idUsuario !== null && (int) $equipo['id_capitan'] === $idUsuario;
+        $esIntegrante = $idUsuario !== null && MiembroEquipo::existe((int) $equipo['id'], $idUsuario);
+        $equipoUsuario = $idUsuario !== null ? MiembroEquipo::equipoDeUsuario($idUsuario) : null;
         $puedeGestionar = $esCapitan || Sesion::esAdministrador();
 
         $errores = $_SESSION['errores'] ?? [];
@@ -36,6 +42,9 @@ class ControladorEquipos extends Controlador
             'equipo'         => $equipo,
             'miembros'       => $miembros,
             'puedeGestionar' => $puedeGestionar,
+            'esIntegrante'   => $esIntegrante,
+            'puedeUnirse'    => $idUsuario !== null && !$esIntegrante && $equipoUsuario === null,
+            'equipoUsuario'  => $equipoUsuario,
             'errores'        => $errores,
         ]);
         limpiar_viejos();
@@ -44,6 +53,7 @@ class ControladorEquipos extends Controlador
     public function formularioCrear(): void
     {
         $this->exigirAutenticacion();
+        $this->redirigirSiYaCapitanea();
         $errores = $_SESSION['errores'] ?? [];
         unset($_SESSION['errores']);
         $this->ver('equipos/formulario', [
@@ -59,6 +69,7 @@ class ControladorEquipos extends Controlador
     {
         $this->exigirAutenticacion();
         $this->exigirPost();
+        $this->redirigirSiYaCapitanea();
 
         $datos = $this->datosFormulario();
         $validador = $this->validarEquipo($datos);
@@ -85,6 +96,33 @@ class ControladorEquipos extends Controlador
         limpiar_viejos();
         Sesion::flash('exito', 'Equipo creado correctamente.');
         $this->redirigir('/equipos/' . $idEquipo);
+    }
+
+    public function unirse(string $id): void
+    {
+        $this->exigirAutenticacion();
+        $this->exigirPost();
+
+        $equipo = Equipo::buscarPorId((int) $id);
+        if ($equipo === null) {
+            $this->noEncontrado();
+        }
+
+        $idUsuario = Sesion::idUsuario();
+        if (MiembroEquipo::existe((int) $equipo['id'], $idUsuario)) {
+            Sesion::flash('info', 'Ya formas parte de este equipo.');
+            $this->redirigir('/equipos/' . $equipo['id']);
+        }
+
+        $equipoActual = MiembroEquipo::equipoDeUsuario($idUsuario);
+        if ($equipoActual !== null) {
+            Sesion::flash('error', 'Ya perteneces a un equipo. No puedes unirte a otro.');
+            $this->redirigir('/equipos/' . $equipo['id']);
+        }
+
+        MiembroEquipo::anadir((int) $equipo['id'], $idUsuario, null, '');
+        Sesion::flash('exito', 'Te has unido al equipo.');
+        $this->redirigir('/equipos/' . $equipo['id']);
     }
 
     public function formularioEditar(string $id): void
@@ -165,6 +203,8 @@ class ControladorEquipos extends Controlador
                 $validador->anadirError('email', 'No existe ningún usuario con este correo.');
             } elseif (MiembroEquipo::existe((int) $equipo['id'], (int) $usuario['id'])) {
                 $validador->anadirError('email', 'Ese usuario ya pertenece al equipo.');
+            } elseif (MiembroEquipo::equipoDeUsuario((int) $usuario['id']) !== null) {
+                $validador->anadirError('email', 'Ese usuario ya pertenece a otro equipo.');
             }
         }
 
@@ -181,6 +221,45 @@ class ControladorEquipos extends Controlador
             $posicion
         );
         Sesion::flash('exito', 'Miembro añadido al equipo.');
+        $this->redirigir('/equipos/' . $equipo['id']);
+    }
+
+    public function actualizarMiembro(string $id): void
+    {
+        $this->exigirAutenticacion();
+        $this->exigirPost();
+        $equipo = $this->equipoGestionable((int) $id);
+
+        $datos = [
+            'id_usuario' => (string) ($_POST['id_usuario'] ?? ''),
+            'dorsal'     => trim((string) ($_POST['dorsal'] ?? '')),
+            'posicion'   => trim((string) ($_POST['posicion'] ?? '')),
+            'titular'    => isset($_POST['titular']) ? '1' : '0',
+        ];
+
+        $validador = (new Validador($datos))
+            ->obligatorio('id_usuario', 'El jugador')
+            ->entero('id_usuario', 'El jugador', 1)
+            ->entero('dorsal', 'El dorsal', 1, 99)
+            ->longitudMaxima('posicion', 40, 'La posiciÃ³n');
+
+        if ($validador->valido() && !MiembroEquipo::existe((int) $equipo['id'], (int) $datos['id_usuario'])) {
+            $validador->anadirError('id_usuario', 'El jugador no pertenece a este equipo.');
+        }
+
+        if (!$validador->valido()) {
+            Sesion::flash('error', current($validador->errores()));
+            $this->redirigir('/equipos/' . $equipo['id']);
+        }
+
+        MiembroEquipo::actualizar(
+            (int) $equipo['id'],
+            (int) $datos['id_usuario'],
+            $datos['dorsal'] === '' ? null : (int) $datos['dorsal'],
+            $datos['posicion'],
+            $datos['titular'] === '1'
+        );
+        Sesion::flash('exito', 'Datos del jugador actualizados.');
         $this->redirigir('/equipos/' . $equipo['id']);
     }
 
@@ -238,5 +317,14 @@ class ControladorEquipos extends Controlador
             exit;
         }
         return $equipo;
+    }
+
+    private function redirigirSiYaCapitanea(): void
+    {
+        $equipo = Equipo::equipoCapitaneadoPorUsuario(Sesion::idUsuario());
+        if ($equipo !== null) {
+            Sesion::flash('aviso', 'Ya eres capitÃ¡n de un equipo. Gestiona tu equipo desde aquÃ­.');
+            $this->redirigir('/equipos/' . $equipo['id']);
+        }
     }
 }

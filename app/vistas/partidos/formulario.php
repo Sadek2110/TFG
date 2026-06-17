@@ -71,7 +71,7 @@
         </div>
 
         <div class="formulario__acciones">
-            <button type="submit" class="boton boton--principal">Programar partido</button>
+            <button type="submit" class="boton boton--principal">Solicitar partido</button>
             <a href="<?= e(url('/partidos')) ?>">Cancelar</a>
         </div>
     </form>
