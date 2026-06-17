@@ -5,11 +5,11 @@
     <ul class="lista-tarjetas">
         <li class="tarjeta">
             <h2>Usuarios</h2>
-            <p style="font-size:2rem; margin:0;"><strong><?= (int) $estadisticas['usuarios'] ?></strong></p>
+            <p class="tarjeta__cifra"><?= (int) $estadisticas['usuarios'] ?></p>
         </li>
         <li class="tarjeta">
             <h2>Equipos</h2>
-            <p style="font-size:2rem; margin:0;"><strong><?= (int) $estadisticas['equipos'] ?></strong></p>
+            <p class="tarjeta__cifra"><?= (int) $estadisticas['equipos'] ?></p>
             <div class="tarjeta__pie">
                 <a class="boton boton--secundario" href="<?= e(url('/equipos')) ?>">Ver</a>
                 <a class="boton boton--principal" href="<?= e(url('/equipos/crear')) ?>">+ Nuevo</a>
@@ -17,7 +17,7 @@
         </li>
         <li class="tarjeta">
             <h2>Partidos</h2>
-            <p style="font-size:2rem; margin:0;"><strong><?= (int) $estadisticas['partidos'] ?></strong></p>
+            <p class="tarjeta__cifra"><?= (int) $estadisticas['partidos'] ?></p>
             <div class="tarjeta__pie">
                 <a class="boton boton--secundario" href="<?= e(url('/partidos')) ?>">Ver</a>
                 <a class="boton boton--principal" href="<?= e(url('/partidos/crear')) ?>">+ Nuevo</a>
@@ -25,7 +25,7 @@
         </li>
         <li class="tarjeta">
             <h2>Campos</h2>
-            <p style="font-size:2rem; margin:0;"><strong><?= (int) $estadisticas['campos'] ?></strong></p>
+            <p class="tarjeta__cifra"><?= (int) $estadisticas['campos'] ?></p>
             <div class="tarjeta__pie">
                 <a class="boton boton--secundario" href="<?= e(url('/campos')) ?>">Ver</a>
                 <a class="boton boton--principal" href="<?= e(url('/campos/crear')) ?>">+ Nuevo</a>
@@ -33,7 +33,7 @@
         </li>
         <li class="tarjeta">
             <h2>Ligas</h2>
-            <p style="font-size:2rem; margin:0;"><strong><?= (int) $estadisticas['ligas'] ?></strong></p>
+            <p class="tarjeta__cifra"><?= (int) $estadisticas['ligas'] ?></p>
             <div class="tarjeta__pie">
                 <a class="boton boton--secundario" href="<?= e(url('/ligas')) ?>">Ver</a>
                 <a class="boton boton--principal" href="<?= e(url('/ligas/crear')) ?>">+ Nueva</a>
@@ -42,7 +42,7 @@
     </ul>
 
     <h2>Usuarios registrados</h2>
-    <table class="tabla">
+    <div class="tabla-envoltura"><table class="tabla">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -65,5 +65,5 @@
                 </tr>
             <?php endforeach; ?>
         </tbody>
-    </table>
+    </table></div>
 </section>

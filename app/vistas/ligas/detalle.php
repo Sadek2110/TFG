@@ -14,7 +14,7 @@
     <?php if (empty($clasificacion)): ?>
         <div class="estado-vacio">Inscribe equipos en esta liga para ver la clasificación.</div>
     <?php else: ?>
-        <table class="tabla">
+        <div class="tabla-envoltura"><table class="tabla">
             <thead>
                 <tr>
                     <th>#</th>
@@ -45,7 +45,7 @@
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+        </table></div>
     <?php endif; ?>
 
     <?php if ($puedeInscribir && !empty($equiposLibres)): ?>
@@ -71,7 +71,7 @@
     <?php if (empty($partidos)): ?>
         <div class="estado-vacio">Aún no hay partidos en esta liga.</div>
     <?php else: ?>
-        <table class="tabla">
+        <div class="tabla-envoltura"><table class="tabla">
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -98,6 +98,6 @@
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+        </table></div>
     <?php endif; ?>
 </section>

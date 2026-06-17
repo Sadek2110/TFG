@@ -22,11 +22,11 @@
     </div>
 
     <?php if ($partido['estado'] === 'finalizado'): ?>
-        <p style="font-size:1.6rem; text-align:center;">
-            <strong><?= (int) $partido['goles_local'] ?></strong>
-            -
-            <strong><?= (int) $partido['goles_visitante'] ?></strong>
-        </p>
+        <div class="marcador" aria-label="Resultado final">
+            <span class="marcador__numero"><?= (int) $partido['goles_local'] ?></span>
+            <span class="marcador__separador">–</span>
+            <span class="marcador__numero"><?= (int) $partido['goles_visitante'] ?></span>
+        </div>
     <?php endif; ?>
 
     <?php if ($puedeResultado): ?>
@@ -59,7 +59,7 @@
 
     <?php if ($puedeEliminar): ?>
         <form method="post" action="<?= e(url('/partidos/' . $partido['id'] . '/eliminar')) ?>"
-              data-confirmar="¿Eliminar este partido?" style="margin-top:1rem;">
+              data-confirmar="¿Eliminar este partido?">
             <?= Csrf::campo() ?>
             <button type="submit" class="boton boton--peligro">Eliminar partido</button>
         </form>

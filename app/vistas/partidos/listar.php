@@ -9,7 +9,7 @@
     <?php if (empty($partidos)): ?>
         <div class="estado-vacio">Aún no se ha programado ningún partido.</div>
     <?php else: ?>
-        <table class="tabla">
+        <div class="tabla-envoltura"><table class="tabla">
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -44,6 +44,6 @@
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+        </table></div>
     <?php endif; ?>
 </section>

@@ -12,12 +12,16 @@
          animaciones de revelado solo oculten contenido si el JS va a revelarlo.
          Sin JS, todo se ve igualmente. -->
     <script>document.documentElement.classList.add('js');</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="<?= e(url('/css/estilos.css')) ?>">
 </head>
 <body>
+    <a class="salto-contenido" href="#contenido">Saltar al contenido</a>
+
     <?php require RUTA_VISTAS . '/parciales/cabecera.php'; ?>
 
-    <main class="contenedor">
+    <main id="contenido" class="contenedor">
         <?php require RUTA_VISTAS . '/parciales/mensajes.php'; ?>
         <?= $contenido ?>
     </main>
@@ -33,6 +37,7 @@
     <script src="<?= e(url('/js/cookies.js')) ?>" defer></script>
     <script src="<?= e(url('/js/validacion.js')) ?>" defer></script>
     <script src="<?= e(url('/js/animaciones-scroll.js')) ?>" defer></script>
+    <script src="<?= e(url('/js/hero.js')) ?>" defer></script>
     <script src="<?= e(url('/js/inicio.js')) ?>" defer></script>
     <script src="<?= e(url('/js/carta-jugador.js')) ?>" defer></script>
     <script src="<?= e(url('/js/panel-contextual.js')) ?>" defer></script>

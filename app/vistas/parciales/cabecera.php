@@ -4,7 +4,8 @@
         <a class="cabecera__marca" href="<?= e(url('/')) ?>">
             <img class="cabecera__logo" src="<?= e(url('/imagenes/logo.png')) ?>"
                  alt="" width="40" height="40" decoding="async">
-            <span class="cabecera__nombre">FastPlay</span>
+            <img class="cabecera__marca-img" src="<?= e(url('/imagenes/logo-nombre.png')) ?>"
+                 alt="FastPlay" width="120" height="38" decoding="async">
         </a>
 
         <nav class="navegacion" aria-label="Navegación principal">

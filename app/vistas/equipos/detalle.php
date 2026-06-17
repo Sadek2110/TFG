@@ -39,7 +39,7 @@
             </label>
             <span class="etiqueta" data-contador-visibles><?= count($miembros) ?> miembros</span>
         </div>
-        <table class="tabla">
+        <div class="tabla-envoltura"><table class="tabla">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -72,7 +72,7 @@
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-        </table>
+        </table></div>
         </div><!-- /.tabla-miembros -->
     <?php endif; ?>
 

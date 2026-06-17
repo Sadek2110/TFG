@@ -1,29 +1,63 @@
 <section class="hero revelar">
     <!-- Fondo multimedia: el vídeo se reproduce en bucle y silenciado; si el
-         navegador no puede reproducirlo, queda el póster como imagen de fondo. -->
+         navegador no puede reproducirlo, queda el póster como imagen de fondo.
+         Las "formas" son blobs de color con blur que dan profundidad al hero. -->
     <div class="hero__fondo" aria-hidden="true">
         <video class="hero__video" autoplay muted loop playsinline
                poster="<?= e(url('/imagenes/hero-poster.jpg')) ?>">
             <source src="<?= e(url('/video/hero.webm')) ?>" type="video/webm">
         </video>
         <span class="hero__velo"></span>
+        <span class="hero__forma hero__forma--a"></span>
+        <span class="hero__forma hero__forma--b"></span>
+        <span class="hero__forma hero__forma--c"></span>
     </div>
 
     <div class="hero__contenido">
-        <img class="hero__marca" src="<?= e(url('/imagenes/logo-nombre.png')) ?>"
-             alt="FastPlay" width="320" height="100" decoding="async">
-        <p class="hero__lema">Organiza tu fútbol amateur: equipos, partidos, campos y ligas en un solo sitio.</p>
+        <span class="hero__eyebrow" data-revelar>
+            <span class="hero__eyebrow-punto" aria-hidden="true"></span>
+            La plataforma del fútbol amateur
+        </span>
 
-        <div class="hero__acciones">
-            <a class="boton boton--principal" href="<?= e(url('/equipos')) ?>">Ver equipos</a>
-            <a class="boton boton--contraste" href="<?= e(url('/partidos')) ?>">Ver partidos</a>
+        <h1 class="hero__titulo" data-revelar>
+            Tu próximo partido
+            <span class="hero__titulo-degradado">empieza&nbsp;aquí</span>
+        </h1>
+
+        <p class="hero__subtitulo" data-revelar>
+            Crea tu equipo, organiza partidos, reserva campos y compite en ligas
+            con una sola cuenta. Sin papeleo, sin aplicaciones raras.
+        </p>
+
+        <div class="hero__acciones" data-revelar>
+            <a class="boton boton--principal boton--xl" href="<?= e(url('/equipos')) ?>">
+                Crear mi equipo gratis
+                <svg class="boton__icono" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                    <path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor"
+                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <a class="boton boton--contraste boton--xl" href="<?= e(url('/partidos')) ?>">
+                Ver partidos
+            </a>
         </div>
+
+        <ul class="hero__chips" data-revelar aria-label="Qué incluye FastPlay">
+            <li><span aria-hidden="true">✓</span> Sin coste de alta</li>
+            <li><span aria-hidden="true">✓</span> Sin descargas</li>
+            <li><span aria-hidden="true">✓</span> Hecho en España</li>
+        </ul>
     </div>
+
+    <a class="hero__indicador" href="#panel-ctx" aria-label="Descubrir más">
+        <span class="hero__indicador-texto">Descubrir</span>
+        <span class="hero__indicador-flecha" aria-hidden="true"></span>
+    </a>
 </section>
 
 <!-- Panel contextual: lo rellena public/js/panel-contextual.js vía fetch al
      endpoint JSON, adaptándose al rol de quien mira la página. -->
-<section class="panel-ctx revelar"
+<section id="panel-ctx" class="panel-ctx revelar"
          data-panel-contextual
          data-url="<?= e(url('/api/contexto')) ?>"
          aria-busy="false"
