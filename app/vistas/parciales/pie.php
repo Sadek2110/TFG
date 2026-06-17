@@ -38,7 +38,7 @@
 
         <p class="pie__legal">
             <span>FastPlay &middot; TFG 2.º DAW &middot; <?= date('Y') ?></span>
-            <span>Hecho con PHP, SQLite y CSS vanilla.</span>
+            <span>Hecho por Sadek Ben Jouda Akil</span>
         </p>
     </div>
 </footer>

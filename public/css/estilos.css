@@ -1418,6 +1418,14 @@ body:has(.hero) .cabecera {
     gap: var(--e6);
 }
 
+.equipo-form-grid .campo {
+    min-width: 0;
+}
+
+.equipo-form-grid input {
+    width: 100%;
+}
+
 .tabla--gestion td { vertical-align: middle; }
 
 .tabla-input {
