@@ -56,24 +56,22 @@ Este documento resume **qué enseñar a cada profesor**: las partes del proyecto
 
 ## 3. Desarrollo en el lado del Cliente — *El JavaScript*
 
-**Titular:** JavaScript **Vanilla, sin bundlers ni frameworks** — un archivo por *feature*, con manipulación del DOM, eventos, AJAX y librerías externas.
+**Titular:** JavaScript **Vanilla, sin bundlers ni frameworks** — un archivo por *feature*, con manipulación del DOM, eventos, AJAX y JSON.
 
 ### Puntos a resaltar
-- **Integración de API/librería externa de mapas** ([public/js/campos-map.js](public/js/campos-map.js)): pinta los campos de Ceuta con Leaflet (OpenStreetMap) y conmuta a Google Maps si hay API key — todo de forma transparente. Marcadores SVG propios, popups, y sincronización mapa ↔ tarjetas.
-- **Parsing de JSON con `try/catch`** leyendo `data-*` attributes desde el HTML.
-- **Manipulación del DOM y delegación de eventos:** selección de tarjetas, paneles, validación visual.
-- **Validación de formularios en cliente** ([public/js/form-validation.js](public/js/form-validation.js)) antes del envío al servidor.
-- **Chat en vivo** ([public/js/chat-room.js](public/js/chat-room.js)) con actualización dinámica de mensajes.
-- **Gestión de cookies y consentimiento** ([public/js/cookie-consent.js](public/js/cookie-consent.js)) — banner y persistencia de preferencias.
-- **Componentes interactivos propios:** carta tipo FIFA del jugador (`fifa-card.js`), calendario de partidos (`matches-calendar.js`), animaciones de scroll (`scroll-anim.js`), tema claro/oscuro (`theme.js`), navegación (`nav.js`).
+- **Panel contextual AJAX** ([public/js/panel-contextual.js](public/js/panel-contextual.js)): `fetch` GET a `/api/contexto`, recibe JSON y reconstruye el DOM según el rol (admin/capitán/jugador/visitante). `async/await`, `response.ok`, `try/catch/finally`. **Es la pieza estrella.**
+- **Parsing de JSON con `try/catch`** y reconstrucción del DOM sin `innerHTML` (`createElement`, `replaceChildren`, `DocumentFragment`).
+- **Validación de formularios con regex** ([public/js/validacion.js](public/js/validacion.js)) en `blur`/`input`/`submit`, con feedback accesible, antes del envío al servidor.
+- **Delegación de eventos** ([public/js/detalle-equipo.js](public/js/detalle-equipo.js)): filtrado y resaltado de la tabla de miembros con un solo listener.
+- **Gestión de cookies y consentimiento** ([public/js/cookies.js](public/js/cookies.js)) — banner y persistencia de preferencias con API pública `window.FastplayCookies`.
+- **Componentes interactivos propios:** carta tipo FIFA con tilt 3D (`carta-jugador.js`), animaciones de scroll con IntersectionObserver (`animaciones-scroll.js`), contador animado (`inicio.js`), tema claro/oscuro con localStorage (`tema.js`).
 - **Arquitectura JS modular:** patrón IIFE + `'use strict'`, sin contaminar el scope global, un fichero por funcionalidad.
 
 ### Ficheros para enseñar
-- [public/js/campos-map.js](public/js/campos-map.js) — **el más completo** (API externa + DOM + eventos + JSON)
-- [public/js/form-validation.js](public/js/form-validation.js)
-- [public/js/chat-room.js](public/js/chat-room.js)
-- [public/js/cookie-consent.js](public/js/cookie-consent.js)
-- [public/js/fifa-card.js](public/js/fifa-card.js) · [public/js/matches-calendar.js](public/js/matches-calendar.js)
+- [public/js/panel-contextual.js](public/js/panel-contextual.js) — **el más completo** (evento + AJAX + JSON + DOM + roles)
+- [public/js/validacion.js](public/js/validacion.js)
+- [public/js/cookies.js](public/js/cookies.js) · [public/js/tema.js](public/js/tema.js)
+- [public/js/carta-jugador.js](public/js/carta-jugador.js) · [public/js/animaciones-scroll.js](public/js/animaciones-scroll.js) · [public/js/inicio.js](public/js/inicio.js) · [public/js/detalle-equipo.js](public/js/detalle-equipo.js)
 
 ---
 

@@ -30,6 +30,15 @@
     <?php if (empty($miembros)): ?>
         <div class="estado-vacio">Este equipo todavía no tiene miembros.</div>
     <?php else: ?>
+        <!-- Filtrado en vivo con delegación de eventos: public/js/detalle-equipo.js -->
+        <div class="tabla-miembros" data-tabla-miembros>
+        <div class="tabla-miembros__barra">
+            <label class="tabla-miembros__buscar">
+                <span class="campo__ayuda">Buscar miembro</span>
+                <input type="search" data-buscar-miembro placeholder="Nombre del jugador…" autocomplete="off">
+            </label>
+            <span class="etiqueta" data-contador-visibles><?= count($miembros) ?> miembros</span>
+        </div>
         <table class="tabla">
             <thead>
                 <tr>
@@ -41,7 +50,7 @@
             </thead>
             <tbody>
                 <?php foreach ($miembros as $miembro): ?>
-                    <tr>
+                    <tr data-nombre="<?= e($miembro['nombre']) ?>">
                         <td><?= e($miembro['nombre']) ?></td>
                         <td><?= $miembro['dorsal'] !== null ? (int) $miembro['dorsal'] : '—' ?></td>
                         <td><?= e($miembro['posicion'] ?? '') ?: '—' ?></td>
@@ -64,6 +73,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        </div><!-- /.tabla-miembros -->
     <?php endif; ?>
 
     <?php if ($puedeGestionar): ?>

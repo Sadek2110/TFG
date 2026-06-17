@@ -20,6 +20,8 @@ if ($ruta !== '/' && is_file($archivo)) {
         'gif' => 'image/gif',
         'ico' => 'image/x-icon',
         'webp'=> 'image/webp',
+        'webm'=> 'video/webm',
+        'mp4' => 'video/mp4',
         'json'=> 'application/json',
         'txt' => 'text/plain',
     ];

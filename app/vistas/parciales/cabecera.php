@@ -2,8 +2,9 @@
 <header class="cabecera">
     <div class="contenedor cabecera__interior">
         <a class="cabecera__marca" href="<?= e(url('/')) ?>">
-            <span class="cabecera__logo">FP</span>
-            FastPlay
+            <img class="cabecera__logo" src="<?= e(url('/imagenes/logo.png')) ?>"
+                 alt="" width="40" height="40" decoding="async">
+            <span class="cabecera__nombre">FastPlay</span>
         </a>
 
         <nav class="navegacion" aria-label="Navegación principal">
@@ -14,6 +15,8 @@
         </nav>
 
         <div class="cabecera__usuario">
+            <button type="button" class="boton boton--enlace cabecera__tema"
+                    data-toggle-tema aria-pressed="false" aria-label="Cambiar a tema oscuro">🌙 Oscuro</button>
             <?php if ($usuario): ?>
                 <a href="<?= e(url('/perfil')) ?>" class="<?= ruta_activa('/perfil') ?>">
                     <?= e($usuario['nombre']) ?>

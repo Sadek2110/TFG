@@ -109,41 +109,36 @@ Este documento explica, **asignatura por asignatura**, las *funciones reales*, l
 
 **Titular:** JavaScript **Vanilla, sin bundlers ni frameworks** — un fichero por *feature*, patrón **IIFE + `'use strict'`** para no contaminar el scope global.
 
-### Pieza central de la rúbrica: panel contextual AJAX — [public/js/dwec-context-panel.js](../public/js/dwec-context-panel.js)
+### Pieza central de la rúbrica: panel contextual AJAX — [public/js/panel-contextual.js](../public/js/panel-contextual.js)
 Demuestra de un tirón casi todos los criterios DWEC:
-- **Evento → AJAX → JSON → DOM:** un `click` en el botón dispara un `fetch` GET a `/dashboard/context`; el servidor responde JSON y el panel se re-renderiza según el **rol** del usuario (admin / capitán / jugador / visitante).
-- **`async/await`** con comprobación `response.ok`, `throw` ante HTTP de error, `catch` que muestra mensaje accesible y `finally` que restaura el estado del botón ([dwec-context-panel.js:76-104](../public/js/dwec-context-panel.js#L76-L104)).
-- **Estructuras de datos:** `Map` para diccionarios de roles y acciones, `Set` para deduplicar chips.
-- **Manipulación del DOM sin `innerHTML`:** `createElement`, `replaceChildren`, `textContent`, `dataset`, `classList.toggle`.
-- **ARIA dinámico:** `aria-label`, `aria-busy`, `aria-hidden`, `hidden` para reflejar el estado real.
+- **Evento → AJAX → JSON → DOM:** un `click` en el botón dispara un `fetch` GET a `/api/contexto` ([app/controladores/ControladorApi.php](../app/controladores/ControladorApi.php)); el servidor responde JSON y el panel se re-renderiza según el **rol** del usuario (admin / capitán / jugador / visitante).
+- **`async/await`** con comprobación `response.ok`, `throw` ante HTTP de error, `catch` que muestra mensaje accesible y `finally` que restaura el estado del botón.
+- **Estructuras de datos:** `Map` para el diccionario de roles, `Set` para deduplicar acciones.
+- **Manipulación del DOM sin `innerHTML`:** `createElement`, `replaceChildren`, `textContent`, `dataset`, `classList`, `DocumentFragment`.
+- **ARIA dinámico:** `aria-busy`, `aria-live`, `hidden` para reflejar el estado real.
 - **Internacionalización ligera:** `toLocaleTimeString('es-ES', …)` para la hora de "última actualización".
-
-### API / librería externa: mapa de campos — [public/js/campos-map.js](../public/js/campos-map.js)
-- Pinta los campos de Ceuta con **Leaflet (OpenStreetMap)** y conmuta a **Google Maps** de forma transparente si existe `GOOGLE_MAPS_API_KEY`.
-- **Parsing JSON con `try/catch`** leyendo el atributo `data-fields` del HTML y filtrando coordenadas válidas ([campos-map.js:47-55](../public/js/campos-map.js#L47-L55)).
-- **Marcadores SVG propios** (pin con mini-campo y balón), popups e **sincronización mapa ↔ tarjetas** (`is-selected`).
 
 ### Resto del catálogo DWEC
 | Conocimiento | Fichero | Detalle |
 |---|---|---|
-| **Validación con regex + eventos** | [public/js/form-validation.js](../public/js/form-validation.js) | Catálogo de expresiones regulares (email, contraseña, nombre, ciudad, dorsal…) validando en `blur`/`input`/`submit` con `preventDefault`; feedback accesible (`aria-invalid`, `aria-describedby`). Es complemento de la validación PHP, que sigue siendo la autoritativa. |
-| **Cookies + consentimiento** | [public/js/cookie-consent.js](../public/js/cookie-consent.js) | Banner aceptar/rechazar, cookies con prefijo `fp_client_` y API pública `window.FastplayCookies`. |
-| **Chat en vivo (polling)** | [public/js/chat-room.js](../public/js/chat-room.js) | POST/GET con sondeo cada 8 s; pinta mensajes con `textContent` + `DocumentFragment` (sin `innerHTML` → anti-inyección). |
-| **Eventos avanzados / tilt 3D** | [public/js/fifa-card.js](../public/js/fifa-card.js) | Carta tipo FIFA con efecto *tilt* que sigue al cursor vía `pointermove`. |
-| **`IntersectionObserver`** | [public/js/scroll-anim.js](../public/js/scroll-anim.js) | Revelado progresivo de secciones al hacer scroll. |
-| **`localStorage`** | [public/js/theme.js](../public/js/theme.js) | Tema claro/oscuro persistente con `try/catch`. |
-| **Contador animado** | [public/js/home-init.js](../public/js/home-init.js) | Animación de cifras del landing. |
-| **Delegación de eventos** | [public/js/team-detail.js](../public/js/team-detail.js) | `click` delegado, `dataset`, paneles. |
+| **Validación con regex + eventos** | [public/js/validacion.js](../public/js/validacion.js) | Catálogo de expresiones regulares (email, contraseña, nombre, ciudad, dorsal, teléfono) validando en `blur`/`input`/`submit` con `preventDefault`; feedback accesible (`aria-invalid`, `aria-describedby`); `try/catch` al compilar el `pattern`. Es complemento de la validación PHP, que sigue siendo la autoritativa. |
+| **Cookies + consentimiento** | [public/js/cookies.js](../public/js/cookies.js) | Banner aceptar/rechazar, cookies con prefijo `fp_client_` y API pública `window.FastplayCookies`. |
+| **Eventos avanzados / tilt 3D** | [public/js/carta-jugador.js](../public/js/carta-jugador.js) | Carta tipo FIFA con efecto *tilt* que sigue al cursor vía `pointermove`. |
+| **`IntersectionObserver`** | [public/js/animaciones-scroll.js](../public/js/animaciones-scroll.js) | Revelado progresivo de secciones al hacer scroll. |
+| **`localStorage`** | [public/js/tema.js](../public/js/tema.js) | Tema claro/oscuro persistente con `try/catch`. |
+| **Contador animado** | [public/js/inicio.js](../public/js/inicio.js) | Animación de cifras del landing con `requestAnimationFrame`. |
+| **Delegación de eventos** | [public/js/detalle-equipo.js](../public/js/detalle-equipo.js) | `click`/`input` delegados sobre la tabla de miembros, `dataset`, filtrado y resaltado. |
 
 ### Buenas prácticas transversales
 - **Un fichero por funcionalidad**, todos envueltos en IIFE con `'use strict'`.
-- **Sin dependencias salvo Leaflet/Google Maps** donde aportan valor real.
+- **Sin dependencias externas:** todo es JavaScript vanilla.
+- **Mejora progresiva:** el contenido se ve sin JS; las animaciones de revelado solo se aplican con la clase `js`.
 - **Defensa ante el DOM ausente:** cada módulo comprueba que su raíz existe (`if (!panel) return;`) antes de actuar.
 
 ### Ficheros para enseñar
-- [public/js/dwec-context-panel.js](../public/js/dwec-context-panel.js) — **la pieza estrella** (evento + AJAX + JSON + DOM + roles).
-- [public/js/campos-map.js](../public/js/campos-map.js) — API externa + JSON.
-- [public/js/form-validation.js](../public/js/form-validation.js) · [public/js/chat-room.js](../public/js/chat-room.js) · [public/js/cookie-consent.js](../public/js/cookie-consent.js).
+- [public/js/panel-contextual.js](../public/js/panel-contextual.js) — **la pieza estrella** (evento + AJAX + JSON + DOM + roles) y su endpoint [app/controladores/ControladorApi.php](../app/controladores/ControladorApi.php).
+- [public/js/validacion.js](../public/js/validacion.js) · [public/js/cookies.js](../public/js/cookies.js) · [public/js/tema.js](../public/js/tema.js).
+- [public/js/animaciones-scroll.js](../public/js/animaciones-scroll.js) · [public/js/carta-jugador.js](../public/js/carta-jugador.js) · [public/js/inicio.js](../public/js/inicio.js) · [public/js/detalle-equipo.js](../public/js/detalle-equipo.js).
 
 ---
 
@@ -242,6 +237,6 @@ Demuestra de un tirón casi todos los criterios DWEC:
 |---|---|---|---|
 | **Diseño de Interfaces** | Design System "glass-and-neon" | [public/css/app.css](../public/css/app.css) | Glassmorphism, `clamp()`, `prefers-reduced-motion` |
 | **Servidor (Backend)** | MVC + router reflexivo + PDO | [app/core/Router.php](../app/core/Router.php) | `ReflectionMethod`, kebab→camelCase, helpers PDO |
-| **Cliente (DWEC)** | Panel contextual AJAX por roles | [public/js/dwec-context-panel.js](../public/js/dwec-context-panel.js) | `fetch` + `async/await` + DOM sin `innerHTML` |
+| **Cliente (DWEC)** | Panel contextual AJAX por roles | [public/js/panel-contextual.js](../public/js/panel-contextual.js) | `fetch` + `async/await` + DOM sin `innerHTML` |
 | **Despliegue** | Docker + 12-factor + EasyPanel | [Dockerfile](../Dockerfile) | Document root en `public/`, `BASE_URL` autodetectada |
 | **Seguridad** | CSRF + sesiones + CSP + PDO | [config/config.php](../config/config.php) | `hash_equals`, `random_bytes`, rate limit UTC |

@@ -33,6 +33,16 @@ abstract class Controlador
         exit;
     }
 
+    // Responde con JSON. Usado por los endpoints que consume el cliente
+    // mediante fetch (AJAX). Fija el Content-Type y termina la petición.
+    protected function json(array $datos, int $codigo = 200): void
+    {
+        http_response_code($codigo);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($datos, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
+    }
+
     protected function exigirAutenticacion(): void
     {
         if (!Sesion::autenticado()) {

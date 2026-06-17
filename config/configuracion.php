@@ -7,10 +7,10 @@ declare(strict_types=1);
 const RUTA_RAIZ      = __DIR__ . '/..';
 const RUTA_APP       = RUTA_RAIZ . '/app';
 const RUTA_VISTAS    = RUTA_APP  . '/vistas';
-const RUTA_BD        = RUTA_RAIZ . '/base_datos/fastplay.sqlite';
+define('RUTA_BD', getenv('FASTPLAY_BD_PATH') ?: (RUTA_RAIZ . '/base_datos/fastplay.sqlite'));
 const RUTA_ESQUEMA   = RUTA_RAIZ . '/base_datos/esquema.sql';
 const RUTA_DEMO      = RUTA_RAIZ . '/base_datos/datos_demo.sql';
-const RUTA_SESIONES  = RUTA_RAIZ . '/almacenamiento/sesiones';
+define('RUTA_SESIONES', getenv('FASTPLAY_SESIONES_PATH') ?: (RUTA_RAIZ . '/almacenamiento/sesiones'));
 
 // URL base de la aplicación. Se calcula a partir del script para que funcione
 // en subdirectorios (XAMPP) y con el servidor embebido (php -S).

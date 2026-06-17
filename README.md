@@ -39,7 +39,9 @@ Fastplay/
 |   |-- router.php       # Router para `php -S ... -t public`
 |   |-- .htaccess        # Reescritura para Apache
 |   |-- css/estilos.css  # Hoja de estilos propia
-|   `-- js/              # validacion.js, principal.js
+|   `-- js/              # JS vanilla: panel-contextual (AJAX), validacion,
+|                        # cookies, tema, animaciones-scroll, carta-jugador,
+|                        # inicio, detalle-equipo, principal
 |-- tests/correr.php     # Pruebas minimas de los modelos
 |-- router.php           # Router para `php -S` desde la raiz del proyecto
 `-- AGENTS.md            # Protocolo de trabajo del proyecto
@@ -104,6 +106,11 @@ pagina que la necesita; si no se ha sembrado, estara vacia.
 - **Panel de administracion** con resumen del sitio.
 - Estados vacios, mensajes flash (exito/error/aviso) y confirmaciones antes
   de acciones destructivas.
+- **Parte de cliente (JavaScript vanilla):** panel contextual por rol via
+  AJAX (`fetch` a `/api/contexto` -> JSON -> DOM), validacion de formularios
+  con expresiones regulares, consentimiento de cookies, tema claro/oscuro
+  con `localStorage`, animaciones de scroll (`IntersectionObserver`), carta
+  con efecto 3D y contadores animados. Detalle en `context/rubrica/`.
 
 ## Seguridad implementada
 

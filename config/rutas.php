@@ -55,3 +55,6 @@ $enrutador->post('/ligas/{id}/inscribir',       'ControladorLigas',   'inscribir
 
 // Panel administrador
 $enrutador->get('/admin',                       'ControladorAdmin',   'panel');
+
+// API JSON (consumida por el cliente con fetch)
+$enrutador->get('/api/contexto',                'ControladorApi',     'contexto');

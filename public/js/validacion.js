@@ -1,67 +1,109 @@
-// Validación ligera en cliente. Complementa la validación PHP, que sigue
-// siendo la autoritativa: cualquier formulario debe poder ser validado y
-// rechazado por el servidor aunque el JavaScript no se ejecute.
+// Validación en cliente con expresiones regulares.
 //
-// Cómo funciona:
-//   - Cada formulario con [data-validar] se valida al hacer "submit".
-//   - Cada campo con [required], [minlength], [maxlength], [pattern],
-//     [type=email] o [type=number] se valida también al perder el foco.
-//   - Si hay errores, se cancela el envío y se muestra un mensaje
-//     junto al campo correspondiente.
+// Complementa la validación de PHP, que sigue siendo la autoritativa: el
+// servidor debe poder rechazar cualquier formulario aunque el JavaScript no
+// se ejecute. Aquí solo damos feedback inmediato y accesible.
+//
+// Qué se demuestra (DWEC):
+//   - Catálogo de expresiones regulares (email, contraseña, nombre, ciudad,
+//     dorsal, teléfono…) reutilizable por nombre con [data-regla].
+//   - Eventos: submit (con preventDefault), blur e input.
+//   - Accesibilidad: aria-invalid + aria-describedby apuntando al mensaje.
+//   - try/catch: compilar el patrón de un campo puede lanzar si la expresión
+//     es inválida; se captura para no romper el resto del formulario.
 
 (function () {
     'use strict';
 
+    // Catálogo de reglas con regex con nombre. Un campo las pide con
+    // data-regla="email", data-regla="dorsal", etc.
     const REGLAS = {
         email: {
             patron: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
             mensaje: 'Introduce un correo válido (ejemplo: nombre@dominio.com).',
         },
+        contrasena: {
+            patron: /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
+            mensaje: 'La contraseña debe tener al menos 8 caracteres e incluir letras y números.',
+        },
+        nombre: {
+            patron: /^[\p{L}][\p{L}\s'’.-]{1,59}$/u,
+            mensaje: 'Usa solo letras, espacios, guiones o apóstrofos (2-60 caracteres).',
+        },
+        ciudad: {
+            patron: /^[\p{L}][\p{L}\s'’.-]{1,79}$/u,
+            mensaje: 'Introduce una ciudad válida.',
+        },
+        dorsal: {
+            patron: /^([1-9]|[1-9][0-9])$/,
+            mensaje: 'El dorsal debe ser un número entre 1 y 99.',
+        },
+        telefono: {
+            patron: /^[+]?[\d\s]{9,15}$/,
+            mensaje: 'Introduce un teléfono válido (9 a 15 dígitos).',
+        },
     };
 
-    function mensajeError(campo, motivo) {
-        const etiqueta =
-            (document.querySelector('label[for="' + campo.id + '"]') || {}).textContent ||
-            'Este campo';
-        switch (motivo) {
-            case 'requerido':  return etiqueta.trim() + ' es obligatorio.';
-            case 'minimo':     return etiqueta.trim() + ' debe tener al menos ' + campo.minLength + ' caracteres.';
-            case 'maximo':     return etiqueta.trim() + ' no puede superar ' + campo.maxLength + ' caracteres.';
-            case 'patron':     return etiqueta.trim() + ' no tiene un formato válido.';
-            case 'email':      return REGLAS.email.mensaje;
-            case 'numero':     return etiqueta.trim() + ' debe ser un número entre ' + campo.min + ' y ' + campo.max + '.';
-            default:           return etiqueta.trim() + ' no es válido.';
-        }
+    function etiquetaDe(campo) {
+        const etiqueta = document.querySelector('label[for="' + campo.id + '"]');
+        return (etiqueta ? etiqueta.textContent : '').trim() || 'Este campo';
     }
 
+    // Devuelve un mensaje de error, o null si el campo es válido.
     function validarCampo(campo) {
         const valor = (campo.value || '').trim();
+        const nombreEtiqueta = etiquetaDe(campo);
 
         if (campo.required && valor === '') {
-            return 'requerido';
+            return nombreEtiqueta + ' es obligatorio.';
         }
         if (valor === '') {
-            return null; // No obligatorio y vacío -> OK
+            return null; // Opcional y vacío -> válido.
         }
         if (campo.minLength > 0 && valor.length < campo.minLength) {
-            return 'minimo';
+            return nombreEtiqueta + ' debe tener al menos ' + campo.minLength + ' caracteres.';
         }
         if (campo.maxLength > 0 && valor.length > campo.maxLength) {
-            return 'maximo';
+            return nombreEtiqueta + ' no puede superar ' + campo.maxLength + ' caracteres.';
         }
+
+        // Regla con nombre del catálogo (data-regla="...").
+        const nombreRegla = campo.dataset.regla;
+        if (nombreRegla && REGLAS[nombreRegla] && !REGLAS[nombreRegla].patron.test(valor)) {
+            return REGLAS[nombreRegla].mensaje;
+        }
+
+        // Reglas implícitas por tipo de campo.
         if (campo.type === 'email' && !REGLAS.email.patron.test(valor)) {
-            return 'email';
+            return REGLAS.email.mensaje;
         }
         if (campo.type === 'number') {
             const numero = Number(valor);
-            if (Number.isNaN(numero)) return 'numero';
-            if (campo.min !== '' && numero < Number(campo.min)) return 'numero';
-            if (campo.max !== '' && numero > Number(campo.max)) return 'numero';
+            const min = campo.min !== '' ? Number(campo.min) : -Infinity;
+            const max = campo.max !== '' ? Number(campo.max) : Infinity;
+            if (Number.isNaN(numero) || numero < min || numero > max) {
+                return nombreEtiqueta + ' debe ser un número entre ' + campo.min + ' y ' + campo.max + '.';
+            }
         }
-        if (campo.pattern && !new RegExp('^(?:' + campo.pattern + ')$').test(valor)) {
-            return 'patron';
+
+        // Patrón del atributo HTML pattern. Compilar puede lanzar si la
+        // expresión es inválida: lo capturamos para no tumbar el formulario.
+        if (campo.pattern) {
+            try {
+                const regex = new RegExp('^(?:' + campo.pattern + ')$');
+                if (!regex.test(valor)) {
+                    return nombreEtiqueta + ' no tiene un formato válido.';
+                }
+            } catch (error) {
+                console.warn('Patrón inválido en el campo', campo.name, error);
+            }
         }
+
         return null;
+    }
+
+    function idError(campo) {
+        return 'error-' + (campo.id || campo.name || Math.random().toString(36).slice(2));
     }
 
     function mostrarError(campo, mensaje) {
@@ -71,26 +113,34 @@
         if (!aviso) {
             aviso = document.createElement('span');
             aviso.className = 'campo__error campo__error--js';
+            aviso.id = idError(campo);
             padre.appendChild(aviso);
         }
+        // Enlaza el campo con su mensaje para los lectores de pantalla.
+        campo.setAttribute('aria-describedby', aviso.id);
         aviso.textContent = mensaje;
     }
 
     function limpiarError(campo) {
         campo.setAttribute('aria-invalid', 'false');
+        campo.removeAttribute('aria-describedby');
         const padre = campo.closest('.campo') || campo.parentElement;
         const aviso = padre.querySelector('.campo__error--js');
         if (aviso) aviso.remove();
     }
 
+    function esValidable(campo) {
+        return campo.matches && campo.matches('input, textarea, select') &&
+            !['hidden', 'submit', 'button', 'reset'].includes(campo.type);
+    }
+
     function validarFormulario(formulario) {
         let primerError = null;
-        const campos = formulario.querySelectorAll('input, textarea, select');
-        campos.forEach(function (campo) {
-            if (campo.type === 'hidden' || campo.type === 'submit' || campo.type === 'button') return;
-            const motivo = validarCampo(campo);
-            if (motivo) {
-                mostrarError(campo, mensajeError(campo, motivo));
+        formulario.querySelectorAll('input, textarea, select').forEach(function (campo) {
+            if (!esValidable(campo)) return;
+            const mensaje = validarCampo(campo);
+            if (mensaje) {
+                mostrarError(campo, mensaje);
                 if (!primerError) primerError = campo;
             } else {
                 limpiarError(campo);
@@ -103,6 +153,7 @@
         return true;
     }
 
+    // submit: cancela el envío si hay errores.
     document.addEventListener('submit', function (evento) {
         const formulario = evento.target;
         if (!(formulario instanceof HTMLFormElement)) return;
@@ -112,16 +163,23 @@
         }
     });
 
+    // blur: valida un campo al perder el foco (captura porque blur no burbujea).
     document.addEventListener('blur', function (evento) {
         const campo = evento.target;
-        if (!campo.matches || !campo.matches('input, textarea, select')) return;
-        const formulario = campo.closest('form[data-validar]');
-        if (!formulario) return;
-        const motivo = validarCampo(campo);
-        if (motivo) {
-            mostrarError(campo, mensajeError(campo, motivo));
-        } else {
+        if (!esValidable(campo)) return;
+        if (!campo.closest('form[data-validar]')) return;
+        const mensaje = validarCampo(campo);
+        if (mensaje) mostrarError(campo, mensaje);
+        else limpiarError(campo);
+    }, true);
+
+    // input: en cuanto un campo en error vuelve a ser válido, se limpia.
+    document.addEventListener('input', function (evento) {
+        const campo = evento.target;
+        if (!esValidable(campo)) return;
+        if (!campo.closest('form[data-validar]')) return;
+        if (campo.getAttribute('aria-invalid') === 'true' && !validarCampo(campo)) {
             limpiarError(campo);
         }
-    }, true);
+    });
 })();

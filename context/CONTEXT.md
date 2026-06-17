@@ -1,6 +1,6 @@
 ## Contexto desarrollador del proyecto
 
-Soy un alumno de 2 DAW (Desarrollo de aplicaciones web) y este proyecto es mi trabajo final del grado (TFG). En mi grado las asignaturas son las siguientes: 
+Me llamo Sadek Ben Jouda Akil, soy un alumno de 2º de DAW (Desarrollo de aplicaciones web) y este proyecto es mi trabajo final del grado (TFG). En mi grado las asignaturas son las siguientes: 
 
 - Diseño de interfaces → La parte visual del proyecto.
 - Desarrollo en el lado del servidor → El backend del proyecto, las dependencias, la estructura del proyecto y todo lo que tenga que ver con el desarrollo en la parte del servidor.
