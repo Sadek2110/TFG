@@ -72,6 +72,7 @@
     --espacio-pagina-arriba: clamp(var(--e8), 5vw, var(--e12));
     --espacio-pagina-abajo: clamp(var(--e12), 7vw, var(--e20));
     --espacio-secciones: clamp(var(--e12), 7vw, var(--e20));
+    --alto-cabecera: 74px;
 
     /* Movimiento */
     --transicion: 200ms ease;
@@ -229,13 +230,19 @@ main.contenedor > section > h2 + .estado-vacio { margin-top: var(--e4); }
                 color var(--transicion);
 }
 
+body:has(.hero) .cabecera {
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
 .cabecera__interior {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--e6);
     flex-wrap: nowrap;
-    min-height: 74px;
+    min-height: var(--alto-cabecera);
     padding-top: var(--e2);
     padding-bottom: var(--e2);
 }
@@ -501,7 +508,9 @@ main.contenedor > section > h2 + .estado-vacio { margin-top: var(--e4); }
     position: relative;
     overflow: hidden;
     width: 100vw;
+    width: 100dvw;
     margin-left: calc(50% - 50vw);
+    margin-left: calc(50% - 50dvw);
     margin-top: calc(-1 * var(--espacio-pagina-arriba));
     min-height: 100vh;
     min-height: 100dvh;
@@ -518,25 +527,25 @@ main.contenedor > section > h2 + .estado-vacio { margin-top: var(--e4); }
 
 .hero__fondo {
     position: absolute;
-    inset: 0;
+    inset: -8% -5% -16%;
     z-index: 0;
     /* Color de respaldo por si el póster no carga. */
     background-color: transparent;
     background-image: url('../imagenes/hero-poster.jpg');
     background-size: cover;
-    background-position: center top;
+    background-position: center 38%;
     background-repeat: no-repeat;
     pointer-events: none;
 }
 
 .hero__video {
     position: absolute;
-    inset: 0 0 auto 0;
+    inset: -8% -5% -16%;
     z-index: 1;
-    width: 100%;
-    height: 112%;
+    width: 110%;
+    height: 124%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center 38%;
     /* Oscurecemos el vídeo con un filtro por si el clip es muy claro. */
     filter: brightness(0.55) saturate(1.1);
     pointer-events: none;
@@ -1685,6 +1694,7 @@ main.contenedor > section > h2 + .estado-vacio { margin-top: var(--e4); }
    ---------------------------------------------------------------------------- */
 @media (max-width: 720px) {
     .contenedor { padding: 0 var(--e4); }
+    :root { --alto-cabecera: 68px; }
     .calendario,
     .dia-partidos,
     .campo-card__contenido { padding: var(--e4); }
@@ -1697,7 +1707,6 @@ main.contenedor > section > h2 + .estado-vacio { margin-top: var(--e4); }
 
     .cabecera__interior {
         position: relative;
-        min-height: 68px;
         gap: var(--e3);
     }
 

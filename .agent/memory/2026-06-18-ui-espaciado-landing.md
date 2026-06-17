@@ -16,9 +16,13 @@ poco el video por debajo porque aparecia la marca de agua de Veo.
     cifras, calendario, detalle de equipo y tarjetas de campos.
   - Ajuste responsive para que en movil los paddings vuelvan a valores
     razonables.
-  - El video del hero se ancla arriba con `height: 112%` y
-    `object-position: center top`, recortando la zona inferior sin modificar el
-    archivo `.webm`.
+- El video del hero se ancla arriba con `height: 112%` y
+  `object-position: center top`, recortando la zona inferior sin modificar el
+  archivo `.webm`.
+- Ajuste posterior: la cabecera de la portada se superpone al hero con
+  `body:has(.hero) .cabecera { position: fixed; }` y el video/poster ahora
+  sobresalen con `inset` negativo, `width: 110%` y `height: 124%` para cubrir
+  pantallas grandes y evitar bandas negras.
 
 ## Verificacion
 - `php -l app/vistas/inicio/index.php`: sin errores.

@@ -74,3 +74,6 @@ Fastplay es una aplicación web escrita en PHP 8.1+ con un MVC propio minimalist
 - El vídeo del hero se recorta por CSS anclándolo arriba y aumentando su altura
   al 112%, de forma que se oculta visualmente la zona inferior donde aparecía la
   marca de agua sin regenerar `public/video/hero.webm`.
+- Ajuste posterior: en portada, la cabecera pasa a `fixed` con `body:has(.hero)`
+  para superponerse al hero sin franja negra, y el vídeo/póster sobresalen del
+  contenedor con inset negativo para cubrir pantallas grandes sin bordes.
