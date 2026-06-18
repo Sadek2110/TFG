@@ -44,7 +44,6 @@ Fastplay/
 |                        # inicio, detalle-equipo, principal
 |-- tests/correr.php     # Pruebas minimas de los modelos
 |-- router.php           # Router para `php -S` desde la raiz del proyecto
-`-- AGENTS.md            # Protocolo de trabajo del proyecto
 ```
 
 ## Instalacion y arranque
